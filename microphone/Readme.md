@@ -1,5 +1,5 @@
 # Microphone
-
+![alt text](pinout.webp "Logo Title Text 1")
 ## Materials
  - Raspberry
  - sound sensor (Sunfounder)

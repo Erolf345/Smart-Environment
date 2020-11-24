@@ -15,5 +15,10 @@ The potentiometer on the right can be used to adjust the time that the output st
  ## Results
  Works when connected to 5V
 
+Pinout(ignore led):
+
+ ![alt text](pinout.jpg "Logo Title Text 1")
+
+
  ## Sources
 https://create.arduino.cc/projecthub/electropeak/pir-motion-sensor-how-to-use-pirs-w-arduino-raspberry-pi-18d7fa
