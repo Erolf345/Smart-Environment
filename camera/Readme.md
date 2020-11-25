@@ -14,4 +14,4 @@ One of the three tested cameras doesn't seem to work.
 
 ## Testable Project
 
-For a first sensor-actuator test, setup camera as well as PIR sensor and run code ``camera_sensor.py`` on pi
+For a first sensor-actuator test, setup camera as well as PIR sensor and run code ``camera_sensor.py`` on pi. Now every time a motion is detected, the camera will take an image.
