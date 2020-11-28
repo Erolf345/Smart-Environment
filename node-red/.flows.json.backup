@@ -7,6 +7,118 @@
         "info": ""
     },
     {
+        "id": "8a3c0162.4c8d1",
+        "type": "ui_group",
+        "name": "Color Picker",
+        "tab": "ed5f97bc.2d4ce8",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "ed5f97bc.2d4ce8",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard"
+    },
+    {
+        "id": "792b1862.01ed98",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
         "id": "740a99d2.b07d1",
         "type": "function",
         "z": "7d7b30a8.5bc2b",
@@ -57,14 +169,14 @@
         "id": "41b167bc.bbffc",
         "type": "rpi-gpio out",
         "z": "7d7b30a8.5bc2b",
-        "name": "",
+        "name": "Simple LED",
         "pin": "11",
         "set": false,
         "level": "0",
         "freq": "1000",
         "out": "pwm",
-        "x": 549,
-        "y": 200,
+        "x": 570,
+        "y": 360,
         "wires": []
     },
     {
@@ -123,12 +235,13 @@
         "intype": "tri",
         "debounce": "25",
         "read": true,
-        "x": 240,
-        "y": 480,
+        "x": 180,
+        "y": 540,
         "wires": [
             [
                 "f60b971f.d72818",
-                "41b167bc.bbffc"
+                "41b167bc.bbffc",
+                "1e562453.9b452c"
             ]
         ]
     },
@@ -147,15 +260,15 @@
         "type": "debug",
         "z": "7d7b30a8.5bc2b",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 550,
-        "y": 480,
+        "x": 490,
+        "y": 580,
         "wires": []
     },
     {
@@ -168,7 +281,8 @@
                 "p": "payload"
             },
             {
-                "p": "topic",
+                "p": "frequency",
+                "v": "5000",
                 "vt": "str"
             }
         ],
@@ -179,8 +293,8 @@
         "topic": "",
         "payload": "1",
         "payloadType": "num",
-        "x": 370,
-        "y": 320,
+        "x": 190,
+        "y": 340,
         "wires": [
             [
                 "41b167bc.bbffc"
@@ -208,11 +322,317 @@
         "topic": "",
         "payload": "0",
         "payloadType": "num",
-        "x": 370,
-        "y": 360,
+        "x": 190,
+        "y": 380,
         "wires": [
             [
                 "41b167bc.bbffc"
+            ]
+        ]
+    },
+    {
+        "id": "82428d88.c2784",
+        "type": "comment",
+        "z": "7d7b30a8.5bc2b",
+        "name": "PIR check",
+        "info": "",
+        "x": 180,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "715c1baf.2c7394",
+        "type": "ui_colour_picker",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "label": "Choose",
+        "group": "8a3c0162.4c8d1",
+        "format": "rgb",
+        "outformat": "object",
+        "showSwatch": true,
+        "showPicker": true,
+        "showValue": true,
+        "showHue": false,
+        "showAlpha": false,
+        "showLightness": true,
+        "square": "false",
+        "dynOutput": "true",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "topic": "",
+        "x": 100,
+        "y": 820,
+        "wires": [
+            [
+                "30e73299.7e539e"
+            ]
+        ]
+    },
+    {
+        "id": "30e73299.7e539e",
+        "type": "function",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "func": "\nreturn [\n    //need to invert for LED (maybe not here)\n    {payload:255 - msg.payload.r},\n    {payload:255 - msg.payload.g},\n    {payload:255 - msg.payload.b}\n];",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 260,
+        "y": 820,
+        "wires": [
+            [
+                "b06ef87a.2ecd18"
+            ],
+            [
+                "3532ded.ea45f22"
+            ],
+            [
+                "813aa6c7.4faa58"
+            ]
+        ]
+    },
+    {
+        "id": "813aa6c7.4faa58",
+        "type": "range",
+        "z": "7d7b30a8.5bc2b",
+        "minin": "0",
+        "maxin": "255",
+        "minout": "0",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "B",
+        "x": 470,
+        "y": 860,
+        "wires": [
+            [
+                "3a344f73.a341b",
+                "843e8dab.baebc"
+            ]
+        ]
+    },
+    {
+        "id": "3532ded.ea45f22",
+        "type": "range",
+        "z": "7d7b30a8.5bc2b",
+        "minin": "0",
+        "maxin": "255",
+        "minout": "0",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "G",
+        "x": 470,
+        "y": 820,
+        "wires": [
+            [
+                "3bfc15b3.af5d12",
+                "96ad2af9.ebb138"
+            ]
+        ]
+    },
+    {
+        "id": "b06ef87a.2ecd18",
+        "type": "range",
+        "z": "7d7b30a8.5bc2b",
+        "minin": "0",
+        "maxin": "255",
+        "minout": "0",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "R",
+        "x": 470,
+        "y": 780,
+        "wires": [
+            [
+                "5f036011.4248c8",
+                "43b79720.9de288"
+            ]
+        ]
+    },
+    {
+        "id": "843e8dab.baebc",
+        "type": "debug",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 670,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "96ad2af9.ebb138",
+        "type": "debug",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 830,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "43b79720.9de288",
+        "type": "debug",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "3bfc15b3.af5d12",
+        "type": "rpi-gpio out",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "pin": "19",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 660,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "5f036011.4248c8",
+        "type": "rpi-gpio out",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "pin": "21",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 660,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "3a344f73.a341b",
+        "type": "rpi-gpio out",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "pin": "23",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 660,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "dcd87b79.2108e8",
+        "type": "inject",
+        "z": "7d7b30a8.5bc2b",
+        "name": "on",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 450,
+        "y": 720,
+        "wires": [
+            [
+                "5f036011.4248c8",
+                "3bfc15b3.af5d12",
+                "3a344f73.a341b"
+            ]
+        ]
+    },
+    {
+        "id": "c334952d.1e9208",
+        "type": "inject",
+        "z": "7d7b30a8.5bc2b",
+        "name": "off",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "100",
+        "payloadType": "num",
+        "x": 450,
+        "y": 980,
+        "wires": [
+            [
+                "5f036011.4248c8",
+                "3bfc15b3.af5d12",
+                "3a344f73.a341b"
+            ]
+        ]
+    },
+    {
+        "id": "70e589e9.da3a",
+        "type": "comment",
+        "z": "7d7b30a8.5bc2b",
+        "name": "RGB control",
+        "info": "",
+        "x": 90,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "1e562453.9b452c",
+        "type": "function",
+        "z": "7d7b30a8.5bc2b",
+        "name": "and just to rbg led",
+        "func": "\nreturn {payload: (1 - msg.payload)*100};\n//invert",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 370,
+        "y": 640,
+        "wires": [
+            [
+                "5f036011.4248c8",
+                "3bfc15b3.af5d12",
+                "3a344f73.a341b"
             ]
         ]
     }
