@@ -2,7 +2,6 @@
 
 ## Materials
  - Raspberry
- - resistor
  - PIR Sensor (HC-SR501)
 
 ## Calibration
