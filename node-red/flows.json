@@ -57,14 +57,14 @@
         "id": "41b167bc.bbffc",
         "type": "rpi-gpio out",
         "z": "7d7b30a8.5bc2b",
-        "name": "",
+        "name": "Simple LED",
         "pin": "11",
         "set": false,
         "level": "0",
         "freq": "1000",
         "out": "pwm",
-        "x": 549,
-        "y": 200,
+        "x": 570,
+        "y": 360,
         "wires": []
     },
     {
@@ -119,15 +119,16 @@
         "type": "rpi-gpio in",
         "z": "7d7b30a8.5bc2b",
         "name": "PIR sensor",
-        "pin": "7",
+        "pin": "36",
         "intype": "tri",
         "debounce": "25",
-        "read": false,
+        "read": true,
         "x": 180,
-        "y": 480,
+        "y": 540,
         "wires": [
             [
-                "f60b971f.d72818"
+                "f60b971f.d72818",
+                "41b167bc.bbffc"
             ]
         ]
     },
@@ -153,8 +154,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 460,
-        "y": 480,
+        "x": 590,
+        "y": 540,
         "wires": []
     },
     {
@@ -178,8 +179,8 @@
         "topic": "",
         "payload": "1",
         "payloadType": "num",
-        "x": 370,
-        "y": 320,
+        "x": 190,
+        "y": 340,
         "wires": [
             [
                 "41b167bc.bbffc"
@@ -207,12 +208,22 @@
         "topic": "",
         "payload": "0",
         "payloadType": "num",
-        "x": 370,
-        "y": 360,
+        "x": 190,
+        "y": 380,
         "wires": [
             [
                 "41b167bc.bbffc"
             ]
         ]
+    },
+    {
+        "id": "82428d88.c2784",
+        "type": "comment",
+        "z": "7d7b30a8.5bc2b",
+        "name": "PIR check",
+        "info": "",
+        "x": 180,
+        "y": 460,
+        "wires": []
     }
 ]
