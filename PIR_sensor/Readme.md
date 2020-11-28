@@ -2,7 +2,6 @@
 
 ## Materials
  - Raspberry
- - resistor
  - PIR Sensor (HC-SR501)
 
 ## Calibration
@@ -21,4 +20,5 @@ Pinout(ignore led):
 
 
  ## Sources
-https://create.arduino.cc/projecthub/electropeak/pir-motion-sensor-how-to-use-pirs-w-arduino-raspberry-pi-18d7fa
++ [gpiozero library PIR example](https://gpiozero.readthedocs.io/en/stable/recipes.html#motion-sensor)
++ [Arduino sample project](https://create.arduino.cc/projecthub/electropeak/pir-motion-sensor-how-to-use-pirs-w-arduino-raspberry-pi-18d7fa)
