@@ -1,0 +1,218 @@
+[
+    {
+        "id": "7d7b30a8.5bc2b",
+        "type": "tab",
+        "label": "LED test flow",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "740a99d2.b07d1",
+        "type": "function",
+        "z": "7d7b30a8.5bc2b",
+        "name": "startBlink",
+        "func": "var BLINKDELAY = 250;\n\nvar light = true;\n\n\nvar blinker = setInterval(blink, BLINKDELAY);\n\nglobal.set(\"blinker\", blinker);\n\nfunction blink () {\n    \n    if (light) {\n        msg.payload = 1;\n        light = false;\n    }\n    \n    else {\n        msg.payload = 0;\n        light = true;\n    }\n    \n    node.send(msg);\n}\n\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 360,
+        "y": 200,
+        "wires": [
+            [
+                "41b167bc.bbffc"
+            ]
+        ]
+    },
+    {
+        "id": "73f5f278.0231bc",
+        "type": "inject",
+        "z": "7d7b30a8.5bc2b",
+        "name": "pressme",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 204,
+        "y": 200,
+        "wires": [
+            [
+                "740a99d2.b07d1"
+            ]
+        ]
+    },
+    {
+        "id": "41b167bc.bbffc",
+        "type": "rpi-gpio out",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "pin": "11",
+        "set": false,
+        "level": "0",
+        "freq": "1000",
+        "out": "pwm",
+        "x": 549,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "cc1b11b1.bebb28",
+        "type": "function",
+        "z": "7d7b30a8.5bc2b",
+        "name": "stopBlink",
+        "func": "clearInterval(global.get(\"blinker\"));\n\nmsg.payload = 0;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 360,
+        "y": 260,
+        "wires": [
+            [
+                "41b167bc.bbffc"
+            ]
+        ]
+    },
+    {
+        "id": "5db82a6c.1b547c",
+        "type": "inject",
+        "z": "7d7b30a8.5bc2b",
+        "name": "pressme",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 195,
+        "y": 261,
+        "wires": [
+            [
+                "cc1b11b1.bebb28"
+            ]
+        ]
+    },
+    {
+        "id": "684e2449.974414",
+        "type": "rpi-gpio in",
+        "z": "7d7b30a8.5bc2b",
+        "name": "PIR sensor",
+        "pin": "7",
+        "intype": "tri",
+        "debounce": "25",
+        "read": false,
+        "x": 180,
+        "y": 480,
+        "wires": [
+            [
+                "f60b971f.d72818"
+            ]
+        ]
+    },
+    {
+        "id": "38a9dec0.2999f2",
+        "type": "comment",
+        "z": "7d7b30a8.5bc2b",
+        "name": "LED control",
+        "info": "",
+        "x": 190,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "f60b971f.d72818",
+        "type": "debug",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "c176f953.9e71b8",
+        "type": "inject",
+        "z": "7d7b30a8.5bc2b",
+        "name": "on",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 370,
+        "y": 320,
+        "wires": [
+            [
+                "41b167bc.bbffc"
+            ]
+        ]
+    },
+    {
+        "id": "97f7256a.4ea5e8",
+        "type": "inject",
+        "z": "7d7b30a8.5bc2b",
+        "name": "off",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 370,
+        "y": 360,
+        "wires": [
+            [
+                "41b167bc.bbffc"
+            ]
+        ]
+    }
+]
