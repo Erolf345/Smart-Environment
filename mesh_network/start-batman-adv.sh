@@ -21,4 +21,4 @@ sudo iw wlan0 ibss join my-mesh-network 2432 # join mesh (frequency must match c
 
 sleep 1
 sudo sysctl net.ipv4.icmp_echo_ignore_broadcasts=0
-ping -c 2 169.254.255.255
+ping -c 2 -b 169.254.255.255
