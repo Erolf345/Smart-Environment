@@ -13,7 +13,9 @@ sudo apt install batctl
 ```
 should be fine but newer versions exist.
 
-Once installed just run start-batman-adv.sh as root. CAUTION: Wifi networking will be disabled. Either connect using ethernet or reconnect via mesh network.
+Once installed setup the interfaces by running ```sudo ./init.sh``` and reboot. Wifi connectivity may not work after this point.
+
+Then just run start-batman-adv.sh as root. CAUTION: Wifi networking will be disabled. Either connect using ethernet or reconnect via mesh network.
 
 Now you can use batctl to get information about the network. 
 
