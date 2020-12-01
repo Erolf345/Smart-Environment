@@ -18,3 +18,7 @@ sudo iwconfig wlan0 channel 3 # arbitrary channel
 sudo ip link set wlan0 up 
 sudo ifconfig bat0 mtu 1468 # because we can't increase mtu of wlan0
 sudo iw wlan0 ibss join my-mesh-network 2432 # join mesh (frequency must match channel)
+
+sleep 1
+sudo sysctl net.ipv4.icmp_echo_ignore_broadcasts=0
+ping -c 2 169.254.255.255
