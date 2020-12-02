@@ -1,0 +1,374 @@
+[
+    {
+        "id": "4c218d37.917254",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "b0d8c5d1.4353b8",
+        "type": "rpi-gpio out",
+        "z": "4c218d37.917254",
+        "name": "Blue LED",
+        "pin": "15",
+        "set": true,
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "x": 680,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "e8f22acc.312ce8",
+        "type": "rpi-gpio in",
+        "z": "4c218d37.917254",
+        "name": "PIR",
+        "pin": "16",
+        "intype": "up",
+        "debounce": "25",
+        "read": true,
+        "x": 90,
+        "y": 200,
+        "wires": [
+            [
+                "d146b893.2a2668"
+            ]
+        ]
+    },
+    {
+        "id": "d146b893.2a2668",
+        "type": "switch",
+        "z": "4c218d37.917254",
+        "name": "If input is 1",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 230,
+        "y": 200,
+        "wires": [
+            [
+                "cc52c859.88bf58"
+            ],
+            [
+                "36b679e0.66d126"
+            ]
+        ]
+    },
+    {
+        "id": "cc52c859.88bf58",
+        "type": "change",
+        "z": "4c218d37.917254",
+        "name": "Change to 0",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "0",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "current_pir",
+                "pt": "global",
+                "to": "0",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "b0d8c5d1.4353b8"
+            ]
+        ]
+    },
+    {
+        "id": "36b679e0.66d126",
+        "type": "change",
+        "z": "4c218d37.917254",
+        "name": "Change to 1",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "1",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "current_pir",
+                "pt": "global",
+                "to": "1",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 410,
+        "y": 240,
+        "wires": [
+            [
+                "b0d8c5d1.4353b8"
+            ]
+        ]
+    },
+    {
+        "id": "29b2f7f0.39a518",
+        "type": "comment",
+        "z": "4c218d37.917254",
+        "name": "Person enters detection range (Doubleclick for more infos)",
+        "info": "Since there are no blind spots in the room, every person that enters, is already detected from at least one other sensor.\n\nWe now make TCP requests to the Mesh network to see if maybe we are the only ones detecting that person.\n\nWe also share our info with the rest of the network.",
+        "x": 610,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "d2e0f58a.1f0308",
+        "type": "comment",
+        "z": "4c218d37.917254",
+        "name": "Nobody detected, LED is turned off",
+        "info": "",
+        "x": 160,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "3aac463b.037a1a",
+        "type": "inject",
+        "z": "4c218d37.917254",
+        "name": "Play scenario",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "str",
+        "x": 130,
+        "y": 540,
+        "wires": [
+            [
+                "93cde635.dbb468"
+            ]
+        ]
+    },
+    {
+        "id": "f4297c1f.fa661",
+        "type": "tcp request",
+        "z": "4c218d37.917254",
+        "server": "",
+        "port": "",
+        "out": "time",
+        "splitc": "0",
+        "name": "",
+        "x": 630,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "482c52e7.d8c82c",
+        "type": "tcp request",
+        "z": "4c218d37.917254",
+        "server": "",
+        "port": "",
+        "out": "time",
+        "splitc": "0",
+        "name": "",
+        "x": 630,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2b5c2782.46ba08",
+        "type": "tcp request",
+        "z": "4c218d37.917254",
+        "server": "",
+        "port": "",
+        "out": "time",
+        "splitc": "0",
+        "name": "",
+        "x": 630,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4adf4454.1321bc",
+        "type": "tcp out",
+        "z": "4c218d37.917254",
+        "host": "localhost",
+        "port": "88",
+        "beserver": "client",
+        "base64": false,
+        "end": false,
+        "name": "",
+        "x": 660,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "cbd6f7b8.2af758",
+        "type": "comment",
+        "z": "4c218d37.917254",
+        "name": "This is only temporary as long as no real TCP input is available",
+        "info": "",
+        "x": 250,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "d746d431.4dd218",
+        "type": "rpi-gpio out",
+        "z": "4c218d37.917254",
+        "name": "Red LED",
+        "pin": "13",
+        "set": true,
+        "level": "1",
+        "freq": "",
+        "out": "out",
+        "x": 440,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "81e3bd5d.33f08",
+        "type": "function",
+        "z": "4c218d37.917254",
+        "name": "Change to 1 or 0",
+        "func": "if (msg.payload == \"0\") {\n    msg.payload = \"1\"\n    return msg;\n} if (msg.payload == \"1\" && global.get(\"current_pir\") == \"0\") {\n    msg.payload =\"0\";\n    return msg;\n}\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 470,
+        "y": 500,
+        "wires": [
+            [
+                "b0d8c5d1.4353b8"
+            ]
+        ]
+    },
+    {
+        "id": "bf119a9d.433ed8",
+        "type": "inject",
+        "z": "4c218d37.917254",
+        "name": "Mesh Off",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "str",
+        "x": 800,
+        "y": 200,
+        "wires": [
+            [
+                "d792910f.7b563"
+            ]
+        ]
+    },
+    {
+        "id": "93cde635.dbb468",
+        "type": "function",
+        "z": "4c218d37.917254",
+        "name": "",
+        "func": "msg.payload = global.get(\"myData\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 280,
+        "y": 540,
+        "wires": [
+            [
+                "d746d431.4dd218",
+                "81e3bd5d.33f08"
+            ]
+        ]
+    },
+    {
+        "id": "d792910f.7b563",
+        "type": "function",
+        "z": "4c218d37.917254",
+        "name": "Set as global vars",
+        "func": "if (msg.payload == \"0\") {\n    global.set(\"myData\", \"1\")\n} else {\n    global.set(\"myData\", \"0\")\n}\n\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1010,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f723ae26.4978d",
+        "type": "inject",
+        "z": "4c218d37.917254",
+        "name": "Mesh On",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "str",
+        "x": 800,
+        "y": 120,
+        "wires": [
+            [
+                "d792910f.7b563"
+            ]
+        ]
+    }
+]
