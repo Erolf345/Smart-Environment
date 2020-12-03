@@ -124,7 +124,7 @@
                 "f60b971f.d72818",
                 "41b167bc.bbffc",
                 "20d35e60.b0f65a",
-                "1e562453.9b452c"
+                "b12eb4c7.8746d"
             ]
         ]
     },
@@ -143,7 +143,7 @@
         "type": "debug",
         "z": "7d7b30a8.5bc2b",
         "name": "",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -297,7 +297,7 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 670,
+        "x": 870,
         "y": 920,
         "wires": []
     },
@@ -311,7 +311,7 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 830,
+        "x": 1030,
         "y": 820,
         "wires": []
     },
@@ -326,7 +326,7 @@
         "tostatus": false,
         "complete": "payload",
         "targetType": "msg",
-        "x": 670,
+        "x": 870,
         "y": 740,
         "wires": []
     },
@@ -340,7 +340,7 @@
         "level": "0",
         "freq": "",
         "out": "pwm",
-        "x": 660,
+        "x": 860,
         "y": 820,
         "wires": []
     },
@@ -354,7 +354,7 @@
         "level": "0",
         "freq": "",
         "out": "pwm",
-        "x": 660,
+        "x": 860,
         "y": 780,
         "wires": []
     },
@@ -368,7 +368,7 @@
         "level": "0",
         "freq": "",
         "out": "pwm",
-        "x": 660,
+        "x": 860,
         "y": 860,
         "wires": []
     },
@@ -431,13 +431,13 @@
         "type": "function",
         "z": "7d7b30a8.5bc2b",
         "name": "adjust to rbg led",
-        "func": "\nreturn {payload: (1 - msg.payload)*100};\n//invert",
+        "func": "let local_pir = msg.payload[\"pi/36\"]\n\n\n\nreturn {payload: (1 - local_pir)*100};\n//invert",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 500,
-        "y": 640,
+        "x": 660,
+        "y": 660,
         "wires": [
             [
                 "5f036011.4248c8",
@@ -467,14 +467,14 @@
         "datamode": "stream",
         "datatype": "buffer",
         "newline": "",
-        "topic": "",
+        "topic": "network",
         "base64": false,
         "x": 140,
         "y": 1120,
         "wires": [
             [
                 "df2da042.662a1",
-                "1e562453.9b452c"
+                "b12eb4c7.8746d"
             ]
         ]
     },
@@ -531,14 +531,14 @@
         "showSwatch": false,
         "showPicker": true,
         "showValue": false,
-        "showHue": true,
+        "showHue": false,
         "showAlpha": false,
         "showLightness": true,
         "square": "false",
         "dynOutput": "true",
         "order": 0,
-        "width": "5",
-        "height": "9",
+        "width": "10",
+        "height": "5",
         "passthru": true,
         "topic": "",
         "x": 90,
@@ -548,5 +548,159 @@
                 "30e73299.7e539e"
             ]
         ]
+    },
+    {
+        "id": "8ccddb9a.a55f38",
+        "type": "inject",
+        "z": "7d7b30a8.5bc2b",
+        "name": "temperature",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "temperature",
+        "payload": "10",
+        "payloadType": "num",
+        "x": 850,
+        "y": 1100,
+        "wires": [
+            [
+                "47b769c5.cb0e28"
+            ]
+        ]
+    },
+    {
+        "id": "47b769c5.cb0e28",
+        "type": "join",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1050,
+        "y": 1140,
+        "wires": [
+            [
+                "f9afb265.b11b7"
+            ]
+        ]
+    },
+    {
+        "id": "f9afb265.b11b7",
+        "type": "debug",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 1210,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "2d269127.4f04ce",
+        "type": "inject",
+        "z": "7d7b30a8.5bc2b",
+        "name": "humidity",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "humidity",
+        "payload": "",
+        "payloadType": "num",
+        "x": 840,
+        "y": 1140,
+        "wires": [
+            [
+                "47b769c5.cb0e28"
+            ]
+        ]
+    },
+    {
+        "id": "d6fbe805.0e4628",
+        "type": "inject",
+        "z": "7d7b30a8.5bc2b",
+        "name": "pressure",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "pressure",
+        "payload": "999",
+        "payloadType": "num",
+        "x": 840,
+        "y": 1180,
+        "wires": [
+            [
+                "47b769c5.cb0e28"
+            ]
+        ]
+    },
+    {
+        "id": "b12eb4c7.8746d",
+        "type": "join",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 450,
+        "y": 660,
+        "wires": [
+            [
+                "1e562453.9b452c",
+                "79344d4c.593544"
+            ]
+        ]
+    },
+    {
+        "id": "79344d4c.593544",
+        "type": "debug",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 730,
+        "y": 580,
+        "wires": []
     }
 ]
