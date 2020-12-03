@@ -7,6 +7,12 @@
         "info": ""
     },
     {
+        "id": "b0d2fcdd.369d6",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard"
+    },
+    {
         "id": "ce52a348.41d78",
         "type": "ui_group",
         "name": "Chart",
@@ -15,12 +21,6 @@
         "disp": true,
         "width": "12",
         "collapse": false
-    },
-    {
-        "id": "b0d2fcdd.369d6",
-        "type": "ui_tab",
-        "name": "Home",
-        "icon": "dashboard"
     },
     {
         "id": "740a99d2.b07d1",
@@ -521,36 +521,6 @@
         "wires": []
     },
     {
-        "id": "e5d9eb.0eb01618",
-        "type": "ui_colour_picker",
-        "z": "7d7b30a8.5bc2b",
-        "name": "",
-        "label": "Pick a color",
-        "group": "ce52a348.41d78",
-        "format": "rgb",
-        "outformat": "object",
-        "showSwatch": false,
-        "showPicker": true,
-        "showValue": false,
-        "showHue": false,
-        "showAlpha": false,
-        "showLightness": true,
-        "square": "false",
-        "dynOutput": "true",
-        "order": 0,
-        "width": "10",
-        "height": "5",
-        "passthru": true,
-        "topic": "",
-        "x": 90,
-        "y": 820,
-        "wires": [
-            [
-                "30e73299.7e539e"
-            ]
-        ]
-    },
-    {
         "id": "b12eb4c7.8746d",
         "type": "join",
         "z": "7d7b30a8.5bc2b",
@@ -648,7 +618,7 @@
         "type": "function",
         "z": "7d7b30a8.5bc2b",
         "name": "Extract IPs from output",
-        "func": "var lines = msg.payload.split('\\n');\nlines.splice(0,3);\nlines.pop();\nvar cleaned = lines.join('\\n');\n// TODO: sanity check output\nvar ips= [];\nip_arr = cleaned.split('\\n');\nfor (i = 0; i < ip_arr.length; i++) {\n    var ip = ip_arr[i];\n    ip = ip.split('.');\n    // TODO: sanity check\n    ip[0] = ip[0].replace(/\\D/g,''); // remove non digits from first element in array\n    ip[3] = ip[3].split(' ')[0]; // remove mac adress\n    ip = ip.join('.');\n    ips.push(ip);\n}\nmsg.payload = ips;\nmsg.topic = \"ip_addresses\"\nreturn msg;",
+        "func": "var lines = msg.payload.split('\\n');\nlines.splice(0,3);\nlines.pop();\nvar ip_arr = lines.join('\\n');\n\nvar ips= [];\nfor (i = 0; i < ip_arr.length; i++) {\n    var ip = ip_arr[i];\n    ip = ip.split('.');\n    // TODO: sanity check\n    ip[0] = ip[0].replace(/\\D/g,''); // remove non digits from first element in array\n    ip[3] = ip[3].split(' ')[0]; // remove mac adress\n    ip = ip.join('.');\n    ips.push(ip);\n}\nmsg.payload = ips;\nmsg.topic = \"ip_addresses\"\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -684,15 +654,15 @@
         "z": "7d7b30a8.5bc2b",
         "name": "",
         "mode": "custom",
-        "build": "string",
+        "build": "object",
         "property": "payload",
         "propertyType": "msg",
         "key": "topic",
         "joiner": "\\n",
         "joinerType": "str",
-        "accumulate": false,
+        "accumulate": true,
         "timeout": "",
-        "count": "",
+        "count": "2",
         "reduceRight": false,
         "reduceExp": "",
         "reduceInit": "",
@@ -737,6 +707,36 @@
         "y": 1380,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "e5d9eb.0eb01618",
+        "type": "ui_colour_picker",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "label": "Pick a color",
+        "group": "ce52a348.41d78",
+        "format": "rgb",
+        "outformat": "object",
+        "showSwatch": false,
+        "showPicker": true,
+        "showValue": false,
+        "showHue": false,
+        "showAlpha": false,
+        "showLightness": true,
+        "square": "false",
+        "dynOutput": "true",
+        "order": 0,
+        "width": "10",
+        "height": "5",
+        "passthru": true,
+        "topic": "",
+        "x": 90,
+        "y": 820,
+        "wires": [
+            [
+                "30e73299.7e539e"
+            ]
         ]
     }
 ]
