@@ -107,7 +107,8 @@
             [
                 "f60b971f.d72818",
                 "41b167bc.bbffc",
-                "20d35e60.b0f65a"
+                "20d35e60.b0f65a",
+                "1e562453.9b452c"
             ]
         ]
     },
@@ -457,7 +458,7 @@
         "wires": [
             [
                 "df2da042.662a1",
-                "a272f13f.fb6548"
+                "1e562453.9b452c"
             ]
         ]
     },
@@ -938,26 +939,6 @@
         "y": 1120,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "a272f13f.fb6548",
-        "type": "function",
-        "z": "7d7b30a8.5bc2b",
-        "name": "adjust to rbg led",
-        "func": "\nreturn {payload: (1 - msg.payload)*100};\n//invert",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 420,
-        "y": 1040,
-        "wires": [
-            [
-                "5f036011.4248c8",
-                "3bfc15b3.af5d12",
-                "3a344f73.a341b"
-            ]
         ]
     }
 ]
