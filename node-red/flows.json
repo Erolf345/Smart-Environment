@@ -123,8 +123,9 @@
             [
                 "f60b971f.d72818",
                 "41b167bc.bbffc",
-                "20d35e60.b0f65a",
-                "b12eb4c7.8746d"
+                "b12eb4c7.8746d",
+                "edf9809c.5c166",
+                "20d35e60.b0f65a"
             ]
         ]
     },
@@ -206,13 +207,13 @@
         "id": "30e73299.7e539e",
         "type": "function",
         "z": "7d7b30a8.5bc2b",
-        "name": "",
+        "name": "Invert and split",
         "func": "\nreturn [\n    //need to invert for LED (maybe not here)\n    {payload:255 - msg.payload.r},\n    {payload:255 - msg.payload.g},\n    {payload:255 - msg.payload.b}\n];",
         "outputs": 3,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 400,
+        "x": 420,
         "y": 820,
         "wires": [
             [
@@ -515,7 +516,7 @@
         "base64": false,
         "end": false,
         "name": "",
-        "x": 370,
+        "x": 390,
         "y": 1280,
         "wires": []
     },
@@ -593,7 +594,7 @@
         "wires": []
     },
     {
-        "id": "c669b177.a30f6",
+        "id": "95f32362.be46b",
         "type": "inject",
         "z": "7d7b30a8.5bc2b",
         "name": "Get IPs",
@@ -613,16 +614,16 @@
         "topic": "",
         "payload": "",
         "payloadType": "str",
-        "x": 660,
-        "y": 120,
+        "x": 150,
+        "y": 1560,
         "wires": [
             [
-                "c8c8fa1e.f04cf8"
+                "cfe97850.9c6638"
             ]
         ]
     },
     {
-        "id": "c8c8fa1e.f04cf8",
+        "id": "cfe97850.9c6638",
         "type": "exec",
         "z": "7d7b30a8.5bc2b",
         "command": "sudo batctl dc",
@@ -632,36 +633,37 @@
         "timer": "",
         "oldrc": false,
         "name": "",
-        "x": 670,
-        "y": 180,
+        "x": 160,
+        "y": 1620,
         "wires": [
             [
-                "40c4f385.5fca4c"
+                "503aa18.be17e6"
             ],
             [],
             []
         ]
     },
     {
-        "id": "40c4f385.5fca4c",
+        "id": "503aa18.be17e6",
         "type": "function",
         "z": "7d7b30a8.5bc2b",
         "name": "Extract IPs from output",
-        "func": "var lines = msg.payload.split('\\n');\nlines.splice(0,3);\nlines.pop();\nvar cleaned = lines.join('\\n');\n// TODO: sanity check output\nvar ips= [];\nip_arr = cleaned.split('\\n');\nfor (i = 0; i < ip_arr.length; i++) {\n    var ip = ip_arr[i];\n    ip = ip.split('.');\n    // TODO: sanity check\n    ip[0] = ip[0].replace(/\\D/g,''); // remove non digits from first element in array\n    ip[3] = ip[3].split(' ')[0]; // remove mac adress\n    ip = ip.join('.');\n    ips.push(ip);\n}\nmsg.payload = ips;\nreturn msg;",
+        "func": "var lines = msg.payload.split('\\n');\nlines.splice(0,3);\nlines.pop();\nvar cleaned = lines.join('\\n');\n// TODO: sanity check output\nvar ips= [];\nip_arr = cleaned.split('\\n');\nfor (i = 0; i < ip_arr.length; i++) {\n    var ip = ip_arr[i];\n    ip = ip.split('.');\n    // TODO: sanity check\n    ip[0] = ip[0].replace(/\\D/g,''); // remove non digits from first element in array\n    ip[3] = ip[3].split(' ')[0]; // remove mac adress\n    ip = ip.join('.');\n    ips.push(ip);\n}\nmsg.payload = ips;\nmsg.topic = \"ip_addresses\"\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 710,
-        "y": 240,
+        "x": 200,
+        "y": 1680,
         "wires": [
             [
-                "d7864f42.a0e69"
+                "983d5af.c2a63a8",
+                "edf9809c.5c166"
             ]
         ]
     },
     {
-        "id": "d7864f42.a0e69",
+        "id": "983d5af.c2a63a8",
         "type": "debug",
         "z": "7d7b30a8.5bc2b",
         "name": "",
@@ -672,8 +674,69 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 670,
-        "y": 300,
+        "x": 160,
+        "y": 1740,
         "wires": []
+    },
+    {
+        "id": "edf9809c.5c166",
+        "type": "join",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "mode": "custom",
+        "build": "string",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 350,
+        "y": 1380,
+        "wires": [
+            [
+                "4acef986.d22658"
+            ]
+        ]
+    },
+    {
+        "id": "4acef986.d22658",
+        "type": "function",
+        "z": "7d7b30a8.5bc2b",
+        "name": "Send to all IPs",
+        "func": "let motion = msg.payload[\"pi/36\"];\nlet addresses = msg.payload[\"ip_addresses\"];\n\nfor (ip of addresses){\n    msg = {host: ip, payload: motion };\n    node.send(motion);\n}\n\n//return msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 520,
+        "y": 1380,
+        "wires": [
+            [
+                "d72e01c0.3db6c8"
+            ]
+        ]
+    },
+    {
+        "id": "d72e01c0.3db6c8",
+        "type": "tcp request",
+        "z": "7d7b30a8.5bc2b",
+        "server": "",
+        "port": "55555",
+        "out": "time",
+        "splitc": "0",
+        "name": "",
+        "x": 700,
+        "y": 1380,
+        "wires": [
+            []
+        ]
     }
 ]

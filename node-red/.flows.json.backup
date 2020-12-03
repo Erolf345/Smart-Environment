@@ -591,5 +591,89 @@
         "x": 730,
         "y": 580,
         "wires": []
+    },
+    {
+        "id": "c669b177.a30f6",
+        "type": "inject",
+        "z": "7d7b30a8.5bc2b",
+        "name": "Get IPs",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 660,
+        "y": 120,
+        "wires": [
+            [
+                "c8c8fa1e.f04cf8"
+            ]
+        ]
+    },
+    {
+        "id": "c8c8fa1e.f04cf8",
+        "type": "exec",
+        "z": "7d7b30a8.5bc2b",
+        "command": "sudo batctl dc",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 670,
+        "y": 180,
+        "wires": [
+            [
+                "40c4f385.5fca4c"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "40c4f385.5fca4c",
+        "type": "function",
+        "z": "7d7b30a8.5bc2b",
+        "name": "Extract IPs from output",
+        "func": "var lines = msg.payload.split('\\n');\nlines.splice(0,3);\nlines.pop();\nvar cleaned = lines.join('\\n');\n// TODO: sanity check output\nvar ips= [];\nip_arr = cleaned.split('\\n');\nfor (i = 0; i < ip_arr.length; i++) {\n    var ip = ip_arr[i];\n    ip = ip.split('.');\n    // TODO: sanity check\n    ip[0] = ip[0].replace(/\\D/g,''); // remove non digits from first element in array\n    ip[3] = ip[3].split(' ')[0]; // remove mac adress\n    ip = ip.join('.');\n    ips.push(ip);\n}\nmsg.payload = ips;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 710,
+        "y": 240,
+        "wires": [
+            [
+                "d7864f42.a0e69"
+            ]
+        ]
+    },
+    {
+        "id": "d7864f42.a0e69",
+        "type": "debug",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 300,
+        "wires": []
     }
 ]
