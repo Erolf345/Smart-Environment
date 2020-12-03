@@ -210,7 +210,9 @@
         "func": "\nreturn [\n    //need to invert for LED (maybe not here)\n    {payload:255 - msg.payload.r},\n    {payload:255 - msg.payload.g},\n    {payload:255 - msg.payload.b}\n];",
         "outputs": 3,
         "noerr": 0,
-        "x": 260,
+        "initialize": "",
+        "finalize": "",
+        "x": 400,
         "y": 820,
         "wires": [
             [
@@ -236,7 +238,7 @@
         "round": true,
         "property": "payload",
         "name": "B",
-        "x": 470,
+        "x": 610,
         "y": 860,
         "wires": [
             [
@@ -257,7 +259,7 @@
         "round": true,
         "property": "payload",
         "name": "G",
-        "x": 470,
+        "x": 610,
         "y": 820,
         "wires": [
             [
@@ -278,7 +280,7 @@
         "round": true,
         "property": "payload",
         "name": "R",
-        "x": 470,
+        "x": 610,
         "y": 780,
         "wires": [
             [
@@ -431,18 +433,16 @@
         "type": "function",
         "z": "7d7b30a8.5bc2b",
         "name": "adjust to rbg led",
-        "func": "let local_pir = msg.payload[\"pi/36\"]\n\n\n\nreturn {payload: (1 - local_pir)*100};\n//invert",
+        "func": "let local_pir = msg.payload[\"pi/36\"]\nlet net = msg.payload[\"network\"]\n\nlet red=0\nlet green=0\nlet blue=0\n\n//compute rgb values\nif (local_pir == 1) {\n  if (net == 1){\n      red = 255;\n      green = 255;\n      blue = 255;\n  }\n  else {\n      red = 255\n  }\n}\nelse if (net==1){\n    blue = 255\n}\n\n\n//return RGB values\nreturn {payload: {r: red,b: blue, g:green}}\n\n\n//return {payload: (1 - local_pir)*100};\n//invert",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 660,
+        "x": 520,
         "y": 660,
         "wires": [
             [
-                "5f036011.4248c8",
-                "3bfc15b3.af5d12",
-                "3a344f73.a341b"
+                "30e73299.7e539e"
             ]
         ]
     },
@@ -680,7 +680,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 450,
+        "x": 290,
         "y": 660,
         "wires": [
             [
