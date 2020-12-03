@@ -19,7 +19,7 @@ Then just run start-batman-adv.sh as root. CAUTION: Wifi networking will be disa
 
 Now you can use batctl to get information about the network. 
 
-``` batctl dc ``` should return a mapping of hardware to ip-adresses to use with network layer connections. TODO: This does not work reliably. The IP adresses work but the dat_cache doesn't always list ip's.
+``` batctl dc ``` should return a mapping of hardware to ip-adresses to use with network layer connections.
 
 
 
@@ -27,8 +27,7 @@ Now you can use batctl to get information about the network.
 
 Only tested on ubuntu 18.04-20.04. Will only work if Wifi card supports IBSS or Ad-hoc (run ```iw list``` to check)
 
-Copy and paste each line of ubuntu_connect into a root terminal (some commands need delay) TODO: make script executable using sleep command
-
+Copy and paste each line of ubuntu_connect into a root terminal (some commands need delay)
 Once finished batctl commands should work as expected. The laptop is assigned the IP 169.254.100.100 so if you are adding multiple laptops, one will have to change
 
 ## Sources
