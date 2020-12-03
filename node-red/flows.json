@@ -584,11 +584,11 @@
         "topic": "",
         "payload": "",
         "payloadType": "str",
-        "x": 150,
-        "y": 1560,
+        "x": 130,
+        "y": 1480,
         "wires": [
             [
-                "cfe97850.9c6638"
+                "13b0ffe6.347ac"
             ]
         ]
     },
@@ -604,7 +604,7 @@
         "oldrc": false,
         "name": "",
         "x": 160,
-        "y": 1620,
+        "y": 1600,
         "wires": [
             [
                 "503aa18.be17e6"
@@ -618,17 +618,16 @@
         "type": "function",
         "z": "7d7b30a8.5bc2b",
         "name": "Extract IPs from output",
-        "func": "var lines = msg.payload.split('\\n');\nlines.splice(0,3);\nlines.pop();\nvar ip_arr = lines.join('\\n');\n\nvar ips= [];\nfor (i = 0; i < ip_arr.length; i++) {\n    var ip = ip_arr[i];\n    ip = ip.split('.');\n    if (ip.length != 4 ){ // sanity check\n        node.error(\"Input from batctl could not be parsed: \" + ip.join('.'));\n        continue\n    }\n    ip[0] = ip[0].replace(/\\D/g,''); // remove non digits from first element in array\n    ip[3] = ip[3].split(' ')[0]; // remove mac adress\n    ip = ip.join('.');\n    ips.push(ip);\n}\nmsg.payload = ips;\nmsg.topic = \"ip_addresses\"\nreturn msg;",
+        "func": "var ip_lines = msg.payload.split('\\n');\nip_lines.splice(0,3);\nip_lines.pop();\n\nvar ips= [];\nfor (i = 0; i < ip_lines.length; i++) {\n    var ip = ip_lines[i];\n    ip = ip.split('.');\n    if (ip.length != 4 ){ // sanity check\n        node.error(\"Input from batctl could not be parsed: \" + ip.join('.'));\n        continue\n    }\n    ip[0] = ip[0].replace(/\\D/g,''); // remove non digits from first element in array\n    ip[3] = ip[3].split(' ')[0]; // remove mac adress\n    ip = ip.join('.');\n    ips.push(ip);\n}\nmsg.ips = ips;\nmsg.topic = \"ip_addresses\"\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 200,
-        "y": 1680,
+        "x": 180,
+        "y": 1660,
         "wires": [
             [
-                "983d5af.c2a63a8",
-                "edf9809c.5c166"
+                "1f336213.81595e"
             ]
         ]
     },
@@ -641,11 +640,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 160,
-        "y": 1740,
+        "x": 150,
+        "y": 1820,
         "wires": []
     },
     {
@@ -736,6 +736,67 @@
         "wires": [
             [
                 "30e73299.7e539e"
+            ]
+        ]
+    },
+    {
+        "id": "13b0ffe6.347ac",
+        "type": "exec",
+        "z": "7d7b30a8.5bc2b",
+        "command": "sudo ping -i .2 -c3 -b 169.254.255.255",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Refresh batman table",
+        "x": 180,
+        "y": 1540,
+        "wires": [
+            [
+                "cfe97850.9c6638"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "1f336213.81595e",
+        "type": "exec",
+        "z": "7d7b30a8.5bc2b",
+        "command": "ifconfig bat0 | grep -o \"inet [0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*\" | grep -o \"[0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*\"",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "get my own IP",
+        "x": 160,
+        "y": 1720,
+        "wires": [
+            [
+                "600f1f97.226c4"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "600f1f97.226c4",
+        "type": "function",
+        "z": "7d7b30a8.5bc2b",
+        "name": "strip my ip from batctl output",
+        "func": "var my_ip = msg.payload\nvar ip_arr = msg.ips;\n\n//Filter out newline from shell command result\nmy_ip = my_ip.replace(/(\\r\\n|\\n|\\r)/gm, \"\"); \n\nip_arr = ip_arr.filter(e => e !== my_ip);\n\nmsg.payload = ip_arr\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 200,
+        "y": 1780,
+        "wires": [
+            [
+                "983d5af.c2a63a8",
+                "edf9809c.5c166"
             ]
         ]
     }
