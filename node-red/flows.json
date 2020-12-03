@@ -7,6 +7,22 @@
         "info": ""
     },
     {
+        "id": "ce52a348.41d78",
+        "type": "ui_group",
+        "name": "Chart",
+        "tab": "b0d2fcdd.369d6",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "b0d2fcdd.369d6",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard"
+    },
+    {
         "id": "740a99d2.b07d1",
         "type": "function",
         "z": "7d7b30a8.5bc2b",
@@ -502,5 +518,34 @@
         "x": 370,
         "y": 1280,
         "wires": []
+    },
+    {
+        "id": "e5d9eb.0eb01618",
+        "type": "ui_colour_picker",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "label": "",
+        "group": "ce52a348.41d78",
+        "format": "rgb",
+        "outformat": "object",
+        "showSwatch": true,
+        "showPicker": false,
+        "showValue": false,
+        "showHue": false,
+        "showAlpha": false,
+        "showLightness": true,
+        "dynOutput": "true",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "topic": "",
+        "x": 90,
+        "y": 820,
+        "wires": [
+            [
+                "30e73299.7e539e"
+            ]
+        ]
     }
 ]
