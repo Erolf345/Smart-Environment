@@ -786,7 +786,7 @@
         "type": "function",
         "z": "7d7b30a8.5bc2b",
         "name": "strip my ip from batctl output",
-        "func": "var my_ip = msg.payload\nvar ip_arr = msg.ip_addresses;\n\n//Filter out newline from shell command result\nmy_ip = my_ip.replace(/(\\r\\n|\\n|\\r)/gm, \"\"); \n\nip_arr = ip_arr.filter(e => e !== my_ip);\n\nmsg.payload = ip_arr\nreturn msg;",
+        "func": "var my_ip = msg.payload\nvar ip_arr = msg.ips;\n\n//Filter out newline from shell command result\nmy_ip = my_ip.replace(/(\\r\\n|\\n|\\r)/gm, \"\"); \n\nip_arr = ip_arr.filter(e => e !== my_ip);\n\nmsg.payload = ip_arr\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
