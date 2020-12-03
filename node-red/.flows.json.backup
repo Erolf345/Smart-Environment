@@ -743,7 +743,7 @@
         "id": "13b0ffe6.347ac",
         "type": "exec",
         "z": "7d7b30a8.5bc2b",
-        "command": "sudo ping -i .2 -c3 -b 169.254.255.255",
+        "command": "ping -c3 -b 169.254.255.255",
         "addpay": false,
         "append": "",
         "useSpawn": "false",
