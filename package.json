@@ -4,7 +4,9 @@
     "version": "0.0.1",
     "dependencies": {
         "node-red-node-pi-gpio": "1.2.1",
-        "node-red-contrib-play-audio": "2.5.0"
+        "node-red-contrib-play-audio": "2.5.0",
+        "node-red-contrib-play-sound": "0.2.0",
+        "node-red-dashboard": "2.25.0"
     },
     "node-red": {
         "settings": {
