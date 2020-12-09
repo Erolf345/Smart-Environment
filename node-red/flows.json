@@ -813,14 +813,12 @@
         "z": "f9e6941.9f5df68",
         "name": "",
         "playerOptions": "{}",
-        "audioURI": "/home/pi/Downloads/test_sound.mp3",
+        "audioURI": "/home/pi/Downloads/rotation.mp3",
         "options": "{}",
         "x": 400,
         "y": 140,
         "wires": [
-            [
-                "a68028bb.0c6818"
-            ]
+            []
         ]
     },
     {
@@ -848,42 +846,9 @@
         "y": 140,
         "wires": [
             [
-                "4b35e8d9.9f3b88",
-                "bb9acfc6.28fd4"
+                "4b35e8d9.9f3b88"
             ]
         ]
-    },
-    {
-        "id": "a68028bb.0c6818",
-        "type": "debug",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 680,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "bb9acfc6.28fd4",
-        "type": "debug",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 340,
-        "y": 80,
-        "wires": []
     },
     {
         "id": "c1178bba.400568",
@@ -913,5 +878,90 @@
                 "4b35e8d9.9f3b88"
             ]
         ]
+    },
+    {
+        "id": "1b4fe2c2.1beedd",
+        "type": "inject",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 400,
+        "wires": [
+            [
+                "aa635f36.5dd64"
+            ]
+        ]
+    },
+    {
+        "id": "aa635f36.5dd64",
+        "type": "function",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "func": "msg.payload/=3;\nif (msg.payload>0) msg.payload+=66;\nmsg.payload+=\"%\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 350,
+        "y": 420,
+        "wires": [
+            [
+                "47bfdfed.deb56"
+            ]
+        ]
+    },
+    {
+        "id": "47bfdfed.deb56",
+        "type": "exec",
+        "z": "f9e6941.9f5df68",
+        "command": "amixer cset numid=1 --",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Volume",
+        "x": 630,
+        "y": 420,
+        "wires": [
+            [
+                "3f2b9239.d76b4e"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "3f2b9239.d76b4e",
+        "type": "debug",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 340,
+        "wires": []
     }
 ]
