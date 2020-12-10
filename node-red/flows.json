@@ -892,7 +892,7 @@
         "playerOptions": "{}",
         "audioURI": "/home/pi/Downloads/rotation.mp3",
         "options": "{}",
-        "x": 400,
+        "x": 550,
         "y": 140,
         "wires": [
             []
@@ -975,27 +975,9 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 130,
-        "y": 400,
-        "wires": [
-            [
-                "aa635f36.5dd64"
-            ]
-        ]
-    },
-    {
-        "id": "aa635f36.5dd64",
-        "type": "function",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "func": "msg.payload/=3;\nif (msg.payload>0) msg.payload+=66;\nmsg.payload+=\"%\";\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 320,
+        "payload": "1",
+        "payloadType": "str",
+        "x": 120,
         "y": 400,
         "wires": [
             [
@@ -1007,14 +989,14 @@
         "id": "47bfdfed.deb56",
         "type": "exec",
         "z": "f9e6941.9f5df68",
-        "command": "amixer cset numid=1 --",
-        "addpay": true,
+        "command": "vlc /home/pi/mu_code/rotation.mp3",
+        "addpay": false,
         "append": "",
         "useSpawn": "false",
         "timer": "",
         "oldrc": false,
         "name": "Volume",
-        "x": 500,
+        "x": 380,
         "y": 400,
         "wires": [
             [
@@ -1040,26 +1022,6 @@
         "x": 690,
         "y": 400,
         "wires": []
-    },
-    {
-        "id": "9b2a50e4.6feb68",
-        "type": "fs-ops-dir",
-        "z": "c1c06219.7371",
-        "name": "Get filenames from /home/pi/songs",
-        "path": "/home/pi/songs",
-        "pathType": "str",
-        "filter": "*",
-        "filterType": "str",
-        "dir": "payload",
-        "dirType": "msg",
-        "x": 240,
-        "y": 240,
-        "wires": [
-            [
-                "265e9470.f5b29c",
-                "49883eac.45546"
-            ]
-        ]
     },
     {
         "id": "7c39a75f.a236f8",
@@ -1225,7 +1187,6 @@
         "y": 180,
         "wires": [
             [
-                "9b2a50e4.6feb68",
                 "66efbfa6.aa3508"
             ]
         ]
@@ -1903,40 +1864,8 @@
         "x": 170,
         "y": 260,
         "wires": [
-            [
-                "30fe44e.5a143bc"
-            ]
+            []
         ]
-    },
-    {
-        "id": "30fe44e.5a143bc",
-        "type": "ui_level",
-        "z": "224d605b.c4bd28",
-        "group": "bcdf1bbc.f314e",
-        "order": 3,
-        "width": "6",
-        "height": "2",
-        "name": "UI_Level",
-        "label": "",
-        "colorHi": "#e60000",
-        "colorWarn": "#ff9900",
-        "colorNormal": "#00b33c",
-        "colorOff": "#595959",
-        "min": 0,
-        "max": "10",
-        "segWarn": "",
-        "segHigh": "",
-        "unit": "",
-        "layout": "sh",
-        "channelA": "",
-        "channelB": "",
-        "decimals": 0,
-        "animations": "reactive",
-        "shape": "3",
-        "colorschema": "rainbow",
-        "x": 400,
-        "y": 260,
-        "wires": []
     },
     {
         "id": "5e20f800.472658",
@@ -2598,5 +2527,34 @@
         "x": 200,
         "y": 40,
         "wires": []
+    },
+    {
+        "id": "952a3c76.f1151",
+        "type": "inject",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "str",
+        "x": 80,
+        "y": 480,
+        "wires": [
+            [
+                "47bfdfed.deb56"
+            ]
+        ]
     }
 ]
