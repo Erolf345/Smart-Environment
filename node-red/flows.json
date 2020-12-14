@@ -9,7 +9,7 @@
     {
         "id": "f9e6941.9f5df68",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "Music Control",
         "disabled": false,
         "info": ""
     },
@@ -916,7 +916,7 @@
         "id": "a53c96c6.d61cd8",
         "type": "inject",
         "z": "f9e6941.9f5df68",
-        "name": "",
+        "name": "Open music file",
         "props": [
             {
                 "p": "payload"
@@ -929,8 +929,8 @@
         "topic": "",
         "payload": "open",
         "payloadType": "str",
-        "x": 390,
-        "y": 380,
+        "x": 240,
+        "y": 120,
         "wires": [
             [
                 "7a6093ad.512abc"
@@ -941,7 +941,7 @@
         "id": "10e903ef.9912ac",
         "type": "inject",
         "z": "f9e6941.9f5df68",
-        "name": "",
+        "name": "PlayPause music file",
         "props": [
             {
                 "p": "payload"
@@ -958,8 +958,8 @@
         "topic": "",
         "payload": "playpause",
         "payloadType": "str",
-        "x": 400,
-        "y": 440,
+        "x": 230,
+        "y": 180,
         "wires": [
             [
                 "7a6093ad.512abc"
@@ -988,7 +988,7 @@
         "payload": "5",
         "payloadType": "str",
         "x": 110,
-        "y": 500,
+        "y": 240,
         "wires": [
             [
                 "741833ea.8be7cc"
@@ -1005,8 +1005,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 280,
-        "y": 500,
+        "x": 260,
+        "y": 240,
         "wires": [
             [
                 "c79ca805.386358"
@@ -1028,8 +1028,8 @@
         "randomLast": "5",
         "randomUnits": "seconds",
         "drop": false,
-        "x": 450,
-        "y": 500,
+        "x": 410,
+        "y": 260,
         "wires": [
             [
                 "7a6093ad.512abc"
@@ -1048,8 +1048,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 850,
-        "y": 440,
+        "x": 770,
+        "y": 200,
         "wires": []
     },
     {
@@ -1065,8 +1065,8 @@
         "disableghostbox": false,
         "subtitlepath": "",
         "loop": false,
-        "x": 670,
-        "y": 440,
+        "x": 590,
+        "y": 200,
         "wires": [
             [
                 "67eb6bf0.5a1ab4"
@@ -1095,7 +1095,7 @@
         "payload": "5",
         "payloadType": "str",
         "x": 100,
-        "y": 560,
+        "y": 280,
         "wires": [
             [
                 "51255d49.972864"
@@ -1112,34 +1112,11 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 280,
-        "y": 560,
+        "x": 260,
+        "y": 280,
         "wires": [
             [
-                "683d6a63.da6234"
-            ]
-        ]
-    },
-    {
-        "id": "683d6a63.da6234",
-        "type": "delay",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "2",
-        "nbRateUnits": "",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 450,
-        "y": 560,
-        "wires": [
-            [
-                "7a6093ad.512abc"
+                "c79ca805.386358"
             ]
         ]
     }

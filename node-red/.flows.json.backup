@@ -916,7 +916,7 @@
         "id": "a53c96c6.d61cd8",
         "type": "inject",
         "z": "f9e6941.9f5df68",
-        "name": "",
+        "name": "Open music file",
         "props": [
             {
                 "p": "payload"
@@ -929,7 +929,7 @@
         "topic": "",
         "payload": "open",
         "payloadType": "str",
-        "x": 390,
+        "x": 460,
         "y": 380,
         "wires": [
             [
@@ -941,7 +941,7 @@
         "id": "10e903ef.9912ac",
         "type": "inject",
         "z": "f9e6941.9f5df68",
-        "name": "",
+        "name": "PlayPause music file",
         "props": [
             {
                 "p": "payload"
@@ -958,8 +958,8 @@
         "topic": "",
         "payload": "playpause",
         "payloadType": "str",
-        "x": 400,
-        "y": 440,
+        "x": 450,
+        "y": 460,
         "wires": [
             [
                 "7a6093ad.512abc"
@@ -1028,8 +1028,8 @@
         "randomLast": "5",
         "randomUnits": "seconds",
         "drop": false,
-        "x": 450,
-        "y": 500,
+        "x": 470,
+        "y": 540,
         "wires": [
             [
                 "7a6093ad.512abc"
@@ -1048,8 +1048,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 890,
-        "y": 440,
+        "x": 870,
+        "y": 460,
         "wires": []
     },
     {
@@ -1065,8 +1065,8 @@
         "disableghostbox": false,
         "subtitlepath": "",
         "loop": false,
-        "x": 670,
-        "y": 440,
+        "x": 690,
+        "y": 460,
         "wires": [
             [
                 "67eb6bf0.5a1ab4"
@@ -1094,8 +1094,8 @@
         "topic": "",
         "payload": "5",
         "payloadType": "str",
-        "x": 100,
-        "y": 560,
+        "x": 120,
+        "y": 580,
         "wires": [
             [
                 "51255d49.972864"
@@ -1113,33 +1113,10 @@
         "initialize": "",
         "finalize": "",
         "x": 280,
-        "y": 560,
+        "y": 580,
         "wires": [
             [
-                "683d6a63.da6234"
-            ]
-        ]
-    },
-    {
-        "id": "683d6a63.da6234",
-        "type": "delay",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "2",
-        "nbRateUnits": "",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 450,
-        "y": 560,
-        "wires": [
-            [
-                "7a6093ad.512abc"
+                "c79ca805.386358"
             ]
         ]
     }
