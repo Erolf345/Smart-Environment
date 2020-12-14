@@ -14,34 +14,6 @@
         "info": ""
     },
     {
-        "id": "c1c06219.7371",
-        "type": "tab",
-        "label": "Music Player - v1.0.0",
-        "disabled": false,
-        "info": "v1.0.0 - first public release"
-    },
-    {
-        "id": "6a5d7cb.ff81384",
-        "type": "tab",
-        "label": "Music Engine",
-        "disabled": false,
-        "info": ""
-    },
-    {
-        "id": "224d605b.c4bd28",
-        "type": "tab",
-        "label": "Player Controls",
-        "disabled": false,
-        "info": ""
-    },
-    {
-        "id": "1e4469c9.e848f6",
-        "type": "tab",
-        "label": "shutdown",
-        "disabled": false,
-        "info": ""
-    },
-    {
         "id": "b0d2fcdd.369d6",
         "type": "ui_tab",
         "name": "Home",
@@ -58,46 +30,6 @@
         "collapse": false
     },
     {
-        "id": "e2995cd7.b9add",
-        "type": "ui_group",
-        "name": "now playing",
-        "tab": "3aff5f59.0a6d88",
-        "order": 1,
-        "disp": false,
-        "width": "6",
-        "collapse": false
-    },
-    {
-        "id": "bcdf1bbc.f314e",
-        "type": "ui_group",
-        "name": "volume control",
-        "tab": "3aff5f59.0a6d88",
-        "order": 2,
-        "disp": false,
-        "width": "6",
-        "collapse": false
-    },
-    {
-        "id": "85720886.d08da",
-        "type": "ui_group",
-        "name": "play controls",
-        "tab": "3aff5f59.0a6d88",
-        "order": 3,
-        "disp": false,
-        "width": "6",
-        "collapse": false
-    },
-    {
-        "id": "acb5989b.bc373",
-        "type": "ui_group",
-        "name": "Shutdown Pi control",
-        "tab": "3aff5f59.0a6d88",
-        "order": 4,
-        "disp": true,
-        "width": "6",
-        "collapse": false
-    },
-    {
         "id": "3aff5f59.0a6d88",
         "type": "ui_tab",
         "name": "Music Controls",
@@ -105,6 +37,102 @@
         "order": 1,
         "disabled": false,
         "hidden": true
+    },
+    {
+        "id": "875a7078.91fde",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
     },
     {
         "id": "740a99d2.b07d1",
@@ -885,129 +913,7 @@
         ]
     },
     {
-        "id": "4b35e8d9.9f3b88",
-        "type": "PlaySound",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "playerOptions": "{}",
-        "audioURI": "/home/pi/Downloads/rotation.mp3",
-        "options": "{}",
-        "x": 550,
-        "y": 140,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "7e9ab8a.2833748",
-        "type": "inject",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "stop",
-        "payloadType": "str",
-        "x": 170,
-        "y": 140,
-        "wires": [
-            [
-                "4b35e8d9.9f3b88"
-            ]
-        ]
-    },
-    {
-        "id": "c1178bba.400568",
-        "type": "inject",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "start",
-        "payloadType": "str",
-        "x": 140,
-        "y": 220,
-        "wires": [
-            [
-                "4b35e8d9.9f3b88"
-            ]
-        ]
-    },
-    {
-        "id": "1b4fe2c2.1beedd",
-        "type": "inject",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "1",
-        "payloadType": "str",
-        "x": 120,
-        "y": 400,
-        "wires": [
-            [
-                "47bfdfed.deb56"
-            ]
-        ]
-    },
-    {
-        "id": "47bfdfed.deb56",
-        "type": "exec",
-        "z": "f9e6941.9f5df68",
-        "command": "vlc /home/pi/mu_code/rotation.mp3",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "Volume",
-        "x": 380,
-        "y": 400,
-        "wires": [
-            [
-                "3f2b9239.d76b4e"
-            ],
-            [],
-            []
-        ]
-    },
-    {
-        "id": "3f2b9239.d76b4e",
+        "id": "67eb6bf0.5a1ab4",
         "type": "debug",
         "z": "f9e6941.9f5df68",
         "name": "",
@@ -1015,25 +921,25 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 690,
-        "y": 400,
+        "x": 610,
+        "y": 300,
         "wires": []
     },
     {
-        "id": "7c39a75f.a236f8",
+        "id": "a53c96c6.d61cd8",
         "type": "inject",
-        "z": "c1c06219.7371",
-        "name": "Enter the path to music folder here",
+        "z": "f9e6941.9f5df68",
+        "name": "",
         "props": [
             {
                 "p": "payload"
             },
             {
-                "p": "topic",
+                "p": "filename",
+                "v": "/home/pi/Desktop/Musik/rotation.mp3",
                 "vt": "str"
             }
         ],
@@ -1042,1494 +948,39 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "/home/pi/songs",
+        "payload": "open",
         "payloadType": "str",
-        "x": 240,
-        "y": 120,
-        "wires": [
-            [
-                "44492279.72883c"
-            ]
-        ]
-    },
-    {
-        "id": "265e9470.f5b29c",
-        "type": "debug",
-        "z": "c1c06219.7371",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "x": 550,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "ae9850d0.8bcc9",
-        "type": "debug",
-        "z": "c1c06219.7371",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "x": 550,
-        "y": 360,
-        "wires": []
-    },
-    {
-        "id": "9647a584.97779",
-        "type": "change",
-        "z": "c1c06219.7371",
-        "name": "set up global object songlist",
-        "rules": [
-            {
-                "t": "set",
-                "p": "musicobj.songcount",
-                "pt": "global",
-                "to": "song_count",
-                "tot": "msg"
-            },
-            {
-                "t": "move",
-                "p": "payload",
-                "pt": "msg",
-                "to": "musicobj.songlist",
-                "tot": "global"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 220,
-        "y": 360,
-        "wires": [
-            [
-                "ae9850d0.8bcc9",
-                "9f1b663a.5047"
-            ]
-        ]
-    },
-    {
-        "id": "9f1b663a.5047",
-        "type": "change",
-        "z": "c1c06219.7371",
-        "name": "set default volume",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "220",
-                "tot": "num"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 190,
-        "y": 420,
-        "wires": [
-            [
-                "ab252747.61a3"
-            ]
-        ]
-    },
-    {
-        "id": "ab252747.61a3",
-        "type": "link out",
-        "z": "c1c06219.7371",
-        "name": "to volume",
-        "links": [
-            "15dca399.f6aa14",
-            "dc3283bb.92a"
-        ],
-        "x": 335,
-        "y": 420,
-        "wires": []
-    },
-    {
-        "id": "44492279.72883c",
-        "type": "change",
-        "z": "c1c06219.7371",
-        "name": "Set file path and musicobj global",
-        "rules": [
-            {
-                "t": "set",
-                "p": "fileURL",
-                "pt": "msg",
-                "to": "payload",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "musicobj",
-                "pt": "global",
-                "to": "{\t   \"fileURL\"    : msg.fileURL,\t   \"audioURL\"   : msg.audioURL,\t   \"songcount\"  : 0,\t   \"songlist\"   : [],\t   \"songindex\"  : -1,\t   \"songtoplay\" : \"\",\t   \"action\"     : \"start\"     \t}",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 240,
-        "y": 180,
-        "wires": [
-            [
-                "66efbfa6.aa3508"
-            ]
-        ]
-    },
-    {
-        "id": "66efbfa6.aa3508",
-        "type": "debug",
-        "z": "c1c06219.7371",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "x": 550,
-        "y": 180,
-        "wires": []
-    },
-    {
-        "id": "de6b36f6.388348",
-        "type": "debug",
-        "z": "c1c06219.7371",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "x": 550,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "9d3aeef1.4d61f8",
-        "type": "comment",
-        "z": "c1c06219.7371",
-        "name": "ReadMe Music Player v1.0.0",
-        "info": "This music player reads a folder (called 'songs') and will play the songs in alphabetical order. \nOnce all the songs have been played, it will restart the list. \n\nYou can Pause/Resume play, Skip to the next song, go to the previous song and stop playing any songs.\n\nThere is also a button to power off the Pi.\n\nI designed this to allow it to be controled by an iPhone by turning on\nthe iPhone's Personal hotspot. To access it this way, you need to add the iPhone Hotspot name\nand password to the wpa_supplicant.config file on the Pi. ",
-        "x": 200,
-        "y": 60,
-        "wires": []
-    },
-    {
-        "id": "49883eac.45546",
-        "type": "change",
-        "z": "c1c06219.7371",
-        "name": "Get rid of hidden files and get count of songs",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "[payload[$substring(0,1) != \".\"]]",
-                "tot": "jsonata"
-            },
-            {
-                "t": "set",
-                "p": "song_count",
-                "pt": "msg",
-                "to": "$count(payload)",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 270,
-        "y": 300,
-        "wires": [
-            [
-                "9647a584.97779",
-                "de6b36f6.388348"
-            ]
-        ]
-    },
-    {
-        "id": "406e779c.6c7b78",
-        "type": "PlaySound",
-        "z": "6a5d7cb.ff81384",
-        "name": "",
-        "playerOptions": "{}",
-        "audioURI": "",
-        "options": "{}",
-        "x": 730,
-        "y": 300,
-        "wires": [
-            [
-                "9124d974.eb418",
-                "9534da70.b643d8"
-            ]
-        ]
-    },
-    {
-        "id": "9124d974.eb418",
-        "type": "debug",
-        "z": "6a5d7cb.ff81384",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "x": 910,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "9104b8c9.663f4",
-        "type": "catch",
-        "z": "6a5d7cb.ff81384",
-        "name": "",
-        "scope": null,
-        "uncaught": false,
-        "x": 180,
-        "y": 380,
-        "wires": [
-            [
-                "e6bb71ad.6c646"
-            ]
-        ]
-    },
-    {
-        "id": "e6bb71ad.6c646",
-        "type": "debug",
-        "z": "6a5d7cb.ff81384",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "x": 430,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "eb681c07.0df9f",
-        "type": "switch",
-        "z": "6a5d7cb.ff81384",
-        "name": "Actions",
-        "property": "musicobj.action",
-        "propertyType": "global",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "previous",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "end",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "next",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "start",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "stop",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "pause",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "resume",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 7,
-        "x": 180,
-        "y": 240,
-        "wires": [
-            [
-                "3bd212ca.a6aee6"
-            ],
-            [
-                "d15d4dae.7daef"
-            ],
-            [
-                "d15d4dae.7daef"
-            ],
-            [
-                "d15d4dae.7daef"
-            ],
-            [
-                "b19fbd0.4ad1f4"
-            ],
-            [
-                "b19fbd0.4ad1f4"
-            ],
-            [
-                "b19fbd0.4ad1f4"
-            ]
-        ],
-        "outputLabels": [
-            "",
-            "song ended",
-            "",
-            "",
-            "",
-            "",
-            ""
-        ]
-    },
-    {
-        "id": "ed1057a7.128a78",
-        "type": "ui_text",
-        "z": "6a5d7cb.ff81384",
-        "group": "e2995cd7.b9add",
-        "order": 1,
-        "width": "6",
-        "height": "1",
-        "name": "Display song name on dashboard",
-        "label": "Now playing: ",
-        "format": "{{msg.payload}}",
-        "layout": "col-center",
-        "x": 800,
-        "y": 180,
-        "wires": []
-    },
-    {
-        "id": "986294f8.e1878",
-        "type": "change",
-        "z": "6a5d7cb.ff81384",
-        "name": "Get song name - strip out \".wav.\"",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "$globalContext(\"musicobj.songplaying\")",
-                "tot": "jsonata"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "$replace(payload, \".wav\", \"\")",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 800,
-        "y": 240,
-        "wires": [
-            [
-                "ed1057a7.128a78"
-            ]
-        ]
-    },
-    {
-        "id": "15dca399.f6aa14",
-        "type": "link in",
-        "z": "6a5d7cb.ff81384",
-        "name": "Check Action",
-        "links": [
-            "6c3cbc3d.d183f4",
-            "8a62210b.718a",
-            "a86ea6df.2170a8",
-            "ab252747.61a3",
-            "53ea45ee.eda144",
-            "290be014.9360c8"
-        ],
-        "x": 75,
-        "y": 240,
-        "wires": [
-            [
-                "eb681c07.0df9f"
-            ]
-        ]
-    },
-    {
-        "id": "6c3cbc3d.d183f4",
-        "type": "link out",
-        "z": "6a5d7cb.ff81384",
-        "name": "",
-        "links": [
-            "15dca399.f6aa14"
-        ],
-        "x": 895,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "3bd212ca.a6aee6",
-        "type": "change",
-        "z": "6a5d7cb.ff81384",
-        "name": "Get prior song ",
-        "rules": [
-            {
-                "t": "set",
-                "p": "musicobj.songindex",
-                "pt": "global",
-                "to": "$globalContext(\"musicobj.songindex\") - 1",
-                "tot": "jsonata"
-            },
-            {
-                "t": "set",
-                "p": "musicobj.songindex",
-                "pt": "global",
-                "to": "($globalContext(\"musicobj.songindex\")  >= 0)  ?  $globalContext(\"musicobj.songindex\") : $globalContext(\"musicobj.songcount\") - 1\t",
-                "tot": "jsonata"
-            },
-            {
-                "t": "set",
-                "p": "song_name",
-                "pt": "msg",
-                "to": "$globalContext(\"musicobj.songlist\")[$globalContext(\"musicobj.songindex\")]",
-                "tot": "jsonata"
-            },
-            {
-                "t": "set",
-                "p": "musicobj.action",
-                "pt": "global",
-                "to": "play",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "musicobj.songplaying",
-                "pt": "global",
-                "to": "song_name",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "audioURI",
-                "pt": "msg",
-                "to": "\"/home/pi/songs/\"&song_name",
-                "tot": "jsonata"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "start",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "options",
-                "pt": "msg",
-                "to": "{\"afplay\": [ \"-r\", 0.5, \"-t\", 2.5, \"-v\", 1 ], \"mplayer\": [ \"-volume\", 1 ] }",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 400,
-        "y": 200,
-        "wires": [
-            [
-                "986294f8.e1878",
-                "406e779c.6c7b78"
-            ]
-        ]
-    },
-    {
-        "id": "d15d4dae.7daef",
-        "type": "change",
-        "z": "6a5d7cb.ff81384",
-        "name": "get next song",
-        "rules": [
-            {
-                "t": "set",
-                "p": "musicobj.songindex",
-                "pt": "global",
-                "to": "($globalContext(\"musicobj.songindex\")+1) > ($globalContext(\"musicobj.songcount\")-1) ? 0 : $globalContext(\"musicobj.songindex\")+1",
-                "tot": "jsonata"
-            },
-            {
-                "t": "set",
-                "p": "song_name",
-                "pt": "msg",
-                "to": "$globalContext(\"musicobj.songlist\")[$globalContext(\"musicobj.songindex\")]",
-                "tot": "jsonata"
-            },
-            {
-                "t": "set",
-                "p": "musicobj.action",
-                "pt": "global",
-                "to": "play",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "musicobj.songplaying",
-                "pt": "global",
-                "to": "song_name",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "audioURI",
-                "pt": "msg",
-                "to": "\"/home/pi/songs/\"&song_name\t",
-                "tot": "jsonata"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "start",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "options",
-                "pt": "msg",
-                "to": "{\"afplay\": [ \"-r\", 0.5, \"-t\", 2.5, \"-v\", 1 ], \"mplayer\": [ \"-volume\", 1 ] }",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 400,
-        "y": 240,
-        "wires": [
-            [
-                "406e779c.6c7b78",
-                "986294f8.e1878"
-            ]
-        ]
-    },
-    {
-        "id": "9534da70.b643d8",
-        "type": "change",
-        "z": "6a5d7cb.ff81384",
-        "name": "set global action",
-        "rules": [
-            {
-                "t": "set",
-                "p": "musicobj.action",
-                "pt": "global",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 740,
-        "y": 380,
-        "wires": [
-            [
-                "6c3cbc3d.d183f4"
-            ]
-        ]
-    },
-    {
-        "id": "b19fbd0.4ad1f4",
-        "type": "change",
-        "z": "6a5d7cb.ff81384",
-        "name": "set action",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "musicobj.action",
-                "tot": "global"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 380,
+        "x": 130,
         "y": 280,
         "wires": [
             [
-                "406e779c.6c7b78"
+                "7a6093ad.512abc"
             ]
         ]
     },
     {
-        "id": "fd46bb5c.00a54",
-        "type": "comment",
-        "z": "6a5d7cb.ff81384",
-        "name": "send response from playsound back to actions",
-        "info": "",
-        "x": 840,
-        "y": 340,
-        "wires": []
-    },
-    {
-        "id": "8767759.079d608",
-        "type": "comment",
-        "z": "6a5d7cb.ff81384",
-        "name": "send response from playsound back to actions",
-        "info": "",
-        "x": 300,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "2bc0f655.2eaa92",
-        "type": "comment",
-        "z": "6a5d7cb.ff81384",
-        "name": "Watch for unexpected errors",
-        "info": "",
-        "x": 240,
-        "y": 340,
-        "wires": []
-    },
-    {
-        "id": "c1f6639f.eaecb8",
-        "type": "comment",
-        "z": "6a5d7cb.ff81384",
-        "name": "This is the music engine processing all the buttons",
-        "info": "",
-        "x": 570,
-        "y": 80,
-        "wires": []
-    },
-    {
-        "id": "39c0a9b7.b854de",
-        "type": "exec",
-        "z": "224d605b.c4bd28",
-        "command": "amixer cset numid=1 ",
-        "addpay": true,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
+        "id": "7a6093ad.512abc",
+        "type": "rpi-omxplayer",
+        "z": "f9e6941.9f5df68",
         "name": "",
-        "x": 440,
-        "y": 200,
-        "wires": [
-            [
-                "5efa42e0.af4104"
-            ],
-            [
-                "6316927a.17de7c"
-            ],
-            [
-                "749374ae.cb1e3c"
-            ]
-        ]
-    },
-    {
-        "id": "5efa42e0.af4104",
-        "type": "debug",
-        "z": "224d605b.c4bd28",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "x": 730,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "6316927a.17de7c",
-        "type": "debug",
-        "z": "224d605b.c4bd28",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "x": 730,
-        "y": 200,
-        "wires": []
-    },
-    {
-        "id": "749374ae.cb1e3c",
-        "type": "debug",
-        "z": "224d605b.c4bd28",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "x": 730,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "575f4365.4c3e04",
-        "type": "ui_slider",
-        "z": "224d605b.c4bd28",
-        "name": "Volume",
-        "label": "",
-        "tooltip": "",
-        "group": "bcdf1bbc.f314e",
-        "order": 2,
-        "width": "6",
-        "height": "1",
-        "passthru": true,
-        "outs": "all",
-        "topic": "",
-        "min": "118",
-        "max": "235",
-        "step": 1,
-        "x": 180,
-        "y": 140,
-        "wires": [
-            [
-                "1ccf7602.3d40da"
-            ]
-        ]
-    },
-    {
-        "id": "1ccf7602.3d40da",
-        "type": "trigger",
-        "z": "224d605b.c4bd28",
-        "name": "",
-        "op1": "",
-        "op2": "",
-        "op1type": "nul",
-        "op2type": "payl",
-        "duration": "250",
-        "extend": true,
-        "units": "ms",
-        "reset": "",
-        "bytopic": "all",
-        "outputs": 1,
-        "x": 200,
-        "y": 200,
-        "wires": [
-            [
-                "39c0a9b7.b854de",
-                "575f4365.4c3e04",
-                "def17d.2b9ca68"
-            ]
-        ]
-    },
-    {
-        "id": "def17d.2b9ca68",
-        "type": "range",
-        "z": "224d605b.c4bd28",
-        "minin": "118",
-        "maxin": "235",
-        "minout": "0",
-        "maxout": "10",
-        "action": "clamp",
-        "round": true,
-        "property": "payload",
-        "name": "",
-        "x": 170,
-        "y": 260,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "5e20f800.472658",
-        "type": "ui_text",
-        "z": "224d605b.c4bd28",
-        "group": "bcdf1bbc.f314e",
-        "order": 1,
-        "width": "6",
-        "height": "1",
-        "name": "",
-        "label": "Volume",
-        "format": "",
-        "layout": "col-center",
-        "x": 180,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "dc3283bb.92a",
-        "type": "link in",
-        "z": "224d605b.c4bd28",
-        "name": "volume",
-        "links": [
-            "ab252747.61a3",
-            "b4a40821.1094d8"
-        ],
-        "x": 55,
-        "y": 140,
-        "wires": [
-            [
-                "575f4365.4c3e04"
-            ]
-        ]
-    },
-    {
-        "id": "d1d0c70e.6e9f9",
-        "type": "ui_template",
-        "z": "224d605b.c4bd28",
-        "group": "85720886.d08da",
-        "name": ">>",
-        "order": 3,
-        "width": "2",
-        "height": "2",
-        "format": "\n<md-button class=\"vibrate filled touched bigfont rounded\" style=\"background-color:#2980b9\"   ng-click=\"send({payload: 'Hello World big blue'})\"> \n    >>\n</md-button> \n\n",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "templateScope": "local",
-        "x": 150,
-        "y": 576,
-        "wires": [
-            [
-                "2af0686d.edca5",
-                "beb45749.39c7"
-            ]
-        ]
-    },
-    {
-        "id": "3ecd7c9e.1cfa74",
-        "type": "ui_template",
-        "z": "224d605b.c4bd28",
-        "group": "85720886.d08da",
-        "name": "<<",
-        "order": 1,
-        "width": "2",
-        "height": "2",
-        "format": "\n<md-button class=\"vibrate filled touched bigfont rounded\" style=\"background-color:#c0392b\" ng-click=\"send({payload: 'Hello World big red'})\"> \n   &lt;&lt;\n</md-button> \n\n",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "templateScope": "local",
-        "x": 150,
-        "y": 416,
-        "wires": [
-            [
-                "ecc9799d.720eb8",
-                "2af0686d.edca5"
-            ]
-        ]
-    },
-    {
-        "id": "89e52406.0e0358",
-        "type": "ui_template",
-        "z": "224d605b.c4bd28",
-        "group": "85720886.d08da",
-        "name": "Play/Pause",
-        "order": 2,
-        "width": "2",
-        "height": "2",
-        "format": "<md-button class=\"filled touched bigfont rounded vibrate\" \n    style=\"background-color:#27ae60\" \n    ng-click=\"send({payload:1})\" > \n   Play/<br/>Pause\n</md-button> \n",
-        "storeOutMessages": false,
-        "fwdInMessages": true,
-        "templateScope": "local",
-        "x": 170,
-        "y": 496,
-        "wires": [
-            [
-                "1f595443.16ff64"
-            ]
-        ]
-    },
-    {
-        "id": "f9c772d0.33f17",
-        "type": "ui_template",
-        "z": "224d605b.c4bd28",
-        "group": "85720886.d08da",
-        "name": "Styling for player buttons",
-        "order": 5,
-        "width": "6",
-        "height": "1",
-        "format": "<style>\n  .filled { \n      height: 100% !important;\n\n      padding: 0 !important;\n      margin: 0 !important;\n  }\n  .nr-dashboard-template {\n      padding: 0;\n      margin: 0;\n  }\n  \n  .rounded {\n  border-radius: 12px 12px 12px 12px;\n}\n \n   .bigfont {\n  font-size: 18px;\n}\n\n   .smallfont {\n  font-size: 12px;\n}\n  \n</style>\n\n<script>\n$('.vibrate').on('click', function() {\n  navigator.vibrate(100);\n});\n\nfunction restore_bg(x) {\n            $(this).css(\"background-color\", x);\n    };\n\n$('.touched').on('mousedown', function() {\n    \n    var x= $(this).css(\"background-color\");\n    $(this).css(\"background-color\", \"yellow\");\n    \n    setTimeout(restore_bg.bind(this,x),100);\n    navigator.vibrate(80);\n    });\n    \n</script>",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "templateScope": "local",
-        "x": 590,
-        "y": 376,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "7c0c9248.2416ac",
-        "type": "change",
-        "z": "224d605b.c4bd28",
-        "name": "pause",
-        "rules": [
-            {
-                "t": "set",
-                "p": "musicobj.action",
-                "pt": "global",
-                "to": "pause",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "pause",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 530,
-        "y": 476,
-        "wires": [
-            [
-                "290be014.9360c8"
-            ]
-        ]
-    },
-    {
-        "id": "290be014.9360c8",
-        "type": "link out",
-        "z": "224d605b.c4bd28",
-        "name": "Play/pause",
-        "links": [
-            "15dca399.f6aa14"
-        ],
-        "x": 675,
-        "y": 496,
-        "wires": []
-    },
-    {
-        "id": "d15fc5f7.c602a8",
-        "type": "comment",
-        "z": "224d605b.c4bd28",
-        "name": "Stop",
-        "info": "",
-        "x": 150,
-        "y": 616,
-        "wires": []
-    },
-    {
-        "id": "82bd4df7.1b63f8",
-        "type": "comment",
-        "z": "224d605b.c4bd28",
-        "name": "Previous Song",
-        "info": "",
-        "x": 180,
-        "y": 376,
-        "wires": []
-    },
-    {
-        "id": "5ee5be59.84e6b8",
-        "type": "comment",
-        "z": "224d605b.c4bd28",
-        "name": "Play/Pause sound",
-        "info": "This section handles the Play/Pause switch.\n\nWhen a song is selected (above) the song is started and then\nimmediately paused. Because of this, 'play' is actually 'resume'.\n\nAt startup, the global that holds the play/pause value is empty\nso it defaults to \nWhen the button is pressed, ",
-        "x": 190,
-        "y": 456,
-        "wires": []
-    },
-    {
-        "id": "ca4426f4.fece4",
-        "type": "comment",
-        "z": "224d605b.c4bd28",
-        "name": "Next Song",
-        "info": "",
-        "x": 160,
-        "y": 536,
-        "wires": []
-    },
-    {
-        "id": "a7d29f70.ac458",
-        "type": "ui_button",
-        "z": "224d605b.c4bd28",
-        "name": "",
-        "group": "85720886.d08da",
-        "order": 4,
-        "width": "6",
-        "height": "1",
-        "passthru": false,
-        "label": "Stop",
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "icon": "",
-        "payload": "1",
-        "payloadType": "str",
-        "topic": "",
-        "x": 150,
-        "y": 656,
-        "wires": [
-            [
-                "2af0686d.edca5"
-            ]
-        ]
-    },
-    {
-        "id": "53ea45ee.eda144",
-        "type": "link out",
-        "z": "224d605b.c4bd28",
-        "name": "Stop",
-        "links": [
-            "15dca399.f6aa14"
-        ],
-        "x": 675,
-        "y": 656,
-        "wires": []
-    },
-    {
-        "id": "2af0686d.edca5",
-        "type": "change",
-        "z": "224d605b.c4bd28",
-        "name": "Stop",
-        "rules": [
-            {
-                "t": "set",
-                "p": "musicobj.action",
-                "pt": "global",
-                "to": "stop",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "stop",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
+        "filename": "/home/pi/Desktop/Musik/rotation.mp3",
+        "audiooutput": "headphones",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": false,
         "x": 350,
-        "y": 656,
+        "y": 280,
         "wires": [
             [
-                "53ea45ee.eda144"
+                "67eb6bf0.5a1ab4"
             ]
         ]
     },
     {
-        "id": "db307fd9.72383",
-        "type": "change",
-        "z": "224d605b.c4bd28",
-        "name": "next",
-        "rules": [
-            {
-                "t": "set",
-                "p": "musicobj.action",
-                "pt": "global",
-                "to": "next",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "next",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 530,
-        "y": 576,
-        "wires": [
-            [
-                "a86ea6df.2170a8"
-            ]
-        ]
-    },
-    {
-        "id": "e14c2072.9719",
-        "type": "change",
-        "z": "224d605b.c4bd28",
-        "name": "previous",
-        "rules": [
-            {
-                "t": "set",
-                "p": "musicobj.action",
-                "pt": "global",
-                "to": "previous",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 540,
-        "y": 416,
-        "wires": [
-            [
-                "8a62210b.718a"
-            ]
-        ]
-    },
-    {
-        "id": "8a62210b.718a",
-        "type": "link out",
-        "z": "224d605b.c4bd28",
-        "name": "to previous",
-        "links": [
-            "15dca399.f6aa14"
-        ],
-        "x": 675,
-        "y": 416,
-        "wires": []
-    },
-    {
-        "id": "1f595443.16ff64",
-        "type": "switch",
-        "z": "224d605b.c4bd28",
-        "name": "Flip",
-        "property": "musicobj.action",
-        "propertyType": "global",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "resume",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "initilize",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "play",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "next",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "previous",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "pause",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 7,
-        "x": 350,
-        "y": 496,
-        "wires": [
-            [
-                "7c0c9248.2416ac"
-            ],
-            [
-                "7c0c9248.2416ac"
-            ],
-            [
-                "7c0c9248.2416ac"
-            ],
-            [
-                "7c0c9248.2416ac"
-            ],
-            [
-                "7c0c9248.2416ac"
-            ],
-            [
-                "1026c9df.fbe996"
-            ],
-            [
-                "1026c9df.fbe996"
-            ]
-        ]
-    },
-    {
-        "id": "1026c9df.fbe996",
-        "type": "change",
-        "z": "224d605b.c4bd28",
-        "name": "play (resume)",
-        "rules": [
-            {
-                "t": "set",
-                "p": "musicobj.action",
-                "pt": "global",
-                "to": "resume",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "resume",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 550,
-        "y": 516,
-        "wires": [
-            [
-                "290be014.9360c8"
-            ]
-        ]
-    },
-    {
-        "id": "beb45749.39c7",
-        "type": "delay",
-        "z": "224d605b.c4bd28",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "2",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 360,
-        "y": 576,
-        "wires": [
-            [
-                "db307fd9.72383"
-            ]
-        ]
-    },
-    {
-        "id": "a86ea6df.2170a8",
-        "type": "link out",
-        "z": "224d605b.c4bd28",
-        "name": "to 'song end' check",
-        "links": [
-            "15dca399.f6aa14"
-        ],
-        "x": 675,
-        "y": 576,
-        "wires": []
-    },
-    {
-        "id": "ecc9799d.720eb8",
-        "type": "delay",
-        "z": "224d605b.c4bd28",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "2",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 360,
-        "y": 416,
-        "wires": [
-            [
-                "e14c2072.9719"
-            ]
-        ]
-    },
-    {
-        "id": "f3e0a773.8df6f8",
-        "type": "comment",
-        "z": "224d605b.c4bd28",
-        "name": "This code handles the dashboard volume controls and uses and EXEC to call AMIXER",
-        "info": "",
-        "x": 400,
-        "y": 40,
-        "wires": []
-    },
-    {
-        "id": "d61cd8f6.1fae7",
-        "type": "comment",
-        "z": "224d605b.c4bd28",
-        "name": "This code handles the dashboard player controls",
-        "info": "",
-        "x": 280,
-        "y": 336,
-        "wires": []
-    },
-    {
-        "id": "2674ae89.89529a",
-        "type": "inject",
-        "z": "1e4469c9.e848f6",
-        "name": "Press to shutdown the Pi",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 210,
-        "y": 140,
-        "wires": [
-            [
-                "91f984a1.8bd008"
-            ]
-        ]
-    },
-    {
-        "id": "91f984a1.8bd008",
-        "type": "exec",
-        "z": "1e4469c9.e848f6",
-        "command": "sudo poweroff",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "poweroff",
-        "x": 460,
-        "y": 140,
-        "wires": [
-            [
-                "ad983b0.4bc1548"
-            ],
-            [
-                "3451e19d.a7086e"
-            ],
-            [
-                "e6e62a51.ce9f9"
-            ]
-        ]
-    },
-    {
-        "id": "ad983b0.4bc1548",
-        "type": "debug",
-        "z": "1e4469c9.e848f6",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "x": 650,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "3451e19d.a7086e",
-        "type": "debug",
-        "z": "1e4469c9.e848f6",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "x": 650,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "e6e62a51.ce9f9",
-        "type": "debug",
-        "z": "1e4469c9.e848f6",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "x": 650,
-        "y": 180,
-        "wires": []
-    },
-    {
-        "id": "2ae00eff.c1689a",
-        "type": "ui_button",
-        "z": "1e4469c9.e848f6",
-        "name": "",
-        "group": "acb5989b.bc373",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "label": "Power off Pi",
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "icon": "",
-        "payload": "",
-        "payloadType": "str",
-        "topic": "",
-        "x": 150,
-        "y": 80,
-        "wires": [
-            [
-                "91f984a1.8bd008"
-            ]
-        ]
-    },
-    {
-        "id": "22d848f3.fa7d2",
-        "type": "comment",
-        "z": "1e4469c9.e848f6",
-        "name": "Two ways to shutdown the Pi",
-        "info": "",
-        "x": 200,
-        "y": 40,
-        "wires": []
-    },
-    {
-        "id": "952a3c76.f1151",
+        "id": "4c909269.97b67c",
         "type": "inject",
         "z": "f9e6941.9f5df68",
         "name": "",
@@ -2547,13 +998,71 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "0",
+        "payload": "setvolume 0.1",
         "payloadType": "str",
-        "x": 80,
-        "y": 480,
+        "x": 140,
+        "y": 360,
         "wires": [
             [
-                "47bfdfed.deb56"
+                "7a6093ad.512abc"
+            ]
+        ]
+    },
+    {
+        "id": "fdc1cef5.d81b",
+        "type": "inject",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "pause",
+        "payloadType": "str",
+        "x": 150,
+        "y": 420,
+        "wires": [
+            [
+                "7a6093ad.512abc"
+            ]
+        ]
+    },
+    {
+        "id": "10e903ef.9912ac",
+        "type": "inject",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "playpause",
+        "payloadType": "str",
+        "x": 160,
+        "y": 500,
+        "wires": [
+            [
+                "7a6093ad.512abc"
             ]
         ]
     }
