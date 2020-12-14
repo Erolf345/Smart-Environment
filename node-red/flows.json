@@ -913,22 +913,6 @@
         ]
     },
     {
-        "id": "67eb6bf0.5a1ab4",
-        "type": "debug",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 610,
-        "y": 300,
-        "wires": []
-    },
-    {
         "id": "a53c96c6.d61cd8",
         "type": "inject",
         "z": "f9e6941.9f5df68",
@@ -936,11 +920,6 @@
         "props": [
             {
                 "p": "payload"
-            },
-            {
-                "p": "filename",
-                "v": "/home/pi/Desktop/Musik/rotation.mp3",
-                "vt": "str"
             }
         ],
         "repeat": "",
@@ -950,87 +929,8 @@
         "topic": "",
         "payload": "open",
         "payloadType": "str",
-        "x": 130,
-        "y": 280,
-        "wires": [
-            [
-                "7a6093ad.512abc"
-            ]
-        ]
-    },
-    {
-        "id": "7a6093ad.512abc",
-        "type": "rpi-omxplayer",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "filename": "/home/pi/Desktop/Musik/rotation.mp3",
-        "audiooutput": "headphones",
-        "blackbackground": true,
-        "disablekeys": false,
-        "disableosd": true,
-        "disableghostbox": false,
-        "subtitlepath": "",
-        "loop": false,
-        "x": 350,
-        "y": 280,
-        "wires": [
-            [
-                "67eb6bf0.5a1ab4"
-            ]
-        ]
-    },
-    {
-        "id": "4c909269.97b67c",
-        "type": "inject",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "setvolume 0.1",
-        "payloadType": "str",
-        "x": 140,
-        "y": 360,
-        "wires": [
-            [
-                "7a6093ad.512abc"
-            ]
-        ]
-    },
-    {
-        "id": "fdc1cef5.d81b",
-        "type": "inject",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "pause",
-        "payloadType": "str",
-        "x": 150,
-        "y": 420,
+        "x": 390,
+        "y": 380,
         "wires": [
             [
                 "7a6093ad.512abc"
@@ -1058,8 +958,185 @@
         "topic": "",
         "payload": "playpause",
         "payloadType": "str",
-        "x": 160,
+        "x": 400,
+        "y": 440,
+        "wires": [
+            [
+                "7a6093ad.512abc"
+            ]
+        ]
+    },
+    {
+        "id": "d6d71397.2928f",
+        "type": "inject",
+        "z": "f9e6941.9f5df68",
+        "name": "volumedown",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "5",
+        "payloadType": "str",
+        "x": 110,
         "y": 500,
+        "wires": [
+            [
+                "741833ea.8be7cc"
+            ]
+        ]
+    },
+    {
+        "id": "741833ea.8be7cc",
+        "type": "function",
+        "z": "f9e6941.9f5df68",
+        "name": "Smoother",
+        "func": "\nvar o = false;\nfor (var i=0; i<(msg.payload*2); i++) {\n    node.send( {payload:\"volumedown\"} )\n}\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 280,
+        "y": 500,
+        "wires": [
+            [
+                "c79ca805.386358"
+            ]
+        ]
+    },
+    {
+        "id": "c79ca805.386358",
+        "type": "delay",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "2",
+        "nbRateUnits": "",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 450,
+        "y": 500,
+        "wires": [
+            [
+                "7a6093ad.512abc"
+            ]
+        ]
+    },
+    {
+        "id": "67eb6bf0.5a1ab4",
+        "type": "debug",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "7a6093ad.512abc",
+        "type": "rpi-omxplayer",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "filename": "/home/pi/Desktop/Musik/sinatra_boots.mp3",
+        "audiooutput": "headphones",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": false,
+        "x": 670,
+        "y": 440,
+        "wires": [
+            [
+                "67eb6bf0.5a1ab4"
+            ]
+        ]
+    },
+    {
+        "id": "8b95423.4ba3ec",
+        "type": "inject",
+        "z": "f9e6941.9f5df68",
+        "name": "volumeup",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "5",
+        "payloadType": "str",
+        "x": 100,
+        "y": 560,
+        "wires": [
+            [
+                "51255d49.972864"
+            ]
+        ]
+    },
+    {
+        "id": "51255d49.972864",
+        "type": "function",
+        "z": "f9e6941.9f5df68",
+        "name": "Smoother",
+        "func": "\nvar o = false;\nfor (var i=0; i<(msg.payload*2); i++) {\n    node.send( {payload:\"volumeup\"} )\n}\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 280,
+        "y": 560,
+        "wires": [
+            [
+                "683d6a63.da6234"
+            ]
+        ]
+    },
+    {
+        "id": "683d6a63.da6234",
+        "type": "delay",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "2",
+        "nbRateUnits": "",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 450,
+        "y": 560,
         "wires": [
             [
                 "7a6093ad.512abc"
