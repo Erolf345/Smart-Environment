@@ -9,7 +9,7 @@
     {
         "id": "f9e6941.9f5df68",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "Music Control",
         "disabled": false,
         "info": ""
     },
@@ -929,8 +929,8 @@
         "topic": "",
         "payload": "open",
         "payloadType": "str",
-        "x": 460,
-        "y": 380,
+        "x": 340,
+        "y": 80,
         "wires": [
             [
                 "7a6093ad.512abc"
@@ -958,40 +958,11 @@
         "topic": "",
         "payload": "playpause",
         "payloadType": "str",
-        "x": 450,
-        "y": 460,
+        "x": 290,
+        "y": 140,
         "wires": [
             [
                 "7a6093ad.512abc"
-            ]
-        ]
-    },
-    {
-        "id": "d6d71397.2928f",
-        "type": "inject",
-        "z": "f9e6941.9f5df68",
-        "name": "volumedown",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": "",
-        "topic": "",
-        "payload": "5",
-        "payloadType": "str",
-        "x": 110,
-        "y": 500,
-        "wires": [
-            [
-                "741833ea.8be7cc"
             ]
         ]
     },
@@ -1000,13 +971,13 @@
         "type": "function",
         "z": "f9e6941.9f5df68",
         "name": "Smoother",
-        "func": "\nvar o = false;\nfor (var i=0; i<(msg.payload*2); i++) {\n    node.send( {payload:\"volumedown\"} )\n}\n\nreturn null;",
+        "func": "\nvar o = false;\nfor (var i=0; i<8; i++) {\n    node.send( {payload:\"volumedown\"} )\n}\n\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 280,
-        "y": 500,
+        "x": 360,
+        "y": 200,
         "wires": [
             [
                 "c79ca805.386358"
@@ -1028,8 +999,8 @@
         "randomLast": "5",
         "randomUnits": "seconds",
         "drop": false,
-        "x": 470,
-        "y": 540,
+        "x": 530,
+        "y": 260,
         "wires": [
             [
                 "7a6093ad.512abc"
@@ -1048,8 +1019,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 870,
-        "y": 460,
+        "x": 850,
+        "y": 180,
         "wires": []
     },
     {
@@ -1065,40 +1036,11 @@
         "disableghostbox": false,
         "subtitlepath": "",
         "loop": false,
-        "x": 690,
-        "y": 460,
+        "x": 670,
+        "y": 180,
         "wires": [
             [
                 "67eb6bf0.5a1ab4"
-            ]
-        ]
-    },
-    {
-        "id": "8b95423.4ba3ec",
-        "type": "inject",
-        "z": "f9e6941.9f5df68",
-        "name": "volumeup",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": "",
-        "topic": "",
-        "payload": "5",
-        "payloadType": "str",
-        "x": 120,
-        "y": 580,
-        "wires": [
-            [
-                "51255d49.972864"
             ]
         ]
     },
@@ -1107,16 +1049,66 @@
         "type": "function",
         "z": "f9e6941.9f5df68",
         "name": "Smoother",
-        "func": "\nvar o = false;\nfor (var i=0; i<(msg.payload*2); i++) {\n    node.send( {payload:\"volumeup\"} )\n}\n\nreturn null;",
+        "func": "\nvar o = false;\nfor (var i=0; i<8; i++) {\n    node.send( {payload:\"volumeup\"} )\n}\n\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 280,
-        "y": 580,
+        "x": 360,
+        "y": 300,
         "wires": [
             [
                 "c79ca805.386358"
+            ]
+        ]
+    },
+    {
+        "id": "8d46558.c8915a8",
+        "type": "rpi-gpio in",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "pin": "12",
+        "intype": "tri",
+        "debounce": "25",
+        "read": false,
+        "x": 50,
+        "y": 240,
+        "wires": [
+            [
+                "a7a0f7fb.699e68"
+            ]
+        ]
+    },
+    {
+        "id": "a7a0f7fb.699e68",
+        "type": "switch",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 200,
+        "y": 260,
+        "wires": [
+            [
+                "741833ea.8be7cc"
+            ],
+            [
+                "51255d49.972864"
             ]
         ]
     }
