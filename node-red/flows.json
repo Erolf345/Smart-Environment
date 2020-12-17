@@ -3,7 +3,7 @@
         "id": "7d7b30a8.5bc2b",
         "type": "tab",
         "label": "LED test flow",
-        "disabled": false,
+        "disabled": true,
         "info": ""
     },
     {
@@ -1002,9 +1002,7 @@
         "x": 670,
         "y": 260,
         "wires": [
-            [
-                "7a6093ad.512abc"
-            ]
+            []
         ]
     },
     {
@@ -1022,27 +1020,6 @@
         "x": 930,
         "y": 180,
         "wires": []
-    },
-    {
-        "id": "7a6093ad.512abc",
-        "type": "rpi-omxplayer",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "filename": "/home/pi/Desktop/Musik/sinatra_boots.mp3",
-        "audiooutput": "headphones",
-        "blackbackground": true,
-        "disablekeys": false,
-        "disableosd": true,
-        "disableghostbox": false,
-        "subtitlepath": "",
-        "loop": false,
-        "x": 750,
-        "y": 180,
-        "wires": [
-            [
-                "67eb6bf0.5a1ab4"
-            ]
-        ]
     },
     {
         "id": "51255d49.972864",
@@ -1109,6 +1086,27 @@
             ],
             [
                 "51255d49.972864"
+            ]
+        ]
+    },
+    {
+        "id": "7a6093ad.512abc",
+        "type": "rpi-omxplayer",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": false,
+        "x": 750,
+        "y": 180,
+        "wires": [
+            [
+                "67eb6bf0.5a1ab4"
             ]
         ]
     }

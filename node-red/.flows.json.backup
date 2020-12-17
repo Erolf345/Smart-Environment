@@ -3,7 +3,7 @@
         "id": "7d7b30a8.5bc2b",
         "type": "tab",
         "label": "LED test flow",
-        "disabled": false,
+        "disabled": true,
         "info": ""
     },
     {
@@ -929,7 +929,7 @@
         "topic": "",
         "payload": "open",
         "payloadType": "str",
-        "x": 340,
+        "x": 420,
         "y": 80,
         "wires": [
             [
@@ -958,7 +958,7 @@
         "topic": "",
         "payload": "playpause",
         "payloadType": "str",
-        "x": 290,
+        "x": 370,
         "y": 140,
         "wires": [
             [
@@ -970,13 +970,13 @@
         "id": "741833ea.8be7cc",
         "type": "function",
         "z": "f9e6941.9f5df68",
-        "name": "Smoother",
+        "name": "Voldown Smoother",
         "func": "\nvar o = false;\nfor (var i=0; i<8; i++) {\n    node.send( {payload:\"volumedown\"} )\n}\n\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 360,
+        "x": 470,
         "y": 200,
         "wires": [
             [
@@ -999,12 +999,10 @@
         "randomLast": "5",
         "randomUnits": "seconds",
         "drop": false,
-        "x": 530,
+        "x": 670,
         "y": 260,
         "wires": [
-            [
-                "7a6093ad.512abc"
-            ]
+            []
         ]
     },
     {
@@ -1019,42 +1017,21 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 850,
+        "x": 930,
         "y": 180,
         "wires": []
-    },
-    {
-        "id": "7a6093ad.512abc",
-        "type": "rpi-omxplayer",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "filename": "/home/pi/Desktop/Musik/sinatra_boots.mp3",
-        "audiooutput": "headphones",
-        "blackbackground": true,
-        "disablekeys": false,
-        "disableosd": true,
-        "disableghostbox": false,
-        "subtitlepath": "",
-        "loop": false,
-        "x": 670,
-        "y": 180,
-        "wires": [
-            [
-                "67eb6bf0.5a1ab4"
-            ]
-        ]
     },
     {
         "id": "51255d49.972864",
         "type": "function",
         "z": "f9e6941.9f5df68",
-        "name": "Smoother",
+        "name": "Volup Smoother",
         "func": "\nvar o = false;\nfor (var i=0; i<8; i++) {\n    node.send( {payload:\"volumeup\"} )\n}\n\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 360,
+        "x": 460,
         "y": 300,
         "wires": [
             [
@@ -1071,8 +1048,8 @@
         "intype": "tri",
         "debounce": "25",
         "read": false,
-        "x": 50,
-        "y": 240,
+        "x": 110,
+        "y": 260,
         "wires": [
             [
                 "a7a0f7fb.699e68"
@@ -1101,7 +1078,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 200,
+        "x": 280,
         "y": 260,
         "wires": [
             [
@@ -1109,6 +1086,27 @@
             ],
             [
                 "51255d49.972864"
+            ]
+        ]
+    },
+    {
+        "id": "7a6093ad.512abc",
+        "type": "rpi-omxplayer",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "headphones",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": false,
+        "x": 750,
+        "y": 180,
+        "wires": [
+            [
+                "67eb6bf0.5a1ab4"
             ]
         ]
     }
