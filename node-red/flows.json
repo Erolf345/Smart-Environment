@@ -3,13 +3,20 @@
         "id": "7d7b30a8.5bc2b",
         "type": "tab",
         "label": "LED test flow",
-        "disabled": false,
+        "disabled": true,
         "info": ""
     },
     {
         "id": "f9e6941.9f5df68",
         "type": "tab",
         "label": "Music Control",
+        "disabled": true,
+        "info": ""
+    },
+    {
+        "id": "11ea8962.3c616f",
+        "type": "tab",
+        "label": "RCWL",
         "disabled": false,
         "info": ""
     },
@@ -1002,9 +1009,7 @@
         "x": 670,
         "y": 260,
         "wires": [
-            [
-                "7a6093ad.512abc"
-            ]
+            []
         ]
     },
     {
@@ -1022,27 +1027,6 @@
         "x": 930,
         "y": 180,
         "wires": []
-    },
-    {
-        "id": "7a6093ad.512abc",
-        "type": "rpi-omxplayer",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "filename": "/home/pi/Desktop/Musik/sinatra_boots.mp3",
-        "audiooutput": "headphones",
-        "blackbackground": true,
-        "disablekeys": false,
-        "disableosd": true,
-        "disableghostbox": false,
-        "subtitlepath": "",
-        "loop": false,
-        "x": 750,
-        "y": 180,
-        "wires": [
-            [
-                "67eb6bf0.5a1ab4"
-            ]
-        ]
     },
     {
         "id": "51255d49.972864",
@@ -1111,5 +1095,652 @@
                 "51255d49.972864"
             ]
         ]
+    },
+    {
+        "id": "7a6093ad.512abc",
+        "type": "rpi-omxplayer",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": true,
+        "x": 750,
+        "y": 180,
+        "wires": [
+            [
+                "67eb6bf0.5a1ab4"
+            ]
+        ]
+    },
+    {
+        "id": "51164af4.4ec64c",
+        "type": "rpi-gpio in",
+        "z": "11ea8962.3c616f",
+        "name": "PIR sensor",
+        "pin": "36",
+        "intype": "tri",
+        "debounce": "25",
+        "read": true,
+        "x": 140,
+        "y": 280,
+        "wires": [
+            [
+                "3f26ffd0.68ee18",
+                "f42e36fa.cbacf8",
+                "c59d8205.125b8"
+            ]
+        ]
+    },
+    {
+        "id": "f42e36fa.cbacf8",
+        "type": "rpi-gpio out",
+        "z": "11ea8962.3c616f",
+        "name": "Simple LED",
+        "pin": "11",
+        "set": false,
+        "level": "0",
+        "freq": "1000",
+        "out": "pwm",
+        "x": 530,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "3f26ffd0.68ee18",
+        "type": "debug",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 410,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "cb329c61.fb966",
+        "type": "inject",
+        "z": "11ea8962.3c616f",
+        "name": "on",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 150,
+        "y": 80,
+        "wires": [
+            [
+                "f42e36fa.cbacf8"
+            ]
+        ]
+    },
+    {
+        "id": "13a32bd6.8226dc",
+        "type": "inject",
+        "z": "11ea8962.3c616f",
+        "name": "off",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "f42e36fa.cbacf8"
+            ]
+        ]
+    },
+    {
+        "id": "a65b3310.730488",
+        "type": "inject",
+        "z": "11ea8962.3c616f",
+        "name": "Open music file",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "open",
+        "payloadType": "str",
+        "x": 880,
+        "y": 640,
+        "wires": [
+            [
+                "3814255d.914faa"
+            ]
+        ]
+    },
+    {
+        "id": "2d2862fc.5aebbe",
+        "type": "inject",
+        "z": "11ea8962.3c616f",
+        "name": "PlayPause music file",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "playpause",
+        "payloadType": "str",
+        "x": 830,
+        "y": 700,
+        "wires": [
+            [
+                "3814255d.914faa"
+            ]
+        ]
+    },
+    {
+        "id": "e8a7e884.00b53",
+        "type": "debug",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "3814255d.914faa",
+        "type": "rpi-omxplayer",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": true,
+        "x": 910,
+        "y": 860,
+        "wires": [
+            [
+                "e8a7e884.00b53",
+                "e44ac4f8.a7b81"
+            ]
+        ]
+    },
+    {
+        "id": "d132dcd1.4feff8",
+        "type": "inject",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "volumedown",
+        "payloadType": "str",
+        "x": 750,
+        "y": 760,
+        "wires": [
+            [
+                "3814255d.914faa"
+            ]
+        ]
+    },
+    {
+        "id": "4c6e847e.fc97fc",
+        "type": "inject",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "volumeup",
+        "payloadType": "str",
+        "x": 700,
+        "y": 800,
+        "wires": [
+            [
+                "3814255d.914faa"
+            ]
+        ]
+    },
+    {
+        "id": "8a0021f.77dfde",
+        "type": "inject",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "setvolume 0.5",
+        "payloadType": "str",
+        "x": 610,
+        "y": 840,
+        "wires": [
+            [
+                "3814255d.914faa"
+            ]
+        ]
+    },
+    {
+        "id": "4acd7ab3.1737a4",
+        "type": "inject",
+        "z": "11ea8962.3c616f",
+        "name": "Set 0.9",
+        "props": [
+            {
+                "p": "setvolume",
+                "v": "0.9",
+                "vt": "num"
+            },
+            {
+                "p": "complete",
+                "v": "true",
+                "vt": "bool"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 570,
+        "y": 960,
+        "wires": [
+            [
+                "e44ac4f8.a7b81"
+            ]
+        ]
+    },
+    {
+        "id": "f3664879.ed716",
+        "type": "delay",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "2",
+        "nbRateUnits": "",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 900,
+        "y": 1140,
+        "wires": [
+            [
+                "3814255d.914faa"
+            ]
+        ]
+    },
+    {
+        "id": "753266f9.5815b",
+        "type": "inject",
+        "z": "11ea8962.3c616f",
+        "name": "Set 0.1",
+        "props": [
+            {
+                "p": "setvolume",
+                "v": "0.1",
+                "vt": "num"
+            },
+            {
+                "p": "complete",
+                "v": "true",
+                "vt": "bool"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 570,
+        "y": 920,
+        "wires": [
+            [
+                "e44ac4f8.a7b81"
+            ]
+        ]
+    },
+    {
+        "id": "29c76746.4ec05",
+        "type": "function",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "func": "\n\nif (\"status\" in msg && \"vol\" in msg.status && \"setvolume\" in msg){\n    notToBe = msg.status.vol\n    toBe = msg.setvolume\n    \n    diff = toBe - notToBe ;\n    \n    while (Math.abs(diff)>=0.05) {\n        \n        if (Math.abs(diff) <= 0.1) {\n            notToBe = notToBe + diff;\n            msg = {payload: \"setvolume \"+toBe};\n            diff = 0.0;\n        }\n        else{\n            \n            notToBe = notToBe + diff/Math.abs(diff) * 0.1;\n            msg = {payload: \"setvolume \"+notToBe};\n            diff = toBe - notToBe ;\n            \n        }\n        \n        node.send(msg)\n        \n    }\n    \n    //return {payload: msg.status.vol - msg.setvolume}    \n}\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 740,
+        "y": 1080,
+        "wires": [
+            [
+                "b58cc52b.2c1d78",
+                "f3664879.ed716"
+            ]
+        ]
+    },
+    {
+        "id": "e44ac4f8.a7b81",
+        "type": "join",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "mode": "custom",
+        "build": "merged",
+        "property": "",
+        "propertyType": "full",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 730,
+        "y": 1000,
+        "wires": [
+            [
+                "29c76746.4ec05"
+            ]
+        ]
+    },
+    {
+        "id": "b58cc52b.2c1d78",
+        "type": "debug",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 890,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "69d8d1ee.a0e5e",
+        "type": "function",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "func": "if (msg.payload == 0){\n    return {setvolume: 0.1, complete: true}\n}\nelse{\n    return {setvolume: 0.7, complete: true}\n}\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 400,
+        "y": 1000,
+        "wires": [
+            [
+                "e44ac4f8.a7b81"
+            ]
+        ]
+    },
+    {
+        "id": "b7c2f9b.af7a508",
+        "type": "q-gate",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "controlTopic": "control",
+        "defaultState": "open",
+        "openCmd": "open",
+        "closeCmd": "close",
+        "toggleCmd": "toggle",
+        "queueCmd": "queue",
+        "defaultCmd": "default",
+        "triggerCmd": "trigger",
+        "flushCmd": "flush",
+        "resetCmd": "reset",
+        "peekCmd": "peek",
+        "dropCmd": "drop",
+        "statusCmd": "status",
+        "maxQueueLength": "1",
+        "keepNewest": true,
+        "qToggle": true,
+        "persist": false,
+        "storeName": "memory",
+        "x": 310,
+        "y": 660,
+        "wires": [
+            [
+                "6e3c33dd.a2cd24",
+                "69d8d1ee.a0e5e",
+                "121429ca.de7066"
+            ]
+        ]
+    },
+    {
+        "id": "4cadfd20.e5e70c",
+        "type": "inject",
+        "z": "11ea8962.3c616f",
+        "name": "open",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "control",
+        "payload": "open",
+        "payloadType": "str",
+        "x": 130,
+        "y": 460,
+        "wires": [
+            [
+                "b7c2f9b.af7a508"
+            ]
+        ]
+    },
+    {
+        "id": "aa922bde.2d59f8",
+        "type": "inject",
+        "z": "11ea8962.3c616f",
+        "name": "q",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "control",
+        "payload": "queue",
+        "payloadType": "str",
+        "x": 130,
+        "y": 620,
+        "wires": [
+            [
+                "b7c2f9b.af7a508"
+            ]
+        ]
+    },
+    {
+        "id": "c59d8205.125b8",
+        "type": "function",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "func": "// if payload == 0\n        //start queue\n        //send 0\n        //start timer\n\n// if value == 1 \n    //send 1\n    \n// when timer done\n    //open queue\n\n\n\nif (msg.payload == 0){\n    node.send([{payload: \"queue\", topic: \"control\"},null])\n    node.send([{payload: 0},{payload: \"open\", topic: \"control\"}])\n}\nelse{\n    node.send([{payload: 1},null])\n}\n\n\n",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 300,
+        "y": 420,
+        "wires": [
+            [
+                "43b0974c.67c0d8",
+                "b7c2f9b.af7a508"
+            ],
+            [
+                "15a975c2.8a41c2",
+                "9674895.df3b878"
+            ]
+        ]
+    },
+    {
+        "id": "15a975c2.8a41c2",
+        "type": "debug",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "43b0974c.67c0d8",
+        "type": "debug",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 490,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "9674895.df3b878",
+        "type": "delay",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 440,
+        "y": 560,
+        "wires": [
+            [
+                "b7c2f9b.af7a508"
+            ]
+        ]
+    },
+    {
+        "id": "6e3c33dd.a2cd24",
+        "type": "debug",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "121429ca.de7066",
+        "type": "tcp out",
+        "z": "11ea8962.3c616f",
+        "host": "192.168.0.102",
+        "port": "55554",
+        "beserver": "client",
+        "base64": false,
+        "end": false,
+        "name": "",
+        "x": 390,
+        "y": 1300,
+        "wires": []
     }
 ]
