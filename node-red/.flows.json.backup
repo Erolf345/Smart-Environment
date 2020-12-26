@@ -17,6 +17,13 @@
         "id": "11ea8962.3c616f",
         "type": "tab",
         "label": "RCWL",
+        "disabled": true,
+        "info": ""
+    },
+    {
+        "id": "e71c9d35.0449a",
+        "type": "tab",
+        "label": "Flow 1",
         "disabled": false,
         "info": ""
     },
@@ -27,6 +34,15 @@
         "icon": "dashboard"
     },
     {
+        "id": "3aff5f59.0a6d88",
+        "type": "ui_tab",
+        "name": "Music Controls",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": true
+    },
+    {
         "id": "ce52a348.41d78",
         "type": "ui_group",
         "name": "Chart",
@@ -35,15 +51,6 @@
         "disp": true,
         "width": "12",
         "collapse": false
-    },
-    {
-        "id": "3aff5f59.0a6d88",
-        "type": "ui_tab",
-        "name": "Music Controls",
-        "icon": "dashboard",
-        "order": 1,
-        "disabled": false,
-        "hidden": true
     },
     {
         "id": "875a7078.91fde",
@@ -330,8 +337,6 @@
         "func": "\nreturn [\n    //need to invert for LED (maybe not here)\n    {payload:255 - msg.payload.r},\n    {payload:255 - msg.payload.g},\n    {payload:255 - msg.payload.b}\n];",
         "outputs": 3,
         "noerr": 0,
-        "initialize": "",
-        "finalize": "",
         "x": 420,
         "y": 820,
         "wires": [
@@ -556,8 +561,6 @@
         "func": "let local_pir = msg.payload[\"pi/36\"]\nlet net = msg.payload[\"network\"]\n\nlet red=0\nlet green=0\nlet blue=0\n\n//compute rgb values\nif (local_pir == 1) {\n  if (net == 1){\n      red = 255;\n      green = 255;\n      blue = 255;\n  }\n  else {\n      red = 255\n  }\n}\nelse if (net==1){\n    blue = 255\n}\n\n\n//return RGB values\nreturn {payload: {r: red,b: blue, g:green}}\n\n\n//return {payload: (1 - local_pir)*100};\n//invert",
         "outputs": 1,
         "noerr": 0,
-        "initialize": "",
-        "finalize": "",
         "x": 520,
         "y": 660,
         "wires": [
@@ -619,8 +622,6 @@
         "tostatus": false,
         "complete": "payload",
         "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
         "x": 380,
         "y": 1120,
         "wires": []
@@ -687,15 +688,6 @@
         "type": "inject",
         "z": "7d7b30a8.5bc2b",
         "name": "Get IPs",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -740,8 +732,6 @@
         "func": "var ip_lines = msg.payload.split('\\n');\nip_lines.splice(0,3);\nip_lines.pop();\n\nvar ips= [];\nfor (i = 0; i < ip_lines.length; i++) {\n    var ip = ip_lines[i];\n    ip = ip.split('.');\n    if (ip.length != 4 ){ // sanity check\n        node.error(\"Input from batctl could not be parsed: \" + ip.join('.'));\n        continue\n    }\n    ip[0] = ip[0].replace(/\\D/g,''); // remove non digits from first element in array\n    ip[3] = ip[3].split(' ')[0]; // remove mac adress\n    ip = ip.join('.');\n    ips.push(ip);\n}\nmsg.ips = ips;\nmsg.topic = \"ip_addresses\"\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "initialize": "",
-        "finalize": "",
         "x": 180,
         "y": 1660,
         "wires": [
@@ -761,8 +751,6 @@
         "tostatus": false,
         "complete": "payload",
         "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
         "x": 150,
         "y": 1820,
         "wires": []
@@ -803,8 +791,6 @@
         "func": "let motion = msg.payload[\"pi/36\"];\nlet addresses = msg.payload[\"ip_addresses\"];\n\nfor (ip of addresses){\n    msg = {host: ip, payload: motion };\n    node.send(motion);\n}\n\n//return msg;",
         "outputs": 1,
         "noerr": 0,
-        "initialize": "",
-        "finalize": "",
         "x": 520,
         "y": 1380,
         "wires": [
@@ -878,8 +864,6 @@
         "func": "var my_ip = msg.payload\nvar ip_arr = msg.ips;\n\n//Filter out newline from shell command result\nmy_ip = my_ip.replace(/(\\r\\n|\\n|\\r)/gm, \"\"); \n\nip_arr = ip_arr.filter(e => e !== my_ip);\n\nmsg.payload = ip_arr\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "initialize": "",
-        "finalize": "",
         "x": 200,
         "y": 1780,
         "wires": [
@@ -890,45 +874,10 @@
         ]
     },
     {
-        "id": "e5d9eb.0eb01618",
-        "type": "ui_colour_picker",
-        "z": "7d7b30a8.5bc2b",
-        "name": "",
-        "label": "Pick a color",
-        "group": "ce52a348.41d78",
-        "format": "rgb",
-        "outformat": "object",
-        "showSwatch": false,
-        "showPicker": true,
-        "showValue": false,
-        "showHue": false,
-        "showAlpha": false,
-        "showLightness": true,
-        "square": "false",
-        "dynOutput": "true",
-        "order": 0,
-        "width": "10",
-        "height": "5",
-        "passthru": true,
-        "topic": "",
-        "x": 90,
-        "y": 820,
-        "wires": [
-            [
-                "30e73299.7e539e"
-            ]
-        ]
-    },
-    {
         "id": "a53c96c6.d61cd8",
         "type": "inject",
         "z": "f9e6941.9f5df68",
         "name": "Open music file",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -949,15 +898,6 @@
         "type": "inject",
         "z": "f9e6941.9f5df68",
         "name": "PlayPause music file",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -981,8 +921,6 @@
         "func": "\nvar o = false;\nfor (var i=0; i<8; i++) {\n    node.send( {payload:\"volumedown\"} )\n}\n\nreturn null;",
         "outputs": 1,
         "noerr": 0,
-        "initialize": "",
-        "finalize": "",
         "x": 470,
         "y": 200,
         "wires": [
@@ -1022,8 +960,6 @@
         "console": false,
         "tostatus": false,
         "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
         "x": 930,
         "y": 180,
         "wires": []
@@ -1036,10 +972,8 @@
         "func": "\nvar o = false;\nfor (var i=0; i<8; i++) {\n    node.send( {payload:\"volumeup\"} )\n}\n\nreturn null;",
         "outputs": 1,
         "noerr": 0,
-        "initialize": "",
-        "finalize": "",
         "x": 460,
-        "y": 300,
+        "y": 320,
         "wires": [
             [
                 "c79ca805.386358"
@@ -1093,31 +1027,6 @@
             ],
             [
                 "51255d49.972864"
-            ]
-        ]
-    },
-    {
-        "id": "7a6093ad.512abc",
-        "type": "rpi-omxplayer",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "filename": "/home/pi/music/sinatra_boots.mp3",
-<<<<<<< HEAD
-        "audiooutput": "headphones",
-=======
-        "audiooutput": "local",
->>>>>>> e67e18cfe868f7d8b3d3156fee1ee187c2f11094
-        "blackbackground": true,
-        "disablekeys": false,
-        "disableosd": true,
-        "disableghostbox": false,
-        "subtitlepath": "",
-        "loop": true,
-        "x": 750,
-        "y": 180,
-        "wires": [
-            [
-                "67eb6bf0.5a1ab4"
             ]
         ]
     },
@@ -1213,11 +1122,6 @@
         "type": "inject",
         "z": "11ea8962.3c616f",
         "name": "Open music file",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -1238,15 +1142,6 @@
         "type": "inject",
         "z": "11ea8962.3c616f",
         "name": "PlayPause music file",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -1273,48 +1168,15 @@
         "tostatus": false,
         "complete": "true",
         "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
         "x": 1070,
         "y": 860,
         "wires": []
-    },
-    {
-        "id": "3814255d.914faa",
-        "type": "rpi-omxplayer",
-        "z": "11ea8962.3c616f",
-        "name": "",
-        "filename": "/home/pi/music/sinatra_boots.mp3",
-        "audiooutput": "local",
-        "blackbackground": true,
-        "disablekeys": false,
-        "disableosd": true,
-        "disableghostbox": false,
-        "subtitlepath": "",
-        "loop": true,
-        "x": 910,
-        "y": 860,
-        "wires": [
-            [
-                "e8a7e884.00b53",
-                "e44ac4f8.a7b81"
-            ]
-        ]
     },
     {
         "id": "d132dcd1.4feff8",
         "type": "inject",
         "z": "11ea8962.3c616f",
         "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -1335,11 +1197,6 @@
         "type": "inject",
         "z": "11ea8962.3c616f",
         "name": "",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -1360,11 +1217,6 @@
         "type": "inject",
         "z": "11ea8962.3c616f",
         "name": "",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -1385,18 +1237,6 @@
         "type": "inject",
         "z": "11ea8962.3c616f",
         "name": "Set 0.9",
-        "props": [
-            {
-                "p": "setvolume",
-                "v": "0.9",
-                "vt": "num"
-            },
-            {
-                "p": "complete",
-                "v": "true",
-                "vt": "bool"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -1438,18 +1278,6 @@
         "type": "inject",
         "z": "11ea8962.3c616f",
         "name": "Set 0.1",
-        "props": [
-            {
-                "p": "setvolume",
-                "v": "0.1",
-                "vt": "num"
-            },
-            {
-                "p": "complete",
-                "v": "true",
-                "vt": "bool"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -1471,8 +1299,6 @@
         "func": "\n\nif (\"status\" in msg && \"vol\" in msg.status && \"setvolume\" in msg){\n    notToBe = msg.status.vol\n    toBe = msg.setvolume\n    \n    diff = toBe - notToBe ;\n    \n    while (Math.abs(diff)>=0.05) {\n        \n        if (Math.abs(diff) <= 0.1) {\n            notToBe = notToBe + diff;\n            msg = {payload: \"setvolume \"+toBe};\n            diff = 0.0;\n        }\n        else{\n            \n            notToBe = notToBe + diff/Math.abs(diff) * 0.1;\n            msg = {payload: \"setvolume \"+notToBe};\n            diff = toBe - notToBe ;\n            \n        }\n        \n        node.send(msg)\n        \n    }\n    \n    //return {payload: msg.status.vol - msg.setvolume}    \n}\n\n\n",
         "outputs": 1,
         "noerr": 0,
-        "initialize": "",
-        "finalize": "",
         "x": 740,
         "y": 1080,
         "wires": [
@@ -1521,8 +1347,6 @@
         "tostatus": false,
         "complete": "true",
         "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
         "x": 890,
         "y": 1080,
         "wires": []
@@ -1535,8 +1359,6 @@
         "func": "if (msg.payload == 0){\n    return {setvolume: 0.1, complete: true}\n}\nelse{\n    return {setvolume: 0.7, complete: true}\n}\n\n\n",
         "outputs": 1,
         "noerr": 0,
-        "initialize": "",
-        "finalize": "",
         "x": 400,
         "y": 1000,
         "wires": [
@@ -1546,51 +1368,10 @@
         ]
     },
     {
-        "id": "b7c2f9b.af7a508",
-        "type": "q-gate",
-        "z": "11ea8962.3c616f",
-        "name": "",
-        "controlTopic": "control",
-        "defaultState": "open",
-        "openCmd": "open",
-        "closeCmd": "close",
-        "toggleCmd": "toggle",
-        "queueCmd": "queue",
-        "defaultCmd": "default",
-        "triggerCmd": "trigger",
-        "flushCmd": "flush",
-        "resetCmd": "reset",
-        "peekCmd": "peek",
-        "dropCmd": "drop",
-        "statusCmd": "status",
-        "maxQueueLength": "1",
-        "keepNewest": true,
-        "qToggle": true,
-        "persist": false,
-        "storeName": "memory",
-        "x": 310,
-        "y": 660,
-        "wires": [
-            [
-                "6e3c33dd.a2cd24",
-                "69d8d1ee.a0e5e"
-            ]
-        ]
-    },
-    {
         "id": "4cadfd20.e5e70c",
         "type": "inject",
         "z": "11ea8962.3c616f",
         "name": "open",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -1611,15 +1392,6 @@
         "type": "inject",
         "z": "11ea8962.3c616f",
         "name": "q",
-        "props": [
-            {
-                "p": "topic",
-                "vt": "str"
-            },
-            {
-                "p": "payload"
-            }
-        ],
         "repeat": "",
         "crontab": "",
         "once": false,
@@ -1643,8 +1415,6 @@
         "func": "// if payload == 0\n        //start queue\n        //send 0\n        //start timer\n\n// if value == 1 \n    //send 1\n    \n// when timer done\n    //open queue\n\n\n\nif (msg.payload == 0){\n    node.send([{payload: \"queue\", topic: \"control\"},null])\n    node.send([{payload: 0},{payload: \"open\", topic: \"control\"}])\n}\nelse{\n    node.send([{payload: 1},null])\n}\n\n\n",
         "outputs": 2,
         "noerr": 0,
-        "initialize": "",
-        "finalize": "",
         "x": 300,
         "y": 420,
         "wires": [
@@ -1669,8 +1439,6 @@
         "tostatus": false,
         "complete": "true",
         "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
         "x": 510,
         "y": 480,
         "wires": []
@@ -1686,8 +1454,6 @@
         "tostatus": false,
         "complete": "true",
         "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
         "x": 490,
         "y": 420,
         "wires": []
@@ -1726,10 +1492,188 @@
         "tostatus": false,
         "complete": "true",
         "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
         "x": 510,
         "y": 660,
         "wires": []
+    },
+    {
+        "id": "121429ca.de7066",
+        "type": "tcp out",
+        "z": "11ea8962.3c616f",
+        "host": "192.168.0.102",
+        "port": "55554",
+        "beserver": "client",
+        "base64": false,
+        "end": false,
+        "name": "",
+        "x": 390,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "7a6093ad.512abc",
+        "type": "rpi-omxplayer",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": true,
+        "x": 750,
+        "y": 180,
+        "wires": [
+            [
+                "67eb6bf0.5a1ab4"
+            ]
+        ]
+    },
+    {
+        "id": "3814255d.914faa",
+        "type": "rpi-omxplayer",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": true,
+        "x": 910,
+        "y": 860,
+        "wires": [
+            [
+                "e8a7e884.00b53",
+                "e44ac4f8.a7b81"
+            ]
+        ]
+    },
+    {
+        "id": "e5d9eb.0eb01618",
+        "type": "ui_colour_picker",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "label": "Pick a color",
+        "group": "ce52a348.41d78",
+        "format": "rgb",
+        "outformat": "object",
+        "showSwatch": false,
+        "showPicker": true,
+        "showValue": false,
+        "showHue": false,
+        "showAlpha": false,
+        "showLightness": true,
+        "square": "false",
+        "dynOutput": "true",
+        "order": 0,
+        "width": "10",
+        "height": "5",
+        "passthru": true,
+        "topic": "",
+        "x": 90,
+        "y": 820,
+        "wires": [
+            [
+                "30e73299.7e539e"
+            ]
+        ]
+    },
+    {
+        "id": "b7c2f9b.af7a508",
+        "type": "q-gate",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "controlTopic": "control",
+        "defaultState": "open",
+        "openCmd": "open",
+        "closeCmd": "close",
+        "toggleCmd": "toggle",
+        "queueCmd": "queue",
+        "defaultCmd": "default",
+        "triggerCmd": "trigger",
+        "flushCmd": "flush",
+        "resetCmd": "reset",
+        "peekCmd": "peek",
+        "dropCmd": "drop",
+        "statusCmd": "status",
+        "maxQueueLength": "1",
+        "keepNewest": true,
+        "qToggle": true,
+        "persist": false,
+        "storeName": "memory",
+        "x": 310,
+        "y": 660,
+        "wires": [
+            [
+                "6e3c33dd.a2cd24",
+                "69d8d1ee.a0e5e",
+                "121429ca.de7066"
+            ]
+        ]
+    },
+    {
+        "id": "a42e06c6.d2fc78",
+        "type": "inject",
+        "z": "e71c9d35.0449a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 80,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "82a14ed2.31551",
+        "type": "debug",
+        "z": "e71c9d35.0449a",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "e43f785c.f02eb8",
+        "type": "pythonshell in",
+        "z": "e71c9d35.0449a",
+        "name": "motion",
+        "pyfile": "/home/pi/surveillance/motion_detector.py",
+        "virtualenv": "/home/pi/.virtualenvs/cv",
+        "continuous": true,
+        "stdInData": false,
+        "x": 240,
+        "y": 360,
+        "wires": [
+            [
+                "82a14ed2.31551"
+            ]
+        ]
     }
 ]
