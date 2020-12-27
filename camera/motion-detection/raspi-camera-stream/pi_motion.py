@@ -1,10 +1,8 @@
 # import the necessary packages
-import tempimage
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import argparse
 import warnings
-import datetime
 import imutils
 import json
 import time
@@ -19,7 +17,6 @@ args = vars(ap.parse_args())
 # client
 warnings.filterwarnings("ignore")
 conf = json.load(open(args["conf"]))
-client = None
 
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
@@ -39,7 +36,6 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 	# grab the raw NumPy array representing the image and initialize
 	# the timestamp and occupied/unoccupied text
 	frame = f.array
-	timestamp = datetime.datetime.now()
 	text = "Unoccupied"
 	# resize the frame, convert it to grayscale, and blur it
 	frame = imutils.resize(frame, width=500)
@@ -76,12 +72,8 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 		cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 		text = "Occupied"
 	# draw the text and timestamp on the frame
-	ts = timestamp.strftime("%A %d %B %Y %I:%M:%S%p")
 	cv2.putText(frame, "Room Status: {}".format(text), (10, 20),
 		cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-	cv2.putText(frame, ts, (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX,
-		0.35, (0, 0, 255), 1)
-	
 		
 	# check to see if the frames should be displayed to screen
 	if conf["show_video"]:
