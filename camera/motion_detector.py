@@ -1,81 +1,93 @@
-from imutils.video import VideoStream
+# import the necessary packages
+from imutils.video import FileVideoStream
+from imutils.video import FPS
+import numpy as np
 import argparse
-import datetime
 import imutils
 import time
 import cv2
 
+# start the file video stream thread and allow the buffer to start
+fvs = FileVideoStream("movement3.mp4").start()
+time.sleep(1.0)
 
-# construct the argument parser and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", help="path to the video file")
-ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
-args = vars(ap.parse_args())
-
-# if the video argument is None, then we are reading from webcam
-if args.get("video", None) is None:
-	vs = VideoStream(src=0).start()
-	time.sleep(2.0)
-# otherwise, we are reading from a video file
-else:
-	vs = cv2.VideoCapture(args["video"])
-# initialize the first frame in the video stream
+# initialize variables
 firstFrame = None
+count = 0
+distance_window = [800] * 20
 
-# loop over the frames of the video
-while True:
-	# grab the current frame and initialize the occupied/unoccupied
-	# text
-	frame = vs.read()
-	frame = frame if args.get("video", None) is None else frame[1]
-	text = "Unoccupied"
-	# if the frame could not be grabbed, then we have reached the end
-	# of the video
-	if frame is None:
-		break
-	# resize the frame, convert it to grayscale, and blur it
-	frame = imutils.resize(frame, width=500)
-	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-	gray = cv2.GaussianBlur(gray, (21, 21), 0)
-	# if the first frame is None, initialize it
-	if firstFrame is None:
-		firstFrame = gray
-		continue
-    
-    # compute the absolute difference between the current frame and
-	# first frame
-	frameDelta = cv2.absdiff(firstFrame, gray)
-	thresh = cv2.threshold(frameDelta, 100, 255, cv2.THRESH_BINARY)[1]
-	# dilate the thresholded image to fill in holes, then find contours
-	# on thresholded image
-	thresh = cv2.dilate(thresh, None, iterations=2)
-	cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
-		cv2.CHAIN_APPROX_SIMPLE)
-	cnts = imutils.grab_contours(cnts)
-	# loop over the contours
-	for c in cnts:
-		# if the contour is too small, ignore it
-		if cv2.contourArea(c) < args["min_area"]:
-			continue
-		# compute the bounding box for the contour, draw it on the frame,
-		# and update the text
-		(x, y, w, h) = cv2.boundingRect(c)
-		cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-		text = "Occupied"
+# loop over frames from the video file stream
+while fvs.more():
+    # we use a counter to display frame info only every n times
+    count = count + 1
+
+    try:
+        # grab the frame from the threaded video file stream,
+        # resize it, and convert it to grayscale
+        frame = fvs.read()
+        frame = imutils.resize(frame, width=450)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.GaussianBlur(frame, (21, 21), 0)
         
-	# draw the text and timestamp on the frame
-	cv2.putText(frame, "Room Status: {}".format(text), (10, 20),
-		cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-	cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"),
-		(10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
-	# show the frame and record if the user presses a key
-	cv2.imshow("Security Feed", frame)
-	#cv2.imshow("Thresh", thresh)
-	#cv2.imshow("Frame Delta", frameDelta)
-	key = cv2.waitKey(1) & 0xFF
-	# if the `q` key is pressed, break from the lop
-	if key == ord("q"):
-		break
-# cleanup the camera and close any open windows
-vs.stop() if args.get("video", None) is None else vs.release()
+        # if the first frame is None, initialize it
+        # we use the first frame as a refernce for background substraction
+        if firstFrame is None:
+            firstFrame = gray
+            continue
+        
+        # compute the absolute difference between the current frame and first frame
+        frameDelta = cv2.absdiff(firstFrame, gray)
+        thresh = cv2.threshold(frameDelta, 80, 255, cv2.THRESH_BINARY)[1]
+        
+        # extend the thresholded image to fill in holes, then find contours
+        # on thresholded image
+        thresh = cv2.dilate(thresh, None, iterations=2)
+        cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
+                            cv2.CHAIN_APPROX_SIMPLE)
+        cnts = imutils.grab_contours(cnts)
+        
+        # because of shadow and camera movement, it can happen that we
+        # detect more than one "motion" in a frame. We assume that the
+        # biggest motion (e.g. contour) belongs to our person
+        contour_size = 0
+        selected_contour = None
+        for c in cnts:
+            current = cv2.contourArea(c)
+            if current > contour_size:
+                countour_size = current
+                selected_contour = c
+        
+        # compute the bounding box for the contour, get the position and
+        # dimensions and compute the distance (or draw a line)
+        (x, y, w, h) = cv2.boundingRect(selected_contour)
+        h_half = int(h*0.5)
+        w_half = int(w*0.5)
+        
+        #cv2.line(frame, (0,0), (x+w_half, y+h_half), (0, 255, 0), 1)
+        current_distance = np.round(np.sqrt(x*x + y*y), 2)
+        if (current_distance == 0) or (current_distance is None): current_distance = 800
+        distance_window.append(current_distance)
+        distance_window.pop(0)
+        
+        avg_distance = sum(distance_window) / len(distance_window)
+        # draw the text and timestamp on the frame
+        cv2.putText(frame, "Distance to speaker: {}".format(avg_distance), (10, 20),
+            cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
+        
+        # every 20 frames we print the avg_distance
+        if count % 20 == 0:
+            #cv2.imshow("Security Feed", frame)
+            print(avg_distance)
+        
+    except AttributeError:
+        break
+    
+    # keyboard interrupt: press q
+    key = cv2.waitKey(1)
+    if key == ord("q"):
+        break
+
 cv2.destroyAllWindows()
+fvs.stop()
+
+
