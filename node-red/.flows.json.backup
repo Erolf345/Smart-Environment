@@ -1617,7 +1617,241 @@
         ]
     },
     {
-        "id": "a42e06c6.d2fc78",
+        "id": "82a14ed2.31551",
+        "type": "debug",
+        "z": "e71c9d35.0449a",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "e43f785c.f02eb8",
+        "type": "pythonshell in",
+        "z": "e71c9d35.0449a",
+        "name": "motion",
+        "pyfile": "/home/pi/surveillance/read_frames_faster.py",
+        "virtualenv": "/home/pi/.virtualenvs/cv",
+        "continuous": true,
+        "stdInData": false,
+        "x": 130,
+        "y": 220,
+        "wires": [
+            [
+                "82a14ed2.31551",
+                "cf67e593.0dae78"
+            ]
+        ]
+    },
+    {
+        "id": "9f0c00ed.97aed",
+        "type": "inject",
+        "z": "e71c9d35.0449a",
+        "name": "Open music file",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "open",
+        "payloadType": "str",
+        "x": 440,
+        "y": 380,
+        "wires": [
+            [
+                "4813fbf0.f351c4"
+            ]
+        ]
+    },
+    {
+        "id": "baa1b081.97e2f",
+        "type": "inject",
+        "z": "e71c9d35.0449a",
+        "name": "PlayPause music file",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "playpause",
+        "payloadType": "str",
+        "x": 430,
+        "y": 440,
+        "wires": [
+            [
+                "4813fbf0.f351c4"
+            ]
+        ]
+    },
+    {
+        "id": "7836eebb.be616",
+        "type": "function",
+        "z": "e71c9d35.0449a",
+        "name": "Voldown Smoother",
+        "func": "\nvar o = false;\nfor (var i=0; i<8; i++) {\n    node.send( {payload:\"volumedown\"} )\n}\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 550,
+        "y": 580,
+        "wires": [
+            [
+                "5d3b773f.fb5528"
+            ]
+        ]
+    },
+    {
+        "id": "5d3b773f.fb5528",
+        "type": "delay",
+        "z": "e71c9d35.0449a",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "2",
+        "nbRateUnits": "",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 730,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5f63e4f5.7d7bdc",
+        "type": "function",
+        "z": "e71c9d35.0449a",
+        "name": "Volup Smoother",
+        "func": "\nvar o = false;\nfor (var i=0; i<8; i++) {\n    node.send( {payload:\"volumeup\"} )\n}\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 530,
+        "y": 700,
+        "wires": [
+            [
+                "5d3b773f.fb5528"
+            ]
+        ]
+    },
+    {
+        "id": "ef6df5da.7b6058",
+        "type": "switch",
+        "z": "e71c9d35.0449a",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 320,
+        "y": 640,
+        "wires": [
+            [
+                "7836eebb.be616"
+            ],
+            [
+                "5f63e4f5.7d7bdc"
+            ]
+        ]
+    },
+    {
+        "id": "4813fbf0.f351c4",
+        "type": "rpi-omxplayer",
+        "z": "e71c9d35.0449a",
+        "name": "",
+        "filename": "/home/pi/Music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": true,
+        "x": 750,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cf67e593.0dae78",
+        "type": "function",
+        "z": "e71c9d35.0449a",
+        "name": "",
+        "func": "var payload=parseInt(msg.payload);\nratio = payload/800\nmsg.payload = \"setvolume \" + String(ratio)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 350,
+        "y": 280,
+        "wires": [
+            [
+                "4813fbf0.f351c4",
+                "ab0123fd.17203"
+            ]
+        ]
+    },
+    {
+        "id": "ab0123fd.17203",
+        "type": "debug",
+        "z": "e71c9d35.0449a",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "9307569f.dbe728",
         "type": "inject",
         "z": "e71c9d35.0449a",
         "name": "",
@@ -1637,42 +1871,11 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 80,
-        "y": 220,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "82a14ed2.31551",
-        "type": "debug",
-        "z": "e71c9d35.0449a",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 590,
-        "y": 220,
-        "wires": []
-    },
-    {
-        "id": "e43f785c.f02eb8",
-        "type": "pythonshell in",
-        "z": "e71c9d35.0449a",
-        "name": "motion",
-        "pyfile": "/home/pi/surveillance/motion_detector.py",
-        "virtualenv": "/home/pi/.virtualenvs/cv",
-        "continuous": true,
-        "stdInData": false,
-        "x": 240,
-        "y": 360,
+        "x": 110,
+        "y": 420,
         "wires": [
             [
-                "82a14ed2.31551"
+                "cf67e593.0dae78"
             ]
         ]
     }
