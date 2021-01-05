@@ -1,5 +1,9 @@
 # Bluetooth clock Synchronization
 
+# About
+The code in this folder uses bluetooth clocks to synchronize the system clocks and run tasks like music playback and led flashing perfectly synchronous. There are 2 partners for this protocol, A and B. The process of execution is described in the diagram below.
+
+
 # Perequisites 
  ```sudo apt install libbluetooth-dev```
  
@@ -22,6 +26,7 @@ The Code connects the LED to WiringPi pin 0 which is GPIO17 on the Raspberry Pi 
 Done. Now the devices are paired even after reboot.
 
 ## Compilation and execution 
+FIRST REMEMBER TO STOP NODE RED AS IT WILL INTERFERE
 
 Compile the files named bt_sync_B.c and bt_sync_A.c using the command at the top of the file after the imports and macros. It will look something like this 
 ```gcc -o bt_sync_X bt_sync_X.c -lbluetooth -lwiringPi```. 
