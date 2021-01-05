@@ -1464,7 +1464,7 @@
         "type": "function",
         "z": "11ea8962.3c616f",
         "name": "",
-        "func": "\n\nif (\"status\" in msg && \"vol\" in msg.status && \"setvolume\" in msg){\n    notToBe = msg.status.vol\n    toBe = msg.setvolume\n    \n    diff = toBe - notToBe ;\n    \n    while (Math.abs(diff)>=0.05) {\n        \n        if (Math.abs(diff) <= 0.1) {\n            notToBe = notToBe + diff;\n            msg = {payload: \"setvolume \"+toBe};\n            diff = 0.0;\n        }\n        else{\n            \n            notToBe = notToBe + diff/Math.abs(diff) * 0.1;\n            msg = {payload: \"setvolume \"+notToBe};\n            diff = toBe - notToBe ;\n            \n        }\n        \n        node.send(msg)\n        \n    }\n    \n    //return {payload: msg.status.vol - msg.setvolume}    \n}\n\n\n",
+        "func": "\n\nif (\"status\" in msg && \"vol\" in msg.status && \"setvolume\" in msg){\n    notToBe = msg.status.vol\n    toBe = msg.setvolume\n    \n    node.status({fill:\"blue\",shape:\"dot\",text:\"set to\"+ toBe});\n    \n    diff = toBe - notToBe ;\n    \n    while (Math.abs(diff)>=0.05) {\n        \n        if (Math.abs(diff) <= 0.1) {\n            notToBe = notToBe + diff;\n            msg = {payload: \"setvolume \"+toBe};\n            diff = 0.0;\n        }\n        else{\n            \n            notToBe = notToBe + diff/Math.abs(diff) * 0.1;\n            msg = {payload: \"setvolume \"+notToBe};\n            diff = toBe - notToBe ;\n            \n        }\n        \n        node.send(msg)\n        \n    }\n    \n    //return {payload: msg.status.vol - msg.setvolume}    \n}\n\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1528,16 +1528,17 @@
         "type": "function",
         "z": "11ea8962.3c616f",
         "name": "",
-        "func": "if (msg.payload == 0){\n    return {setvolume: 0.1, complete: true}\n}\nelse{\n    return {setvolume: 0.7, complete: true}\n}\n\n\n",
+        "func": "if (msg.topic == \"local\"){\n    var local = msg.payload\n    context.set(\"local_\",local)\n    var network = context.get(\"network_\")\n} \nelse{\n    var network = msg.payload\n    context.set(\"network_\",network)\n    var local = context.get(\"local_\")\n}\n\nif (local == 1){\n    if (network == 1){\n        node.status({fill:\"yellow\",shape:\"dot\",text:\"middle\"+ local+ \" \" + network});\n        return {setvolume: 0.4, complete: true};\n    }\n    else{\n        node.status({fill:\"red\",shape:\"dot\",text:\"close - low vol\" + local+ \" \" + network});\n        return {setvolume: 0.1, complete: true};\n    }\n}\nelse{\n    node.status({fill:\"green\",shape:\"dot\",text:\"far - loud\" + local+ \" \" + network});\n    return {setvolume: 0.7, complete: true};\n}\n\n\n",
         "outputs": 1,
         "noerr": 0,
-        "initialize": "",
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\ncontext.set(\"local_\",0)\ncontext.set(\"network_\",0)",
         "finalize": "",
         "x": 400,
         "y": 1000,
         "wires": [
             [
-                "e44ac4f8.a7b81"
+                "e44ac4f8.a7b81",
+                "59726e8.5dd669"
             ]
         ]
     },
@@ -1637,7 +1638,7 @@
         "type": "function",
         "z": "11ea8962.3c616f",
         "name": "",
-        "func": "// if payload == 0\n        //start queue\n        //send 0\n        //start timer\n\n// if value == 1 \n    //send 1\n    \n// when timer done\n    //open queue\n\n\n\nif (msg.payload == 0){\n    node.send([{payload: \"queue\", topic: \"control\"},null])\n    node.send([{payload: 0},{payload: \"open\", topic: \"control\"}])\n}\nelse{\n    node.send([{payload: 1},null])\n}\n\n\n",
+        "func": "// if payload == 0\n        //start queue\n        //send 0\n        //start timer\n\n// if value == 1 \n    //send 1\n    \n// when timer done\n    //open queue\n\n\n\nif (msg.payload == 0){\n    node.send([{payload: \"queue\", topic: \"control\"},null])\n    node.send([{payload: 0, topic: \"local\"},{payload: \"open\", topic: \"control\"}])\n}\nelse{\n    node.send([{payload: 1, topic: \"local\"},null])\n}\n\n\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -1733,7 +1734,7 @@
         "id": "121429ca.de7066",
         "type": "tcp out",
         "z": "11ea8962.3c616f",
-        "host": "192.168.0.102",
+        "host": "192.168.0.108",
         "port": "55554",
         "beserver": "client",
         "base64": false,
@@ -1741,6 +1742,43 @@
         "name": "",
         "x": 390,
         "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "8e1d1546.691e3",
+        "type": "tcp in",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "server": "server",
+        "host": "",
+        "port": "55554",
+        "datamode": "stream",
+        "datatype": "buffer",
+        "newline": "",
+        "topic": "network",
+        "base64": false,
+        "x": 140,
+        "y": 1540,
+        "wires": [
+            [
+                "69d8d1ee.a0e5e"
+            ]
+        ]
+    },
+    {
+        "id": "59726e8.5dd669",
+        "type": "debug",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 470,
+        "y": 1080,
         "wires": []
     }
 ]
