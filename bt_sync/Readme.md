@@ -31,12 +31,13 @@ FIRST REMEMBER TO STOP NODE RED AS IT WILL INTERFERE
 Compile the files named bt_sync_B.c and bt_sync_A.c using the command at the top of the file after the imports and macros. It will look something like this 
 ```gcc -o bt_sync_X bt_sync_X.c -lbluetooth -lwiringPi```. 
 
-Then you can execute the binaries. For this you need to first run the B Partner as it will open the socket. 
+Then you can execute the binaries. Both must be executed with root privileges.
 
+You need to run the B Partner first as it will open the socket. 
 
-For partner B the parameters are like this: ```bt_sync_B *ARBITRARY_PORT* *BT_ADRESS_OF_PARTNER* ``` where ARBITRARY_PORT is any port you like e.g. 1234, BT_ADRESS_OF_PARTNER is the bluetooth adress of raspberry A. You can get this adress by running ```sudo hcitool device``` on raspberry A.
+For partner B the parameters are like this: ```sudo bt_sync_B *ARBITRARY_PORT* *BT_ADRESS_OF_PARTNER* ``` where ARBITRARY_PORT is any port you like e.g. 1234, BT_ADRESS_OF_PARTNER is the bluetooth adress of raspberry A. You can get this adress by running ```sudo hcitool device``` on raspberry A.
   
   
-For partner A the parameters are like this: ```bt_sync_A *PARTNER_IP* *PARTNER_PORT*``` where PARTNER IP is the ip of raspberry A and PARTNER PORT is the port you specified in the step above.
+For partner A the parameters are like this: ```sudo bt_sync_A *PARTNER_IP* *PARTNER_PORT*``` where PARTNER IP is the ip of raspberry A and PARTNER PORT is the port you specified in the step above.
 
 Thats it!
