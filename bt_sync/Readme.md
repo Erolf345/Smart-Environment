@@ -41,3 +41,5 @@ For partner B the parameters are like this: ```sudo bt_sync_B *ARBITRARY_PORT* *
 For partner A the parameters are like this: ```sudo bt_sync_A *PARTNER_IP* *PARTNER_PORT*``` where PARTNER IP is the ip of raspberry A and PARTNER PORT is the port you specified in the step above.
 
 Thats it!
+# Links
+datasheet for bluetooth chip in raspberry https://www.cypress.com/file/298076/download
