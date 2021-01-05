@@ -2,6 +2,7 @@
 
 # Perequisites 
  ```sudo apt install libbluetooth-dev```
+ 
  ```sudo apt install wiringpi```
  
 # Overview
@@ -28,9 +29,9 @@ Compile the files named bt_sync_B.c and bt_sync_A.c using the command at the top
 Then you can execute the binaries. For this you need to first run the B Partner as it will open the socket. 
 
 
-For partner b the parameters are like this: ```bt_sync_B *ARBITRARY_PORT* *BT_ADRESS_OF_PARTNER* ``` where ARBITRARY_PORT is any port you like e.g. 1234, BT_ADRESS_OF_PARTNER is the bluetooth adress of raspberry A. You can get this adress by running ```sudo hcitool device``` on raspberry A.
+For partner B the parameters are like this: ```bt_sync_B *ARBITRARY_PORT* *BT_ADRESS_OF_PARTNER* ``` where ARBITRARY_PORT is any port you like e.g. 1234, BT_ADRESS_OF_PARTNER is the bluetooth adress of raspberry A. You can get this adress by running ```sudo hcitool device``` on raspberry A.
   
   
-For partner b the parameters are like this: ```bt_sync_B *PARTNER_IP* *PARTNER_PORT*  where PARTNER IP is the ip of raspberry A and PARTNER PORT is the port you specified in the step above.
+For partner A the parameters are like this: ```bt_sync_A *PARTNER_IP* *PARTNER_PORT*``` where PARTNER IP is the ip of raspberry A and PARTNER PORT is the port you specified in the step above.
 
 Thats it!
