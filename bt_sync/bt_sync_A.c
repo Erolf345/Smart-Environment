@@ -191,6 +191,7 @@ int main(int argc, char *argv[])
 	cpu_clock.tv_sec += 2;
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &rawtime);
+
 	// blink at negotiated time
 	while (TRUE)
 	{
@@ -200,7 +201,6 @@ int main(int argc, char *argv[])
 			break;
 		// printf("Code time: %ld seconds, ", diff.tv_sec);
 		// printf("%ld milliseconds                                          \r", (diff.tv_nsec));
-
 	}
 	
 	digitalWrite(0, HIGH);

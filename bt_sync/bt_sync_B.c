@@ -305,12 +305,12 @@ int main(int argc, char *argv[])
 	hci_close_dev(dd);
 	// printf("Partner clock:    0x%4.4x\n", btohl(bt_clock_B + bt_offset));
 
-	// each tick of the cpu clock = 313 ticks of the cpu clock
+	// each tick of the bluetooth clock = 313 ticks of the cpu clock
 	// 1 second = 32.768 ticks
 	bt_ticks_passed = bt_clock_A_now - bt_clock_A;
 	printf("%llu ticks passed!\n", bt_ticks_passed);
-	seconds_passed = (time_t)(bt_ticks_passed / (uint32_t)32.768);									// here for completeness, should always be zero
-	nanoseconds_passed = (bt_ticks_passed - ((unsigned long long)seconds_passed * 32.768)) * 30517;
+	seconds_passed = (time_t)(bt_ticks_passed / (uint32_t)32768);									// here for completeness, should always be zero
+	nanoseconds_passed = (bt_ticks_passed - ((unsigned long long)seconds_passed * 32768)) * 30517;
 
 	cpu_clock_A_current.tv_sec = cpu_clock_A.tv_sec + seconds_passed;
 	cpu_clock_A_current.tv_nsec = cpu_clock_A.tv_nsec + (long)nanoseconds_passed;
