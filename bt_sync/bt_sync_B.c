@@ -311,18 +311,18 @@ int main(int argc, char *argv[])
 	printf("%llu ticks passed!\n", bt_ticks_passed);
 	seconds_passed = (time_t)(bt_ticks_passed / (uint32_t)32768);									// here for completeness, should always be zero
 	nanoseconds_passed = (bt_ticks_passed - ((unsigned long long)seconds_passed * 32768)) * 30517;
-
-	cpu_clock_A_current.tv_sec = cpu_clock_A.tv_sec + seconds_passed;
-	cpu_clock_A_current.tv_nsec = cpu_clock_A.tv_nsec + (long)nanoseconds_passed;
-	if (cpu_clock_A_current.tv_nsec >= 1000000000)
-	{
-		++cpu_clock_A_current.tv_sec;
-		cpu_clock_A_current.tv_nsec -= 1000000000;
-	}
-
-	timespec_diff_macro(&cpu_clock_A_current, &cpu_clock_B, &clock_offset);
 	printf("%ld seconds, ", seconds_passed);
 	printf("%llu milliseconds passed since transmission\n", (nanoseconds_passed / 1000000));
+	cpu_clock_A_current.tv_sec = cpu_clock_A.tv_sec + seconds_passed;
+	nanoseconds_passed = cpu_clock_A.tv_nsec + nanoseconds_passed;
+	if (nanoseconds_passed >= 1000000000)
+	{
+		++cpu_clock_A_current.tv_sec;
+		nanoseconds_passed -= 1000000000;
+	}
+	cpu_clock_A_current.tv_nsec = cpu_clock_A.tv_nsec + (long)nanoseconds_passed;
+
+	timespec_diff_macro(&cpu_clock_A_current, &cpu_clock_B, &clock_offset);
 
 	printf("Clock offset: %ld seconds, ", clock_offset.tv_sec);
 	printf("%ld milliseconds \n", (clock_offset.tv_nsec / 1000000));
