@@ -1,1 +1,36 @@
+# Bluetooth clock Synchronization
 
+# Perequisites 
+ ```sudo apt install libbluetooth-dev```
+ ```sudo apt install wiringpi```
+ 
+# Overview
+
+![Drag Racing](bt_sync.png)
+
+## Wiring
+The Code connects the LED to WiringPi pin 0 which is GPIO17 on the Raspberry Pi 3/4.
+
+## First step pair and trust the devices
+1. ```sudo bluetoothctl``` in both devices 
+2. In device A enter ```discoverable on``` and ```pairable on ```
+3. In device B enter ```scan on``` and wait for the raspberry to appear. Then enter ```scan off```
+4. In device B enter ```pair *BT_ADDR*``` and then pair the device. Then enter ```trust *BT_ADDR*```
+5. In device A enter ```devices``` and copy the BT_adress of the other raspberry. Then enter ```trust *BT_ADDR*```
+
+Done. Now the devices are paired even after reboot.
+
+## Compilation and execution 
+
+Compile the files named bt_sync_B.c and bt_sync_A.c using the command at the top of the file after the imports and macros. It will look something like this 
+```gcc -o bt_sync_X bt_sync_X.c -lbluetooth -lwiringPi```. 
+
+Then you can execute the binaries. For this you need to first run the B Partner as it will open the socket. 
+
+
+For partner b the parameters are like this: ```bt_sync_B *ARBITRARY_PORT* *BT_ADRESS_OF_PARTNER* ``` where ARBITRARY_PORT is any port you like e.g. 1234, BT_ADRESS_OF_PARTNER is the bluetooth adress of raspberry A. You can get this adress by running ```sudo hcitool device``` on raspberry A.
+  
+  
+For partner b the parameters are like this: ```bt_sync_B *PARTNER_IP* *PARTNER_PORT*  where PARTNER IP is the ip of raspberry A and PARTNER PORT is the port you specified in the step above.
+
+Thats it!
