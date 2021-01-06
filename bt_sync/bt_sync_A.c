@@ -191,31 +191,26 @@ int main(int argc, char *argv[])
 
 	bt_clock_now = cmd_clock();
 
-	while (bt_clock_now < bt_clock + 6400)
-		bt_clock_now = cmd_clock();
-	digitalWrite(0, HIGH);
-	sleep(1);
-	digitalWrite(0, LOW);
-	exit(0);
+	//bt ticks per sec 3200
+	uint32_t play_in = 2;
+	while (1){
 
-	cpu_clock.tv_sec += 2;
+		while (bt_clock_now < bt_clock + play_in*3200)
+			bt_clock_now = cmd_clock();
 
-	clock_gettime(CLOCK_MONOTONIC_RAW, &rawtime);
+		digitalWrite(0, HIGH);
+		sleep(1);
+		digitalWrite(0, LOW);
 
-	// blink at negotiated time
-	while (TRUE)
-	{
-		clock_gettime(CLOCK_MONOTONIC_RAW, &rawtime);
-		timespec_diff_macro(&cpu_clock, &rawtime, &diff);
-		if (diff.tv_sec < 0)
+		play_in += 2;
+		printf("Next \n");
+
+		if (play_in > 120){
+			printf("Breaking \n");
 			break;
-		// printf("Code time: %ld seconds, ", diff.tv_sec);
-		// printf("%ld milliseconds                                          \r", (diff.tv_nsec));
-	}
+		}
 
-	digitalWrite(0, HIGH);
-	sleep(1);
-	digitalWrite(0, LOW);
+	}
 
 	close(sockfd);
 	return 0;

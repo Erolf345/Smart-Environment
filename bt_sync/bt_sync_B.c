@@ -400,110 +400,70 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 	
+	/*
+	if (hci_disconnect(dd, htobs(cr->conn_info->handle),
+						reason, 10000) < 0)
+		perror("Disconnect failed");
+
+	free(cr);
+	hci_close_dev(dd);*/
+
 	bt_clock_B_now = cmd_clock();
 	bt_offset = bt_clock_A_now - bt_clock_B_now; //TODO: this is not safe againsts overflos
+
+	printf("Offset %zu \n", bt_offset);
 
 	
 	//bt_clock_A_now = cmd_clock_ext(dev_id, dd, argv);
 	clock_gettime(CLOCK_MONOTONIC_RAW, &cpu_clock_B);
 
-	while (bt_clock_A_now < bt_clock_A + 6400)
-	{
-	 	bt_clock_A_now = cmd_clock() + bt_offset;
-	}
+	uint32_t steps = 60;
+	//for clock drift
+	int tokio_drift[steps+1];
+	tokio_drift[0] = bt_offset;
 
-	digitalWrite(0, HIGH);
-	sleep(1);
-	digitalWrite(0, LOW);
-	hci_close_dev(dd);
-	close(newsockfd);
-	close(sockfd);
+	//bt ticks per sec 3200
+	uint32_t play_in = 2;
+	uint32_t b_now_test;
+	while (1){
 
-	exit(0);
-
-	// printf("Partner clock:    0x%4.4x\n", btohl(bt_clock_B + bt_offset));
-
-	// each tick of the bluetooth clock = 313 ticks of the cpu clock
-	// 1 second = 32.768 ticks
-	bt_ticks_passed = bt_clock_A_now - bt_clock_A;
-
-	//uint32_t bt_ticks_passed2 = bt_clock_A_now - bt_clock_A;
-	//uint32_t bt_trigger_time = bt_clock_A_now + 2 * 32768 - (bt_ticks_passed2);
-
-	//printf("%lu ticks passed (2)\n",bt_ticks_passed2);
-	//printf("triggertime: %lu \n",bt_trigger_time);
-
-	printf("%llu ticks passed!\n", bt_ticks_passed);
-
-	seconds_passed = (time_t)(bt_ticks_passed / (uint32_t)32768); // here for completeness, should always be zero
-	nanoseconds_passed = (bt_ticks_passed - ((unsigned long long)seconds_passed * 32768)) * 30517;
-	printf("%ld seconds, ", seconds_passed);
-	printf("%llu milliseconds passed since transmission\n", (nanoseconds_passed / 1000000));
-	cpu_clock_A_current.tv_sec = cpu_clock_A.tv_sec + seconds_passed;
-	nanoseconds_passed = cpu_clock_A.tv_nsec + nanoseconds_passed;
-	if (nanoseconds_passed >= 1000000000)
-	{
-		++cpu_clock_A_current.tv_sec;
-		nanoseconds_passed -= 1000000000;
-	}
-	cpu_clock_A_current.tv_nsec = cpu_clock_A.tv_nsec + (long)nanoseconds_passed;
-
-	//timespec_diff_macro(&cpu_clock_A_current, &cpu_clock_B, &clock_offset);
-	timespecsub(&cpu_clock_A_current, &cpu_clock_B, &clock_offset);
-
-	printf("Clock offset: %ld seconds, ", clock_offset.tv_sec);
-	printf("%ld milliseconds \n", (clock_offset.tv_nsec / 1000000));
-
-	// blink 2 seconds after negotiated time
-	cpu_clock_A.tv_sec += 2;
-
-	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
-
-	while (TRUE)
-	{ //cpu_clock_A.tv_sec - (raw_time.tv_sec + seconds_offset) >= 0 || cpu_clock_A.tv_nsec - (raw_time.tv_nsec + nanos_offset) >= 0) // wait until trigger time
-		clock_gettime(CLOCK_MONOTONIC_RAW, &raw_time);
-
-		//timespec_add_macro(&raw_time, &clock_offset, &raw_time);
-		timespecadd(&raw_time, &clock_offset, &raw_time);
-		//timespec_diff_macro(&cpu_clock_A, &raw_time, &diff);
-		timespecsub(&cpu_clock_A, &raw_time, &diff);
-		//timespecsub(&cpu_clock_A_current, &cpu_clock_B, &clock_offset);
-
-		if (diff.tv_sec <= 0 && diff.tv_nsec <= 5000000)
+		while (bt_clock_B_now < bt_clock_A + play_in*3200)
 		{
-			if (diff.tv_sec == 0)
-			{
-				printf("nanosecs: %ld\n", diff.tv_nsec);
-			}
+			bt_clock_B_now = cmd_clock() + bt_offset;
+		}
+
+		digitalWrite(0, HIGH);
+		sleep(1);
+		digitalWrite(0, LOW);
+
+		play_in += 2;
+
+		if (play_in > steps*2){
 			break;
 		}
-		//printf("Code time: %ld seconds, ", diff.tv_sec);
-		//printf("%ld milliseconds                                          \r", (diff.tv_nsec));
+
+		connect_bt(argv, &dd, &dev_id, &handle);
+		//get clock A
+		if (hci_read_clock(dd, handle, 0x01, &bt_clock_A_now, &accuracy, 1000) < 0)
+			{
+				perror("Reading clock failed");
+				exit(1);
+			}
+		b_now_test = cmd_clock();
+
+		tokio_drift[play_in/2] = (int) bt_clock_A_now - b_now_test;
+
 	}
-	clock_gettime(CLOCK_MONOTONIC_RAW, &raw_time);
-	timespec_diff_macro(&raw_time, &start, &diff);
-	printf("Code time: %ld seconds, ", diff.tv_sec);
-	printf("%ld milliseconds \n", (diff.tv_nsec / 1000000));
 
-	// cpu_clock_A.tv_sec += 2;
-	// clock_gettime(CLOCK_MONOTONIC_RAW, &raw_time);
-	// // blink at negotiated time
-	// while(cpu_clock_A.tv_sec - raw_time.tv_sec >= 0 || cpu_clock_A.tv_nsec >= raw_time.tv_nsec){ // wait until trigger time
-	//     clock_gettime(CLOCK_MONOTONIC_RAW, &raw_time);
-	// }
-
-	bt_clock_A_now = cmd_clock_ext(dev_id, dd, argv);
 	hci_close_dev(dd);
-
-	bt_ticks_passed = bt_clock_A_now - bt_clock_A;
-	double pass = bt_ticks_passed / 32768.0;
-	printf("%f secs passed\n", pass);
-
-	digitalWrite(0, HIGH);
-	sleep(1);
-	digitalWrite(0, LOW);
-
 	close(newsockfd);
 	close(sockfd);
+
+	printf("Drift: \n [");
+	for (int i=0;i<steps+1; i++){
+		printf ("%d, ", tokio_drift[i]);
+	}
+	printf("] \n");
+
 	return 0;
 }
