@@ -124,8 +124,8 @@ static uint32_t cmd_clock()
 		exit(1);
 	}
 	accuracy = btohs(accuracy);
-	printf("Clock:    0x%4.4x\n", btohl(clock));
-	printf("Accuracy: %.2f msec\n", (float)accuracy * 0.3125);
+	//printf("Clock:    0x%4.4x\n", btohl(clock));
+	//printf("Accuracy: %.2f msec\n", (float)accuracy * 0.3125);
 	hci_close_dev(dd);
 	return clock;
 }
@@ -173,6 +173,7 @@ int main(int argc, char *argv[])
 
 	// read my bt_clock
 	uint32_t bt_clock;
+	uint32_t bt_clock_now;
 	struct timespec cpu_clock;
 	struct timespec diff;
 	bt_clock = cmd_clock();
@@ -188,6 +189,15 @@ int main(int argc, char *argv[])
 	if (n < 0)
 		error("ERROR writing to socket");
 
+	bt_clock_now = cmd_clock();
+
+	while (bt_clock_now < bt_clock + 6400)
+		bt_clock_now = cmd_clock();
+	digitalWrite(0, HIGH);
+	sleep(1);
+	digitalWrite(0, LOW);
+	exit(0);
+
 	cpu_clock.tv_sec += 2;
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &rawtime);
@@ -197,12 +207,12 @@ int main(int argc, char *argv[])
 	{
 		clock_gettime(CLOCK_MONOTONIC_RAW, &rawtime);
 		timespec_diff_macro(&cpu_clock, &rawtime, &diff);
-		if (diff.tv_sec < 0 )
+		if (diff.tv_sec < 0)
 			break;
 		// printf("Code time: %ld seconds, ", diff.tv_sec);
 		// printf("%ld milliseconds                                          \r", (diff.tv_nsec));
 	}
-	
+
 	digitalWrite(0, HIGH);
 	sleep(1);
 	digitalWrite(0, LOW);

@@ -45,28 +45,30 @@
 		}                                                \
 	} while (0)
 
-
 //There is a timespecsub though I cannot use it smh
 //it's the same
-#define	timespecadd(tsp, usp, vsp)					\
-	do {								\
-		(vsp)->tv_sec = (tsp)->tv_sec + (usp)->tv_sec;		\
-		(vsp)->tv_nsec = (tsp)->tv_nsec + (usp)->tv_nsec;	\
-		if ((vsp)->tv_nsec >= 1000000000L) {			\
-			(vsp)->tv_sec++;				\
-			(vsp)->tv_nsec -= 1000000000L;			\
-		}							\
+#define timespecadd(tsp, usp, vsp)                        \
+	do                                                    \
+	{                                                     \
+		(vsp)->tv_sec = (tsp)->tv_sec + (usp)->tv_sec;    \
+		(vsp)->tv_nsec = (tsp)->tv_nsec + (usp)->tv_nsec; \
+		if ((vsp)->tv_nsec >= 1000000000L)                \
+		{                                                 \
+			(vsp)->tv_sec++;                              \
+			(vsp)->tv_nsec -= 1000000000L;                \
+		}                                                 \
 	} while (0)
-#define	timespecsub(tsp, usp, vsp)					\
-	do {								\
-		(vsp)->tv_sec = (tsp)->tv_sec - (usp)->tv_sec;		\
-		(vsp)->tv_nsec = (tsp)->tv_nsec - (usp)->tv_nsec;	\
-		if ((vsp)->tv_nsec < 0) {				\
-			(vsp)->tv_sec--;				\
-			(vsp)->tv_nsec += 1000000000L;			\
-		}							\
+#define timespecsub(tsp, usp, vsp)                        \
+	do                                                    \
+	{                                                     \
+		(vsp)->tv_sec = (tsp)->tv_sec - (usp)->tv_sec;    \
+		(vsp)->tv_nsec = (tsp)->tv_nsec - (usp)->tv_nsec; \
+		if ((vsp)->tv_nsec < 0)                           \
+		{                                                 \
+			(vsp)->tv_sec--;                              \
+			(vsp)->tv_nsec += 1000000000L;                \
+		}                                                 \
 	} while (0)
-
 
 #define timespec_add_macro(a, b, result)                 \
 	do                                                   \
@@ -115,14 +117,79 @@ static int find_conn(int s, int dev_id, long arg)
 	return 0;
 }
 
-static uint32_t cmd_clock_ext(int dev_id, char **argv)
+static uint32_t cmd_clock()
 {
+	int dev_id = -1;
 	struct hci_conn_info_req *cr;
 	bdaddr_t bdaddr;
 	uint8_t which;
 	uint32_t handle, clock;
 	uint16_t accuracy;
 	int dd;
+
+	bacpy(&bdaddr, BDADDR_ANY);
+
+	if (dev_id < 0 && !bacmp(&bdaddr, BDADDR_ANY))
+		dev_id = hci_get_route(NULL);
+	if (dev_id < 0)
+	{
+		dev_id = hci_for_each_dev(HCI_UP, find_conn, (long)&bdaddr);
+		if (dev_id < 0)
+		{
+			fprintf(stderr, "Not connected.\n");
+			exit(1);
+		}
+	}
+	dd = hci_open_dev(dev_id);
+	if (dd < 0)
+	{
+		perror("HCI device open failed");
+		exit(1);
+	}
+	if (bacmp(&bdaddr, BDADDR_ANY))
+	{
+		cr = malloc(sizeof(*cr) + sizeof(struct hci_conn_info));
+		if (!cr)
+		{
+			perror("Can't allocate memory");
+			exit(1);
+		}
+		bacpy(&cr->bdaddr, &bdaddr);
+		cr->type = ACL_LINK;
+		if (ioctl(dd, HCIGETCONNINFO, (unsigned long)cr) < 0)
+		{
+			perror("Get connection info failed");
+			free(cr);
+			exit(1);
+		}
+		handle = htobs(cr->conn_info->handle);
+		which = 0x01;
+		free(cr);
+	}
+	else
+	{
+		handle = 0x00;
+		which = 0x00;
+	}
+	if (hci_read_clock(dd, handle, which, &clock, &accuracy, 1000) < 0)
+	{
+		perror("Reading clock failed");
+		exit(1);
+	}
+	accuracy = btohs(accuracy);
+	//printf("Clock:    0x%4.4x\n", btohl(clock));
+	//printf("Accuracy: %.2f msec\n", (float)accuracy * 0.3125);
+	hci_close_dev(dd);
+	return clock;
+}
+
+static uint32_t cmd_clock_ext(int dev_id, int dd, char **argv)
+{
+	struct hci_conn_info_req *cr;
+	bdaddr_t bdaddr;
+	uint8_t which;
+	uint32_t handle, clock;
+	uint16_t accuracy;
 
 	str2ba(argv[2], &bdaddr);
 
@@ -139,7 +206,7 @@ static uint32_t cmd_clock_ext(int dev_id, char **argv)
 		}
 	}
 
-	dd = hci_open_dev(dev_id);
+	//dd = hci_open_dev(dev_id);
 	if (dd < 0)
 	{
 		perror("HCI device open failed");
@@ -186,14 +253,13 @@ static uint32_t cmd_clock_ext(int dev_id, char **argv)
 	/*printf("Clock:    0x%4.4x\n", btohl(clock));
 	printf("Accuracy: %.2f msec\n", (float)accuracy * 0.3125);*/
 
-	hci_close_dev(dd);
+	//hci_close_dev(dd);
 	return clock;
 }
 
-static void connect_bt(char **argv, int *dd, int *dev_id)
+static void connect_bt(char **argv, int *dd, int *dev_id, uint16_t *handle)
 {
 	bdaddr_t bdaddr;
-	uint16_t handle;
 	uint8_t role;
 	unsigned int ptype;
 
@@ -220,7 +286,7 @@ static void connect_bt(char **argv, int *dd, int *dev_id)
 	}
 
 	if (hci_create_connection(*dd, &bdaddr, htobs(ptype),
-							  htobs(0x0000), role, &handle, 25000) < 0)
+							  htobs(0x0000), role, handle, 25000) < 0)
 		perror("Can't create connection");
 
 	return;
@@ -303,6 +369,8 @@ int main(int argc, char *argv[])
 	struct timespec diff;
 	uint32_t bt_clock_A_now;
 	uint32_t bt_clock_A;
+	uint32_t bt_clock_B_now;
+	uint32_t bt_offset;
 	unsigned long long bt_ticks_passed;
 	time_t seconds_passed;
 	unsigned long long nanoseconds_passed;
@@ -321,12 +389,38 @@ int main(int argc, char *argv[])
 	// start clocks read
 	int dd;
 	int dev_id = -1;
+	uint16_t handle;
+	uint16_t accuracy;
 
-	connect_bt(argv, &dd, &dev_id);
+	connect_bt(argv, &dd, &dev_id, &handle);
 
-	bt_clock_A_now = cmd_clock_ext(dev_id, argv);
+	if (hci_read_clock(dd, handle, 0x01, &bt_clock_A_now, &accuracy, 1000) < 0)
+	{
+		perror("Reading clock failed");
+		exit(1);
+	}
+	
+	bt_clock_B_now = cmd_clock();
+	bt_offset = bt_clock_A_now - bt_clock_B_now; //TODO: this is not safe againsts overflos
+
+	
+	//bt_clock_A_now = cmd_clock_ext(dev_id, dd, argv);
 	clock_gettime(CLOCK_MONOTONIC_RAW, &cpu_clock_B);
+
+	while (bt_clock_A_now < bt_clock_A + 6400)
+	{
+	 	bt_clock_A_now = cmd_clock() + bt_offset;
+	}
+
+	digitalWrite(0, HIGH);
+	sleep(1);
+	digitalWrite(0, LOW);
 	hci_close_dev(dd);
+	close(newsockfd);
+	close(sockfd);
+
+	exit(0);
+
 	// printf("Partner clock:    0x%4.4x\n", btohl(bt_clock_B + bt_offset));
 
 	// each tick of the bluetooth clock = 313 ticks of the cpu clock
@@ -340,8 +434,8 @@ int main(int argc, char *argv[])
 	//printf("triggertime: %lu \n",bt_trigger_time);
 
 	printf("%llu ticks passed!\n", bt_ticks_passed);
-	
-	seconds_passed = (time_t)(bt_ticks_passed / (uint32_t)32768);									// here for completeness, should always be zero
+
+	seconds_passed = (time_t)(bt_ticks_passed / (uint32_t)32768); // here for completeness, should always be zero
 	nanoseconds_passed = (bt_ticks_passed - ((unsigned long long)seconds_passed * 32768)) * 30517;
 	printf("%ld seconds, ", seconds_passed);
 	printf("%llu milliseconds passed since transmission\n", (nanoseconds_passed / 1000000));
@@ -364,9 +458,9 @@ int main(int argc, char *argv[])
 	cpu_clock_A.tv_sec += 2;
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
-	
+
 	while (TRUE)
-	{ 	//cpu_clock_A.tv_sec - (raw_time.tv_sec + seconds_offset) >= 0 || cpu_clock_A.tv_nsec - (raw_time.tv_nsec + nanos_offset) >= 0) // wait until trigger time
+	{ //cpu_clock_A.tv_sec - (raw_time.tv_sec + seconds_offset) >= 0 || cpu_clock_A.tv_nsec - (raw_time.tv_nsec + nanos_offset) >= 0) // wait until trigger time
 		clock_gettime(CLOCK_MONOTONIC_RAW, &raw_time);
 
 		//timespec_add_macro(&raw_time, &clock_offset, &raw_time);
@@ -375,9 +469,11 @@ int main(int argc, char *argv[])
 		timespecsub(&cpu_clock_A, &raw_time, &diff);
 		//timespecsub(&cpu_clock_A_current, &cpu_clock_B, &clock_offset);
 
-		if (diff.tv_sec <= 0 && diff.tv_nsec <= 5000000){
-			if (diff.tv_sec == 0){
-				printf("nanosecs: %ld\n",diff.tv_nsec);
+		if (diff.tv_sec <= 0 && diff.tv_nsec <= 5000000)
+		{
+			if (diff.tv_sec == 0)
+			{
+				printf("nanosecs: %ld\n", diff.tv_nsec);
 			}
 			break;
 		}
@@ -396,11 +492,12 @@ int main(int argc, char *argv[])
 	//     clock_gettime(CLOCK_MONOTONIC_RAW, &raw_time);
 	// }
 
-	bt_clock_A_now = cmd_clock_ext(dev_id, argv);
+	bt_clock_A_now = cmd_clock_ext(dev_id, dd, argv);
+	hci_close_dev(dd);
 
 	bt_ticks_passed = bt_clock_A_now - bt_clock_A;
-	double pass = bt_ticks_passed/32768.0;
-	printf("%f secs passed\n",pass);
+	double pass = bt_ticks_passed / 32768.0;
+	printf("%f secs passed\n", pass);
 
 	digitalWrite(0, HIGH);
 	sleep(1);
