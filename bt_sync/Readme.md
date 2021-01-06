@@ -38,7 +38,7 @@ You need to run the B Partner first as it will open the socket.
 For partner B the parameters are like this: ```sudo bt_sync_B *ARBITRARY_PORT* *BT_ADRESS_OF_PARTNER* ``` where ARBITRARY_PORT is any port you like e.g. 1234, BT_ADRESS_OF_PARTNER is the bluetooth adress of raspberry A. You can get this adress by running ```sudo hcitool device``` on raspberry A.
   
   
-For partner A the parameters are like this: ```sudo bt_sync_A *PARTNER_IP* *PARTNER_PORT*``` where PARTNER IP is the ip of raspberry A and PARTNER PORT is the port you specified in the step above.
+For partner A the parameters are like this: ```sudo bt_sync_A *PARTNER_IP* *PARTNER_PORT*``` where PARTNER IP is the ip of raspberry B and PARTNER PORT is the port you specified in the step above.
 
 Thats it!
 # Links

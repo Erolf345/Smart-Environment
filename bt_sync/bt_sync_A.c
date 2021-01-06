@@ -36,99 +36,23 @@
 
 //gcc -o bt_sync_A bt_sync_A.c -lbluetooth -lwiringPi
 
-static int find_conn(int s, int dev_id, long arg)
-{
-	struct hci_conn_list_req *cl;
-	struct hci_conn_info *ci;
-	int i;
-	if (!(cl = malloc(10 * sizeof(*ci) + sizeof(*cl))))
-	{
-		perror("Can't allocate memory");
-		exit(1);
-	}
-	cl->dev_id = dev_id;
-	cl->conn_num = 10;
-	ci = cl->conn_info;
-	if (ioctl(s, HCIGETCONNLIST, (void *)cl))
-	{
-		perror("Can't get connection list");
-		exit(1);
-	}
-	for (i = 0; i < cl->conn_num; i++, ci++)
-		if (!bacmp((bdaddr_t *)arg, &ci->bdaddr))
-		{
-			free(cl);
-			return 1;
-		}
-	free(cl);
-	return 0;
-}
 
-static uint32_t cmd_clock()
+static uint32_t cmd_clock(int dd)
 {
-	int dev_id = -1;
-	struct hci_conn_info_req *cr;
-	bdaddr_t bdaddr;
-	uint8_t which;
-	uint32_t handle, clock;
+	uint32_t clock;
 	uint16_t accuracy;
-	int dd;
-
-	bacpy(&bdaddr, BDADDR_ANY);
-
-	if (dev_id < 0 && !bacmp(&bdaddr, BDADDR_ANY))
-		dev_id = hci_get_route(NULL);
-	if (dev_id < 0)
-	{
-		dev_id = hci_for_each_dev(HCI_UP, find_conn, (long)&bdaddr);
-		if (dev_id < 0)
-		{
-			fprintf(stderr, "Not connected.\n");
-			exit(1);
-		}
-	}
-	dd = hci_open_dev(dev_id);
-	if (dd < 0)
-	{
-		perror("HCI device open failed");
-		exit(1);
-	}
-	if (bacmp(&bdaddr, BDADDR_ANY))
-	{
-		cr = malloc(sizeof(*cr) + sizeof(struct hci_conn_info));
-		if (!cr)
-		{
-			perror("Can't allocate memory");
-			exit(1);
-		}
-		bacpy(&cr->bdaddr, &bdaddr);
-		cr->type = ACL_LINK;
-		if (ioctl(dd, HCIGETCONNINFO, (unsigned long)cr) < 0)
-		{
-			perror("Get connection info failed");
-			free(cr);
-			exit(1);
-		}
-		handle = htobs(cr->conn_info->handle);
-		which = 0x01;
-		free(cr);
-	}
-	else
-	{
-		handle = 0x00;
-		which = 0x00;
-	}
-	if (hci_read_clock(dd, handle, which, &clock, &accuracy, 1000) < 0)
+		
+	if (hci_read_clock(dd, 0x00, 0x00, &clock, &accuracy, 1000) < 0)
 	{
 		perror("Reading clock failed");
 		exit(1);
 	}
-	accuracy = btohs(accuracy);
 	//printf("Clock:    0x%4.4x\n", btohl(clock));
 	//printf("Accuracy: %.2f msec\n", (float)accuracy * 0.3125);
-	hci_close_dev(dd);
+	// hci_close_dev(dd);
 	return clock;
 }
+
 
 void error(const char *msg)
 {
@@ -138,6 +62,7 @@ void error(const char *msg)
 
 int main(int argc, char *argv[])
 {
+	// -------------------------------- BEGIN NETWORK SOCKET SETUP -----------------------------------------------------
 	int sockfd, portno, n;
 	struct sockaddr_in serv_addr;
 	struct hostent *server;
@@ -169,18 +94,28 @@ int main(int argc, char *argv[])
 	if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
 		error("ERROR connecting");
 
-	struct timespec rawtime;
-
-	// read my bt_clock
-	uint32_t bt_clock;
+	// -------------------------------- BEGIN BLUETOOTH -----------------------------------------------------
+	uint32_t bt_clock_init;
 	uint32_t bt_clock_now;
 	struct timespec cpu_clock;
-	struct timespec diff;
-	bt_clock = cmd_clock();
+
+	// Initialize connection to local bluetooth device
+	int dd_local;
+	int dev_id_local;
+	dev_id_local = hci_get_route(NULL);
+	dd_local = hci_open_dev(dev_id_local);
+	if (dd_local < 0)
+	{
+		perror("HCI device open failed");
+		exit(1);
+	}
+
+
+	bt_clock_init = cmd_clock(dd_local);
 	clock_gettime(CLOCK_MONOTONIC_RAW, &cpu_clock);
 
 	// send bt_clock
-	n = write(sockfd, &bt_clock, sizeof(bt_clock));
+	n = write(sockfd, &bt_clock_init, sizeof(bt_clock_init));
 	if (n < 0)
 		error("ERROR writing to socket");
 
@@ -189,14 +124,14 @@ int main(int argc, char *argv[])
 	if (n < 0)
 		error("ERROR writing to socket");
 
-	bt_clock_now = cmd_clock();
+	bt_clock_now = cmd_clock(dd_local);
 
 	//bt ticks per sec 3200
 	uint32_t play_in = 2;
 	while (1){
 
-		while (bt_clock_now < bt_clock + play_in*3200)
-			bt_clock_now = cmd_clock();
+		while (bt_clock_now < bt_clock_init + play_in*3200)
+			bt_clock_now = cmd_clock(dd_local);
 
 		digitalWrite(0, HIGH);
 		sleep(1);
@@ -212,6 +147,7 @@ int main(int argc, char *argv[])
 
 	}
 
+	hci_close_dev(dd_local);
 	close(sockfd);
 	return 0;
 }

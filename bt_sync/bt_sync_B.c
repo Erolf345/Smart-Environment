@@ -84,178 +84,23 @@
 
 // gcc -o bt_sync_B bt_sync_B.c -lbluetooth -lwiringPi
 
-static volatile int signal_received = 0;
-static int find_conn(int s, int dev_id, long arg)
+
+static uint32_t cmd_clock(int dd)
 {
-	struct hci_conn_list_req *cl;
-	struct hci_conn_info *ci;
-	int i;
-
-	if (!(cl = malloc(10 * sizeof(*ci) + sizeof(*cl))))
-	{
-		perror("Can't allocate memory");
-		exit(1);
-	}
-	cl->dev_id = dev_id;
-	cl->conn_num = 10;
-	ci = cl->conn_info;
-
-	if (ioctl(s, HCIGETCONNLIST, (void *)cl))
-	{
-		perror("Can't get connection list");
-		exit(1);
-	}
-
-	for (i = 0; i < cl->conn_num; i++, ci++)
-		if (!bacmp((bdaddr_t *)arg, &ci->bdaddr))
-		{
-			free(cl);
-			return 1;
-		}
-
-	free(cl);
-	return 0;
-}
-
-static uint32_t cmd_clock()
-{
-	int dev_id = -1;
-	struct hci_conn_info_req *cr;
-	bdaddr_t bdaddr;
-	uint8_t which;
-	uint32_t handle, clock;
+	uint32_t clock;
 	uint16_t accuracy;
-	int dd;
-
-	bacpy(&bdaddr, BDADDR_ANY);
-
-	if (dev_id < 0 && !bacmp(&bdaddr, BDADDR_ANY))
-		dev_id = hci_get_route(NULL);
-	if (dev_id < 0)
-	{
-		dev_id = hci_for_each_dev(HCI_UP, find_conn, (long)&bdaddr);
-		if (dev_id < 0)
-		{
-			fprintf(stderr, "Not connected.\n");
-			exit(1);
-		}
-	}
-	dd = hci_open_dev(dev_id);
-	if (dd < 0)
-	{
-		perror("HCI device open failed");
-		exit(1);
-	}
-	if (bacmp(&bdaddr, BDADDR_ANY))
-	{
-		cr = malloc(sizeof(*cr) + sizeof(struct hci_conn_info));
-		if (!cr)
-		{
-			perror("Can't allocate memory");
-			exit(1);
-		}
-		bacpy(&cr->bdaddr, &bdaddr);
-		cr->type = ACL_LINK;
-		if (ioctl(dd, HCIGETCONNINFO, (unsigned long)cr) < 0)
-		{
-			perror("Get connection info failed");
-			free(cr);
-			exit(1);
-		}
-		handle = htobs(cr->conn_info->handle);
-		which = 0x01;
-		free(cr);
-	}
-	else
-	{
-		handle = 0x00;
-		which = 0x00;
-	}
-	if (hci_read_clock(dd, handle, which, &clock, &accuracy, 1000) < 0)
+		
+	if (hci_read_clock(dd, 0x00, 0x00, &clock, &accuracy, 1000) < 0)
 	{
 		perror("Reading clock failed");
 		exit(1);
 	}
-	accuracy = btohs(accuracy);
 	//printf("Clock:    0x%4.4x\n", btohl(clock));
 	//printf("Accuracy: %.2f msec\n", (float)accuracy * 0.3125);
-	hci_close_dev(dd);
+	// hci_close_dev(dd);
 	return clock;
 }
 
-static uint32_t cmd_clock_ext(int dev_id, int dd, char **argv)
-{
-	struct hci_conn_info_req *cr;
-	bdaddr_t bdaddr;
-	uint8_t which;
-	uint32_t handle, clock;
-	uint16_t accuracy;
-
-	str2ba(argv[2], &bdaddr);
-
-	// if (dev_id < 0 && !bacmp(&bdaddr, BDADDR_ANY))
-	// 	dev_id = hci_get_route(NULL);
-
-	if (dev_id < 0)
-	{
-		dev_id = hci_for_each_dev(HCI_UP, find_conn, (long)&bdaddr);
-		if (dev_id < 0)
-		{
-			fprintf(stderr, "Not connected.\n");
-			exit(1);
-		}
-	}
-
-	//dd = hci_open_dev(dev_id);
-	if (dd < 0)
-	{
-		perror("HCI device open failed");
-		exit(1);
-	}
-
-	if (bacmp(&bdaddr, BDADDR_ANY))
-	{
-		cr = malloc(sizeof(*cr) + sizeof(struct hci_conn_info));
-		if (!cr)
-		{
-			perror("Can't allocate memory");
-			exit(1);
-		}
-
-		bacpy(&cr->bdaddr, &bdaddr);
-		cr->type = ACL_LINK;
-		if (ioctl(dd, HCIGETCONNINFO, (unsigned long)cr) < 0)
-		{
-			perror("Get connection info failed");
-			free(cr);
-			exit(1);
-		}
-
-		handle = htobs(cr->conn_info->handle);
-		//which = atoi(argv[2]);
-		which = 0x01;
-		free(cr);
-	}
-	else
-	{
-		handle = 0x00;
-		which = 0x00;
-	}
-
-	if (hci_read_clock(dd, handle, which, &clock, &accuracy, 1000) < 0)
-	{
-		perror("Reading clock failed");
-		exit(1);
-	}
-
-	accuracy = btohs(accuracy);
-
-	/*printf("Clock:    0x%4.4x\n", btohl(clock));
-	printf("Accuracy: %.2f msec\n", (float)accuracy * 0.3125);*/
-
-	//hci_close_dev(dd);
-	return clock;
-}
 
 static void connect_bt(char **argv, int *dd, int *dev_id, uint16_t *handle)
 {
@@ -363,37 +208,43 @@ int main(int argc, char *argv[])
 		error("ERROR on accept");
 
 	struct timespec cpu_clock_A;
-	struct timespec cpu_clock_A_current;
 	struct timespec cpu_clock_B;
-	struct timespec clock_offset;
-	struct timespec diff;
 	uint32_t bt_clock_A_now;
 	uint32_t bt_clock_A;
 	uint32_t bt_clock_B_now;
 	uint32_t bt_offset;
-	unsigned long long bt_ticks_passed;
-	time_t seconds_passed;
-	unsigned long long nanoseconds_passed;
+	int dd;
+	int dev_id = -1;
+	int dd_local;
+	int dev_id_local;
+	uint16_t handle;
+	uint16_t accuracy;
 
-	struct timespec raw_time;
-	struct timespec start;
 
+	// Read incoming bluetooth clock
 	n = read(newsockfd, &bt_clock_A, sizeof(bt_clock_A));
 	if (n < 0)
 		error("ERROR reading from socket");
 
+	// Read incoming CPU Clock (currently unused but may be useful for cpu clock synchronization but that has failed so far)
 	n = read(newsockfd, &cpu_clock_A, sizeof(cpu_clock_A));
 	if (n < 0)
 		error("ERROR reading from socket");
 
-	// start clocks read
-	int dd;
-	int dev_id = -1;
-	uint16_t handle;
-	uint16_t accuracy;
-
+	// Initialize dd and dev_id for calls to external bluetooth device
 	connect_bt(argv, &dd, &dev_id, &handle);
 
+	// Initialize connection to local bluetooth device
+	dev_id_local = hci_get_route(NULL);
+	dd_local = hci_open_dev(dev_id_local);
+	if (dd_local < 0)
+	{
+		perror("HCI device open failed");
+		exit(1);
+	}
+
+
+	// Get clock of external bluetooth device
 	if (hci_read_clock(dd, handle, 0x01, &bt_clock_A_now, &accuracy, 1000) < 0)
 	{
 		perror("Reading clock failed");
@@ -401,6 +252,7 @@ int main(int argc, char *argv[])
 	}
 	
 	/*
+	// Disconnect from bluetooth device
 	if (hci_disconnect(dd, htobs(cr->conn_info->handle),
 						reason, 10000) < 0)
 		perror("Disconnect failed");
@@ -408,28 +260,28 @@ int main(int argc, char *argv[])
 	free(cr);
 	hci_close_dev(dd);*/
 
-	bt_clock_B_now = cmd_clock();
-	bt_offset = bt_clock_A_now - bt_clock_B_now; //TODO: this is not safe againsts overflos
+	// get bluetooth clock of local device
+	bt_clock_B_now = cmd_clock(dd_local);
+	bt_offset = bt_clock_A_now - bt_clock_B_now;
 
-	printf("Offset %zu \n", bt_offset);
+	printf("bluetooth clock offset %zu \n", bt_offset);
 
-	
-	//bt_clock_A_now = cmd_clock_ext(dev_id, dd, argv);
 	clock_gettime(CLOCK_MONOTONIC_RAW, &cpu_clock_B);
 
+ 	// for measuring clock drift
 	uint32_t steps = 60;
-	//for clock drift
-	int tokio_drift[steps+1];
+	int tokio_drift[steps+1];	
 	tokio_drift[0] = bt_offset;
 
-	//bt ticks per sec 3200
+	// bt ticks per sec ~3200
 	uint32_t play_in = 2;
 	uint32_t b_now_test;
 	while (1){
 
-		while (bt_clock_B_now < bt_clock_A + play_in*3200)
+		// Wait 2 seconds 
+		while (bt_clock_B_now < bt_clock_A + play_in*3200) 
 		{
-			bt_clock_B_now = cmd_clock() + bt_offset;
+			bt_clock_B_now = cmd_clock(dd_local) + bt_offset;
 		}
 
 		digitalWrite(0, HIGH);
@@ -442,20 +294,21 @@ int main(int argc, char *argv[])
 			break;
 		}
 
-		connect_bt(argv, &dd, &dev_id, &handle);
-		//get clock A
-		if (hci_read_clock(dd, handle, 0x01, &bt_clock_A_now, &accuracy, 1000) < 0)
-			{
-				perror("Reading clock failed");
-				exit(1);
-			}
-		b_now_test = cmd_clock();
+		// connect_bt(argv, &dd, &dev_id, &handle);
+		// //get clock A
+		// if (hci_read_clock(dd, handle, 0x01, &bt_clock_A_now, &accuracy, 1000) < 0)
+		// 	{
+		// 		perror("Reading clock failed");
+		// 		exit(1);
+		// 	}
+		b_now_test = cmd_clock(dd_local);
 
 		tokio_drift[play_in/2] = (int) bt_clock_A_now - b_now_test;
 
 	}
 
 	hci_close_dev(dd);
+	hci_close_dev(dd_local);
 	close(newsockfd);
 	close(sockfd);
 
