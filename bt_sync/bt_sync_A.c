@@ -126,7 +126,8 @@ int main(int argc, char *argv[])
 	//bt ticks per sec 3200
 	uint32_t blink_delay = 5;
 	uint32_t play_in = blink_delay;
-	for (int i = 0; i < 5; i++)
+	int iterations = 5;
+	for (int i = 0; i < iterations; i++)
 	{
 
 		while (bt_clock_now < bt_clock_init + play_in * 3200)
@@ -137,7 +138,8 @@ int main(int argc, char *argv[])
 		digitalWrite(0, LOW);
 
 		play_in += blink_delay;
-		printf("Next \n");
+		printf("%d/",i+1);
+		printf("%d\n",iterations);
 	}
 
 	hci_close_dev(dd_local);
