@@ -36,12 +36,11 @@
 
 //gcc -o bt_sync_A bt_sync_A.c -lbluetooth -lwiringPi
 
-
 static uint32_t cmd_clock(int dd)
 {
 	uint32_t clock;
 	uint16_t accuracy;
-		
+
 	if (hci_read_clock(dd, 0x00, 0x00, &clock, &accuracy, 1000) < 0)
 	{
 		perror("Reading clock failed");
@@ -52,7 +51,6 @@ static uint32_t cmd_clock(int dd)
 	// hci_close_dev(dd);
 	return clock;
 }
-
 
 void error(const char *msg)
 {
@@ -110,7 +108,6 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-
 	bt_clock_init = cmd_clock(dd_local);
 	clock_gettime(CLOCK_MONOTONIC_RAW, &cpu_clock);
 
@@ -127,24 +124,20 @@ int main(int argc, char *argv[])
 	bt_clock_now = cmd_clock(dd_local);
 
 	//bt ticks per sec 3200
-	uint32_t play_in = 2;
-	while (1){
+	uint32_t blink_delay = 5;
+	uint32_t play_in = blink_delay;
+	for (int i = 0; i < 5; i++)
+	{
 
-		while (bt_clock_now < bt_clock_init + play_in*3200)
+		while (bt_clock_now < bt_clock_init + play_in * 3200)
 			bt_clock_now = cmd_clock(dd_local);
 
 		digitalWrite(0, HIGH);
 		sleep(1);
 		digitalWrite(0, LOW);
 
-		play_in += 2;
+		play_in += blink_delay;
 		printf("Next \n");
-
-		if (play_in > 120){
-			printf("Breaking \n");
-			break;
-		}
-
 	}
 
 	hci_close_dev(dd_local);

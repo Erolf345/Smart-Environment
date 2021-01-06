@@ -30,21 +30,6 @@
 #include <bluetooth/hci.h>
 #include <bluetooth/hci_lib.h>
 
-// from <sys/time.h>
-// used timersub macro, changed timeval to timespec
-// kept the order of operands the same, that is a - b = result
-#define timespec_diff_macro(a, b, result)                \
-	do                                                   \
-	{                                                    \
-		(result)->tv_sec = (a)->tv_sec - (b)->tv_sec;    \
-		(result)->tv_nsec = (a)->tv_nsec - (b)->tv_nsec; \
-		if ((result)->tv_nsec < 0)                       \
-		{                                                \
-			--(result)->tv_sec;                          \
-			(result)->tv_nsec += 1000000000;             \
-		}                                                \
-	} while (0)
-
 //There is a timespecsub though I cannot use it smh
 //it's the same
 #define timespecadd(tsp, usp, vsp)                        \
@@ -70,26 +55,13 @@
 		}                                                 \
 	} while (0)
 
-#define timespec_add_macro(a, b, result)                 \
-	do                                                   \
-	{                                                    \
-		(result)->tv_sec = (a)->tv_sec + (b)->tv_sec;    \
-		(result)->tv_nsec = (a)->tv_nsec + (b)->tv_nsec; \
-		if ((result)->tv_nsec >= 1000000000)             \
-		{                                                \
-			++(result)->tv_sec;                          \
-			(result)->tv_nsec -= 1000000000;             \
-		}                                                \
-	} while (0)
-
 // gcc -o bt_sync_B bt_sync_B.c -lbluetooth -lwiringPi
-
 
 static uint32_t cmd_clock(int dd)
 {
 	uint32_t clock;
 	uint16_t accuracy;
-		
+
 	if (hci_read_clock(dd, 0x00, 0x00, &clock, &accuracy, 1000) < 0)
 	{
 		perror("Reading clock failed");
@@ -100,7 +72,6 @@ static uint32_t cmd_clock(int dd)
 	// hci_close_dev(dd);
 	return clock;
 }
-
 
 static void connect_bt(char **argv, int *dd, int *dev_id, uint16_t *handle)
 {
@@ -220,7 +191,6 @@ int main(int argc, char *argv[])
 	uint16_t handle;
 	uint16_t accuracy;
 
-
 	// Read incoming bluetooth clock
 	n = read(newsockfd, &bt_clock_A, sizeof(bt_clock_A));
 	if (n < 0)
@@ -243,14 +213,13 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-
 	// Get clock of external bluetooth device
 	if (hci_read_clock(dd, handle, 0x01, &bt_clock_A_now, &accuracy, 1000) < 0)
 	{
 		perror("Reading clock failed");
 		exit(1);
 	}
-	
+
 	/*
 	// Disconnect from bluetooth device
 	if (hci_disconnect(dd, htobs(cr->conn_info->handle),
@@ -268,18 +237,19 @@ int main(int argc, char *argv[])
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &cpu_clock_B);
 
- 	// for measuring clock drift
-	uint32_t steps = 60;
-	int tokio_drift[steps+1];	
+	// for measuring clock drift
+	uint32_t steps = 5;
+	uint32_t tokio_drift[steps + 1];
 	tokio_drift[0] = bt_offset;
 
 	// bt ticks per sec ~3200
-	uint32_t play_in = 2;
+	uint32_t blink_delay = 5;
+	uint32_t play_in = blink_delay;
 	uint32_t b_now_test;
-	while (1){
-
-		// Wait 2 seconds 
-		while (bt_clock_B_now < bt_clock_A + play_in*3200) 
+	for (int i = 0; i < steps; i++)
+	{
+		// Wait 2 seconds
+		while (bt_clock_B_now < bt_clock_A + play_in * 3200)
 		{
 			bt_clock_B_now = cmd_clock(dd_local) + bt_offset;
 		}
@@ -288,23 +258,18 @@ int main(int argc, char *argv[])
 		sleep(1);
 		digitalWrite(0, LOW);
 
-		play_in += 2;
-
-		if (play_in > steps*2){
-			break;
+		play_in += blink_delay;
+		dev_id = -1;
+		connect_bt(argv, &dd, &dev_id, &handle);
+		//get clock A
+		if (hci_read_clock(dd, handle, 0x01, &bt_clock_A_now, &accuracy, 1000) < 0)
+		{
+			perror("Reading clock failed");
+			exit(1);
 		}
-
-		// connect_bt(argv, &dd, &dev_id, &handle);
-		// //get clock A
-		// if (hci_read_clock(dd, handle, 0x01, &bt_clock_A_now, &accuracy, 1000) < 0)
-		// 	{
-		// 		perror("Reading clock failed");
-		// 		exit(1);
-		// 	}
 		b_now_test = cmd_clock(dd_local);
 
-		tokio_drift[play_in/2] = (int) bt_clock_A_now - b_now_test;
-
+		tokio_drift[i] = bt_clock_A_now - b_now_test;
 	}
 
 	hci_close_dev(dd);
@@ -313,8 +278,9 @@ int main(int argc, char *argv[])
 	close(sockfd);
 
 	printf("Drift: \n [");
-	for (int i=0;i<steps+1; i++){
-		printf ("%d, ", tokio_drift[i]);
+	for (int i = 0; i < steps; i++)
+	{
+		printf("%zu, ", tokio_drift[i]);
 	}
 	printf("] \n");
 
