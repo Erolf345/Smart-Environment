@@ -8,6 +8,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <wiringPi.h>
+//#include <sys/time.h>
 #include <time.h>
 
 #define _GNU_SOURCE
@@ -43,6 +44,29 @@
 			(result)->tv_nsec += 1000000000;             \
 		}                                                \
 	} while (0)
+
+
+//There is a timespecsub though I cannot use it smh
+//it's the same
+#define	timespecadd(tsp, usp, vsp)					\
+	do {								\
+		(vsp)->tv_sec = (tsp)->tv_sec + (usp)->tv_sec;		\
+		(vsp)->tv_nsec = (tsp)->tv_nsec + (usp)->tv_nsec;	\
+		if ((vsp)->tv_nsec >= 1000000000L) {			\
+			(vsp)->tv_sec++;				\
+			(vsp)->tv_nsec -= 1000000000L;			\
+		}							\
+	} while (0)
+#define	timespecsub(tsp, usp, vsp)					\
+	do {								\
+		(vsp)->tv_sec = (tsp)->tv_sec - (usp)->tv_sec;		\
+		(vsp)->tv_nsec = (tsp)->tv_nsec - (usp)->tv_nsec;	\
+		if ((vsp)->tv_nsec < 0) {				\
+			(vsp)->tv_sec--;				\
+			(vsp)->tv_nsec += 1000000000L;			\
+		}							\
+	} while (0)
+
 
 #define timespec_add_macro(a, b, result)                 \
 	do                                                   \
@@ -159,8 +183,8 @@ static uint32_t cmd_clock_ext(int dev_id, char **argv)
 
 	accuracy = btohs(accuracy);
 
-	printf("Clock:    0x%4.4x\n", btohl(clock));
-	printf("Accuracy: %.2f msec\n", (float)accuracy * 0.3125);
+	/*printf("Clock:    0x%4.4x\n", btohl(clock));
+	printf("Accuracy: %.2f msec\n", (float)accuracy * 0.3125);*/
 
 	hci_close_dev(dd);
 	return clock;
@@ -308,7 +332,15 @@ int main(int argc, char *argv[])
 	// each tick of the bluetooth clock = 313 ticks of the cpu clock
 	// 1 second = 32.768 ticks
 	bt_ticks_passed = bt_clock_A_now - bt_clock_A;
+
+	//uint32_t bt_ticks_passed2 = bt_clock_A_now - bt_clock_A;
+	//uint32_t bt_trigger_time = bt_clock_A_now + 2 * 32768 - (bt_ticks_passed2);
+
+	//printf("%lu ticks passed (2)\n",bt_ticks_passed2);
+	//printf("triggertime: %lu \n",bt_trigger_time);
+
 	printf("%llu ticks passed!\n", bt_ticks_passed);
+	
 	seconds_passed = (time_t)(bt_ticks_passed / (uint32_t)32768);									// here for completeness, should always be zero
 	nanoseconds_passed = (bt_ticks_passed - ((unsigned long long)seconds_passed * 32768)) * 30517;
 	printf("%ld seconds, ", seconds_passed);
@@ -322,7 +354,8 @@ int main(int argc, char *argv[])
 	}
 	cpu_clock_A_current.tv_nsec = cpu_clock_A.tv_nsec + (long)nanoseconds_passed;
 
-	timespec_diff_macro(&cpu_clock_A_current, &cpu_clock_B, &clock_offset);
+	//timespec_diff_macro(&cpu_clock_A_current, &cpu_clock_B, &clock_offset);
+	timespecsub(&cpu_clock_A_current, &cpu_clock_B, &clock_offset);
 
 	printf("Clock offset: %ld seconds, ", clock_offset.tv_sec);
 	printf("%ld milliseconds \n", (clock_offset.tv_nsec / 1000000));
@@ -331,17 +364,25 @@ int main(int argc, char *argv[])
 	cpu_clock_A.tv_sec += 2;
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+	
 	while (TRUE)
-	{ //cpu_clock_A.tv_sec - (raw_time.tv_sec + seconds_offset) >= 0 || cpu_clock_A.tv_nsec - (raw_time.tv_nsec + nanos_offset) >= 0) // wait until trigger time
+	{ 	//cpu_clock_A.tv_sec - (raw_time.tv_sec + seconds_offset) >= 0 || cpu_clock_A.tv_nsec - (raw_time.tv_nsec + nanos_offset) >= 0) // wait until trigger time
 		clock_gettime(CLOCK_MONOTONIC_RAW, &raw_time);
 
-		timespec_add_macro(&raw_time, &clock_offset, &raw_time);
-		timespec_diff_macro(&cpu_clock_A, &raw_time, &diff);
+		//timespec_add_macro(&raw_time, &clock_offset, &raw_time);
+		timespecadd(&raw_time, &clock_offset, &raw_time);
+		//timespec_diff_macro(&cpu_clock_A, &raw_time, &diff);
+		timespecsub(&cpu_clock_A, &raw_time, &diff);
+		//timespecsub(&cpu_clock_A_current, &cpu_clock_B, &clock_offset);
 
-		if (diff.tv_sec < 0)
+		if (diff.tv_sec <= 0 && diff.tv_nsec <= 5000000){
+			if (diff.tv_sec == 0){
+				printf("nanosecs: %ld\n",diff.tv_nsec);
+			}
 			break;
-		// printf("Code time: %ld seconds, ", diff.tv_sec);
-		// printf("%ld milliseconds                                          \r", (diff.tv_nsec));
+		}
+		//printf("Code time: %ld seconds, ", diff.tv_sec);
+		//printf("%ld milliseconds                                          \r", (diff.tv_nsec));
 	}
 	clock_gettime(CLOCK_MONOTONIC_RAW, &raw_time);
 	timespec_diff_macro(&raw_time, &start, &diff);
@@ -354,6 +395,12 @@ int main(int argc, char *argv[])
 	// while(cpu_clock_A.tv_sec - raw_time.tv_sec >= 0 || cpu_clock_A.tv_nsec >= raw_time.tv_nsec){ // wait until trigger time
 	//     clock_gettime(CLOCK_MONOTONIC_RAW, &raw_time);
 	// }
+
+	bt_clock_A_now = cmd_clock_ext(dev_id, argv);
+
+	bt_ticks_passed = bt_clock_A_now - bt_clock_A;
+	double pass = bt_ticks_passed/32768.0;
+	printf("%f secs passed\n",pass);
 
 	digitalWrite(0, HIGH);
 	sleep(1);
