@@ -25,7 +25,7 @@ The Code connects the LED to WiringPi pin 0 which is GPIO17 on the Raspberry Pi 
 
 Done. Now the devices are paired even after reboot.
 
-## Compilation and execution 
+## Compilation and execution for bt_sync
 FIRST REMEMBER TO STOP NODE RED AS IT WILL INTERFERE
 
 Compile the files named bt_sync_B.c and bt_sync_A.c using the command at the top of the file after the imports and macros. It will look something like this 
@@ -41,5 +41,7 @@ For partner B the parameters are like this: ```sudo bt_sync_B *ARBITRARY_PORT* *
 For partner A the parameters are like this: ```sudo bt_sync_A *PARTNER_IP* *PARTNER_PORT*``` where PARTNER IP is the ip of raspberry B and PARTNER PORT is the port you specified in the step above.
 
 Thats it!
+
+
 # Links
 datasheet for bluetooth chip in raspberry https://www.cypress.com/file/298076/download

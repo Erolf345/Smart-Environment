@@ -118,6 +118,7 @@ int main(int argc, char *argv[])
 {
 	wiringPiSetup();
 	pinMode(0, INPUT);
+	sleep(1); //DO NOT DELETE
 
 	int sockfd, newsockfd, portno;
 	socklen_t clilen;
@@ -178,8 +179,6 @@ int main(int argc, char *argv[])
 	if (newsockfd < 0)
 		error("ERROR on accept");
 
-	struct timespec cpu_clock_A;
-	struct timespec cpu_clock_B;
 	uint32_t bt_clock_A_now;
 	uint32_t bt_clock_A;
 	uint32_t bt_clock_B_now;
@@ -193,11 +192,6 @@ int main(int argc, char *argv[])
 
 	// Read incoming bluetooth clock
 	n = read(newsockfd, &bt_clock_A, sizeof(bt_clock_A));
-	if (n < 0)
-		error("ERROR reading from socket");
-
-	// Read incoming CPU Clock (currently unused but may be useful for cpu clock synchronization but that has failed so far)
-	n = read(newsockfd, &cpu_clock_A, sizeof(cpu_clock_A));
 	if (n < 0)
 		error("ERROR reading from socket");
 
@@ -235,30 +229,21 @@ int main(int argc, char *argv[])
 
 	printf("bluetooth clock offset %zu \n", bt_offset);
 
-	clock_gettime(CLOCK_MONOTONIC_RAW, &cpu_clock_B);
 
-	// bt ticks per sec ~3200
-	uint32_t blink_delay = 5;
-	uint32_t play_in = blink_delay;
-	uint32_t b_now_test;
+	bt_clock_A_now = cmd_clock(dd_local) + bt_offset;
+	printf("predicted_clock=[");
 
-	while (TRUE)
-	{
-		if (digitalRead(0) == HIGH)
-			break;
+	int minutes = 5; // 8 hours
+	while (TRUE){
+		if (digitalRead(0) == HIGH){
+				bt_clock_A_now = cmd_clock(dd_local) + bt_offset;
+				printf("%zu, \n", bt_clock_A_now);
+				minutes -= 1;
+				if (minutes == 0)
+					break;
+				sleep(1);
+		}	
 	}
-	bt_clock_A_now = cmd_clock(dd_local) + bt_offset;
-	printf("Predicted clock of A: %zu\n", bt_clock_A_now);
-	while (digitalRead(0) == HIGH)
-	{
-	}
-	while (TRUE)
-	{
-		if (digitalRead(0) == HIGH)
-			break;
-	}
-	bt_clock_A_now = cmd_clock(dd_local) + bt_offset;
-	printf("Predicted clock of A: %zu\n", bt_clock_A_now);
 
 	hci_close_dev(dd);
 	hci_close_dev(dd_local);

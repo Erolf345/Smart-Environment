@@ -64,19 +64,6 @@ void error(const char *msg)
 	exit(0);
 }
 
-void signal_callback_handler()
-{
-	digitalWrite(0, HIGH);
-	printf("Real clock: %zu \n", bt_clock_now);
-	sleep(1);
-	digitalWrite(0, LOW);
-
-	hci_close_dev(dd_local);
-	close(sockfd);
-
-	// Terminate program
-	exit(0);
-}
 int main(int argc, char *argv[])
 {
 	// -------------------------------- BEGIN NETWORK SOCKET SETUP -----------------------------------------------------
@@ -86,6 +73,8 @@ int main(int argc, char *argv[])
 
 	wiringPiSetup();
 	pinMode(0, OUTPUT);
+	sleep(1); //DO NOT DELETE
+	digitalWrite(0, LOW);
 
 	if (argc < 3)
 	{
@@ -133,25 +122,19 @@ int main(int argc, char *argv[])
 	if (n < 0)
 		error("ERROR writing to socket");
 
-	// send cpu_clock
-	n = write(sockfd, &cpu_clock, sizeof(cpu_clock));
-	if (n < 0)
-		error("ERROR writing to socket");
-
+	sleep(10); // Give B time to catch up
 	bt_clock_now = cmd_clock(dd_local);
-
-	signal(SIGINT, signal_callback_handler);
-
-	while (bt_clock_now < bt_clock_init + 1 * 3200)
-		bt_clock_now = cmd_clock(dd_local);
-
-	digitalWrite(0, HIGH);
-	printf("Real clock: %zu \n", bt_clock_now);
-	sleep(1);
-	digitalWrite(0, LOW);
-
-	while (TRUE)
-		bt_clock_now = cmd_clock(dd_local);
+	printf("real_clock = [");
+	int minutes = 5; // 8 hours
+	for(int i = 0; i < minutes; i++){
+		while (bt_clock_now < bt_clock_init + i * 60 * 3200) // every minute
+			bt_clock_now = cmd_clock(dd_local);
+		digitalWrite(0, HIGH);
+		printf("%zu, \n", bt_clock_now);
+		sleep(1);
+		digitalWrite(0, LOW);
+	}
+	printf("]");
 
 	return 0;
 }
