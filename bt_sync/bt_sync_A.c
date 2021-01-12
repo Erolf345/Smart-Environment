@@ -93,9 +93,8 @@ int main(int argc, char *argv[])
 		error("ERROR connecting");
 
 	// -------------------------------- BEGIN BLUETOOTH -----------------------------------------------------
-	uint32_t bt_clock_init;
+	uint32_t bt_clock_trigger;
 	uint32_t bt_clock_now;
-	struct timespec cpu_clock;
 
 	// Initialize connection to local bluetooth device
 	int dd_local;
@@ -108,39 +107,24 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	bt_clock_init = cmd_clock(dd_local);
-	clock_gettime(CLOCK_MONOTONIC_RAW, &cpu_clock);
+	uint32_t blink_delay = 5; // seconds of delay
+	bt_clock_trigger = cmd_clock(dd_local);
+	bt_clock_trigger += blink_delay * 3200;
 
-	// send bt_clock
-	n = write(sockfd, &bt_clock_init, sizeof(bt_clock_init));
+	// send bt_clock over socket
+	n = write(sockfd, &bt_clock_trigger, sizeof(bt_clock_trigger));
 	if (n < 0)
 		error("ERROR writing to socket");
-
-	// send cpu_clock
-	n = write(sockfd, &cpu_clock, sizeof(cpu_clock));
-	if (n < 0)
-		error("ERROR writing to socket");
-
+	printf("bt_clock_trigger sent through socket %zu \n", bt_clock_trigger);
+	printf("Now waiting for trigger event...\n");
+	// Wait for time to pass
 	bt_clock_now = cmd_clock(dd_local);
+	while (bt_clock_now < bt_clock_trigger)
+		bt_clock_now = cmd_clock(dd_local);
 
-	//bt ticks per sec 3200
-	uint32_t blink_delay = 5;
-	uint32_t play_in = blink_delay;
-	int iterations = 5;
-	for (int i = 0; i < iterations; i++)
-	{
-
-		while (bt_clock_now < bt_clock_init + play_in * 3200)
-			bt_clock_now = cmd_clock(dd_local);
-
-		digitalWrite(0, HIGH);
-		sleep(1);
-		digitalWrite(0, LOW);
-
-		play_in += blink_delay;
-		printf("%d/",i+1);
-		printf("%d\n",iterations);
-	}
+	digitalWrite(0, HIGH);
+	sleep(1);
+	digitalWrite(0, LOW);
 
 	hci_close_dev(dd_local);
 	close(sockfd);

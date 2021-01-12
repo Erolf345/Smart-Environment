@@ -178,10 +178,8 @@ int main(int argc, char *argv[])
 	if (newsockfd < 0)
 		error("ERROR on accept");
 
-	struct timespec cpu_clock_A;
-	struct timespec cpu_clock_B;
 	uint32_t bt_clock_A_now;
-	uint32_t bt_clock_A;
+	uint32_t bt_clock_trigger;
 	uint32_t bt_clock_B_now;
 	uint32_t bt_offset;
 	int dd;
@@ -192,14 +190,10 @@ int main(int argc, char *argv[])
 	uint16_t accuracy;
 
 	// Read incoming bluetooth clock
-	n = read(newsockfd, &bt_clock_A, sizeof(bt_clock_A));
+	n = read(newsockfd, &bt_clock_trigger, sizeof(bt_clock_trigger));
 	if (n < 0)
 		error("ERROR reading from socket");
-
-	// Read incoming CPU Clock (currently unused but may be useful for cpu clock synchronization but that has failed so far)
-	n = read(newsockfd, &cpu_clock_A, sizeof(cpu_clock_A));
-	if (n < 0)
-		error("ERROR reading from socket");
+	printf("bt_clock_trigger received: %zu \n", bt_clock_trigger);
 
 	// Initialize dd and dev_id for calls to external bluetooth device
 	connect_bt(argv, &dd, &dev_id, &handle);
@@ -227,62 +221,30 @@ int main(int argc, char *argv[])
 		perror("Disconnect failed");
 
 	free(cr);
-	hci_close_dev(dd);*/
+	hci_close_dev(dd);
+	*/
 
 	// get bluetooth clock of local device
 	bt_clock_B_now = cmd_clock(dd_local);
 	bt_offset = bt_clock_A_now - bt_clock_B_now;
+	printf("Calculated bluetooth clock offset: %zu \n", bt_offset);
+	printf("Now waiting for trigger event...\n");
 
-	printf("bluetooth clock offset %zu \n", bt_offset);
-
-	clock_gettime(CLOCK_MONOTONIC_RAW, &cpu_clock_B);
-
-	// for measuring clock drift
-	uint32_t steps = 5;
-	uint32_t tokio_drift[steps + 1];
-	tokio_drift[0] = bt_offset;
-
-	// bt ticks per sec ~3200
-	uint32_t blink_delay = 5;
-	uint32_t play_in = blink_delay;
-	uint32_t b_now_test;
-	for (int i = 0; i < steps; i++)
+	// Wait until trigger time
+	while (bt_clock_B_now < bt_clock_trigger)
 	{
-		// Wait 2 seconds
-		while (bt_clock_B_now < bt_clock_A + play_in * 3200)
-		{
-			bt_clock_B_now = cmd_clock(dd_local) + bt_offset;
-		}
-
-		digitalWrite(0, HIGH);
-		sleep(1);
-		digitalWrite(0, LOW);
-
-		play_in += blink_delay;
-		dev_id = -1;
-		connect_bt(argv, &dd, &dev_id, &handle);
-		//get clock A
-		if (hci_read_clock(dd, handle, 0x01, &bt_clock_A_now, &accuracy, 1000) < 0)
-		{
-			perror("Reading clock failed");
-			exit(1);
-		}
-		b_now_test = cmd_clock(dd_local);
-
-		tokio_drift[i] = bt_clock_A_now - b_now_test;
+		bt_clock_B_now = cmd_clock(dd_local) + bt_offset;
 	}
+
+	digitalWrite(0, HIGH);
+	sleep(1);
+	digitalWrite(0, LOW);
+
 
 	hci_close_dev(dd);
 	hci_close_dev(dd_local);
 	close(newsockfd);
 	close(sockfd);
-
-	printf("Drift: \n [");
-	for (int i = 0; i < steps; i++)
-	{
-		printf("%zu, ", tokio_drift[i]);
-	}
-	printf("] \n");
 
 	return 0;
 }
