@@ -5,6 +5,8 @@
 
 ## Prerequisites 
 
+Run ``sudo sh opencv_installer.sh`` to install the needed prerequisites.
+
 I closely followed these tutorials from pyimagesearch:
 
 1. [Motion Detection and Tracking with Python and OpenCV on your PC](https://www.pyimagesearch.com/2015/05/25/basic-motion-detection-and-tracking-with-python-and-opencv/)
