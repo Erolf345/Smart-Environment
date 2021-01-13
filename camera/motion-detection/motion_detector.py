@@ -63,7 +63,7 @@ while fvs.more():
         h_half = int(h*0.5)
         w_half = int(w*0.5)
         
-        #cv2.line(frame, (0,0), (x+w_half, y+h_half), (0, 255, 0), 1)
+        cv2.line(frame, (0,0), (x+w_half, y+h_half), (0, 255, 0), 1)
         current_distance = np.round(np.sqrt(x*x + y*y), 2)
         if (current_distance == 0) or (current_distance is None): current_distance = 800
         distance_window.append(current_distance)
