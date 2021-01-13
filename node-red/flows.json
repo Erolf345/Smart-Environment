@@ -24,6 +24,13 @@
         "id": "e71c9d35.0449a",
         "type": "tab",
         "label": "Flow 1",
+        "disabled": true,
+        "info": ""
+    },
+    {
+        "id": "664289e.22d72f8",
+        "type": "tab",
+        "label": "Flow 2",
         "disabled": false,
         "info": ""
     },
@@ -45,7 +52,7 @@
     {
         "id": "ce52a348.41d78",
         "type": "ui_group",
-        "name": "Chart",
+        "name": "Output",
         "tab": "b0d2fcdd.369d6",
         "order": 1,
         "disp": true,
@@ -1359,17 +1366,13 @@
         "func": "if (msg.topic == \"local\"){\n    var local = msg.payload\n    context.set(\"local_\",local)\n    var network = context.get(\"network_\")\n} \nelse{\n    var network = msg.payload\n    context.set(\"network_\",network)\n    var local = context.get(\"local_\")\n}\n\nif (local == 1){\n    if (network == 1){\n        node.status({fill:\"yellow\",shape:\"dot\",text:\"middle\"+ local+ \" \" + network});\n        return {setvolume: 0.4, complete: true};\n    }\n    else{\n        node.status({fill:\"red\",shape:\"dot\",text:\"close - low vol\" + local+ \" \" + network});\n        return {setvolume: 0.1, complete: true};\n    }\n}\nelse{\n    node.status({fill:\"green\",shape:\"dot\",text:\"far - loud\" + local+ \" \" + network});\n    return {setvolume: 0.7, complete: true};\n}\n\n\n",
         "outputs": 1,
         "noerr": 0,
-<<<<<<< HEAD
         "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\ncontext.set(\"local_\",0)\ncontext.set(\"network_\",0)",
         "finalize": "",
-=======
->>>>>>> 512239abd4f8766e9cfcd3b91c0d962c4c59fe74
         "x": 400,
         "y": 1000,
         "wires": [
             [
-                "e44ac4f8.a7b81",
-                "59726e8.5dd669"
+                "e44ac4f8.a7b81"
             ]
         ]
     },
@@ -1517,25 +1520,6 @@
         "wires": []
     },
     {
-<<<<<<< HEAD
-        "id": "8e1d1546.691e3",
-        "type": "tcp in",
-        "z": "11ea8962.3c616f",
-        "name": "",
-        "server": "server",
-        "host": "",
-        "port": "55554",
-        "datamode": "stream",
-        "datatype": "buffer",
-        "newline": "",
-        "topic": "network",
-        "base64": false,
-        "x": 140,
-        "y": 1540,
-        "wires": [
-            [
-                "69d8d1ee.a0e5e"
-=======
         "id": "7a6093ad.512abc",
         "type": "rpi-omxplayer",
         "z": "f9e6941.9f5df68",
@@ -1575,17 +1559,10 @@
             [
                 "e8a7e884.00b53",
                 "e44ac4f8.a7b81"
->>>>>>> 512239abd4f8766e9cfcd3b91c0d962c4c59fe74
             ]
         ]
     },
     {
-<<<<<<< HEAD
-        "id": "59726e8.5dd669",
-        "type": "debug",
-        "z": "11ea8962.3c616f",
-        "name": "",
-=======
         "id": "e5d9eb.0eb01618",
         "type": "ui_colour_picker",
         "z": "7d7b30a8.5bc2b",
@@ -1653,7 +1630,6 @@
         "type": "debug",
         "z": "e71c9d35.0449a",
         "name": "",
->>>>>>> 512239abd4f8766e9cfcd3b91c0d962c4c59fe74
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -1661,11 +1637,6 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-<<<<<<< HEAD
-        "x": 470,
-        "y": 1080,
-        "wires": []
-=======
         "x": 530,
         "y": 220,
         "wires": []
@@ -1675,7 +1646,7 @@
         "type": "pythonshell in",
         "z": "e71c9d35.0449a",
         "name": "motion",
-        "pyfile": "/home/pi/surveillance/read_frames_faster.py",
+        "pyfile": "/home/pi/.node-red/projects/Smart-Environment/camera/motion-detection/motion_detector.py",
         "virtualenv": "/home/pi/.virtualenvs/cv",
         "continuous": true,
         "stdInData": false,
@@ -1839,7 +1810,7 @@
         "type": "rpi-omxplayer",
         "z": "e71c9d35.0449a",
         "name": "",
-        "filename": "/home/pi/Music/sinatra_boots.mp3",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
         "audiooutput": "local",
         "blackbackground": true,
         "disablekeys": false,
@@ -1916,6 +1887,328 @@
                 "cf67e593.0dae78"
             ]
         ]
->>>>>>> 512239abd4f8766e9cfcd3b91c0d962c4c59fe74
+    },
+    {
+        "id": "20cd612e.ad7976",
+        "type": "debug",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 330,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "bfdd6fbd.6b36e",
+        "type": "inject",
+        "z": "664289e.22d72f8",
+        "name": "Open music file",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "open",
+        "payloadType": "str",
+        "x": 600,
+        "y": 340,
+        "wires": [
+            [
+                "e98895de.973fd8"
+            ]
+        ]
+    },
+    {
+        "id": "caae6bb4.b253a",
+        "type": "inject",
+        "z": "664289e.22d72f8",
+        "name": "PlayPause music file",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "playpause",
+        "payloadType": "str",
+        "x": 590,
+        "y": 400,
+        "wires": [
+            [
+                "e98895de.973fd8"
+            ]
+        ]
+    },
+    {
+        "id": "e98895de.973fd8",
+        "type": "rpi-omxplayer",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": true,
+        "x": 830,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5c88545b.e8f244",
+        "type": "debug",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "c6ac92fc.1d9de8",
+        "type": "tcp in",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "server": "server",
+        "host": "",
+        "port": "55555",
+        "datamode": "stream",
+        "datatype": "buffer",
+        "newline": "",
+        "topic": "network",
+        "base64": false,
+        "x": 160,
+        "y": 140,
+        "wires": [
+            [
+                "20cd612e.ad7976",
+                "3bce1064.56afc8"
+            ]
+        ]
+    },
+    {
+        "id": "3bce1064.56afc8",
+        "type": "function",
+        "z": "664289e.22d72f8",
+        "name": "Get distance",
+        "func": "var payload=parseFloat(msg.payload);\nmsg.payload = payload;\nnode.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+payload});\nmsg.topic=\"distance\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 330,
+        "y": 180,
+        "wires": [
+            [
+                "5c88545b.e8f244",
+                "30928911.12788e",
+                "68368eec.13e8e8",
+                "64d5181d.d25578"
+            ]
+        ]
+    },
+    {
+        "id": "30928911.12788e",
+        "type": "function",
+        "z": "664289e.22d72f8",
+        "name": "Environment adjustments",
+        "func": "let ratio = msg.payload/800\nmsg.payload = \"setvolume \" + String(ratio)\nnode.status({fill:\"blue\",shape:\"dot\",text:\"Volume: \" + ratio});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 570,
+        "y": 200,
+        "wires": [
+            [
+                "9d633fdc.421f7",
+                "e98895de.973fd8"
+            ]
+        ]
+    },
+    {
+        "id": "9d633fdc.421f7",
+        "type": "debug",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 810,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "5aabe545.44e30c",
+        "type": "ui_gauge",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "group": "ce52a348.41d78",
+        "order": 1,
+        "width": "9",
+        "height": "5",
+        "gtype": "gage",
+        "title": "Speaker volume",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 600,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "68368eec.13e8e8",
+        "type": "function",
+        "z": "664289e.22d72f8",
+        "name": "Environment adjustments",
+        "func": "let ratio = msg.payload/800\nmsg.payload = (ratio * 100).toFixed(3)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 350,
+        "y": 600,
+        "wires": [
+            [
+                "5aabe545.44e30c"
+            ]
+        ]
+    },
+    {
+        "id": "64d5181d.d25578",
+        "type": "ui_chart",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "group": "ce52a348.41d78",
+        "order": 2,
+        "width": "9",
+        "height": "6",
+        "label": "Distance",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "cubic",
+        "nodata": "",
+        "dot": true,
+        "ymin": "0",
+        "ymax": "850",
+        "removeOlder": "1",
+        "removeOlderPoints": "60",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "x": 500,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4cca60de.be18d",
+        "type": "inject",
+        "z": "664289e.22d72f8",
+        "name": "clear chart",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "x": 320,
+        "y": 540,
+        "wires": [
+            [
+                "64d5181d.d25578"
+            ]
+        ]
+    },
+    {
+        "id": "b1fe4afe.3565a8",
+        "type": "inject",
+        "z": "664289e.22d72f8",
+        "name": "clear vol",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 300,
+        "y": 680,
+        "wires": [
+            [
+                "5aabe545.44e30c"
+            ]
+        ]
     }
 ]
