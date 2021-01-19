@@ -7,6 +7,15 @@ import imutils
 import time
 import cv2
 
+import socket
+
+#create socket connection to raspberry Pi
+# create an INET, STREAMing socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# now connect to the web server on port 80 - the normal http port
+s.connect(("192.168.0.105", 55555))
+
+
 # start the file video stream thread and allow the buffer to start
 fvs = FileVideoStream("movement3.mp4").start()
 time.sleep(1.0)
@@ -15,6 +24,8 @@ time.sleep(1.0)
 firstFrame = None
 count = 0
 distance_window = [800] * 20
+
+#out = cv2.VideoWriter('sec_feed.mp4',cv2.VideoWriter_fourcc(*'MP4V'), 20.0, (450,800))
 
 # loop over frames from the video file stream
 while fvs.more():
@@ -75,9 +86,15 @@ while fvs.more():
             cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1)
         
         # every 20 frames we print the avg_distance
+        # And send the distance via tcp
         if count % 20 == 0:
-            #cv2.imshow("Security Feed", frame)
+            cv2.imshow("Security Feed", gray)
             print(avg_distance)
+            #import struct
+            #byte_float= bytearray(struct.pack("f", avg_distance))  
+            s.send(str(avg_distance).encode())
+            #out.write(frame)
+
         
     except AttributeError:
         break
@@ -87,7 +104,8 @@ while fvs.more():
     if key == ord("q"):
         break
 
+#out.release()
 cv2.destroyAllWindows()
 fvs.stop()
 
-
+s.close()
