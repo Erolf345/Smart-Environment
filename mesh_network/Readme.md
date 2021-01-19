@@ -21,7 +21,15 @@ Now you can use batctl to get information about the network although you may nee
 
 ``` batctl dc ``` should return a mapping of hardware to ip-adresses to use with network layer connections.
 
+## Steps to undo
 
+1. ```sudo rm /etc/network/interfaces.d/bat0 && sudo rm /etc/network/interfaces.d/wlan0```
+
+2. Delete line ```denyinterfaces wlan0``` in /etc/dhcpcd.conf
+
+3. ```sudo crontab -e``` delete cronjob for start-batman-adv
+
+4. reboot
 
 ## Connecting a laptop to mesh 
 
