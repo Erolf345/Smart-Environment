@@ -2491,5 +2491,15 @@
             [],
             []
         ]
+    },
+    {
+        "id": "4d77c187.4a8f3",
+        "type": "comment",
+        "z": "29c1db97.901354",
+        "name": "Instructions",
+        "info": "The execution of this flow requires that there be a file at /home/pi/tessst in which the ip-addresses of all devices that you want to synchronize are listed. \n Also all devices must have been paired and trusted at a prior time.(see github docs)",
+        "x": 250,
+        "y": 160,
+        "wires": []
     }
 ]
