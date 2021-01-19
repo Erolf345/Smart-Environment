@@ -2403,34 +2403,93 @@
         "timer": "",
         "oldrc": false,
         "name": "",
-        "x": 740,
-        "y": 340,
+        "x": 670,
+        "y": 320,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "88af41f1.2f18c",
+        "type": "tcp in",
+        "z": "29c1db97.901354",
+        "name": "Receive clock and bt_addr",
+        "server": "server",
+        "host": "",
+        "port": "55557",
+        "datamode": "stream",
+        "datatype": "utf8",
+        "newline": "",
+        "topic": "",
+        "base64": false,
+        "x": 1070,
+        "y": 260,
         "wires": [
             [
-                "a8d986cf.fe5e48"
-            ],
-            [
-                "a8d986cf.fe5e48"
-            ],
-            [
-                "a8d986cf.fe5e48"
+                "599e500e.33422"
             ]
         ]
     },
     {
-        "id": "a8d986cf.fe5e48",
-        "type": "debug",
+        "id": "599e500e.33422",
+        "type": "csv",
         "z": "29c1db97.901354",
         "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1070,
-        "y": 300,
-        "wires": []
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1060,
+        "y": 320,
+        "wires": [
+            [
+                "6cf05235.965574"
+            ]
+        ]
+    },
+    {
+        "id": "6cf05235.965574",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "",
+        "func": "msg.payload = msg.payload.col1 + \" \" + msg.payload.col2;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1060,
+        "y": 380,
+        "wires": [
+            [
+                "575591c3.9b5fd"
+            ]
+        ]
+    },
+    {
+        "id": "575591c3.9b5fd",
+        "type": "exec",
+        "z": "29c1db97.901354",
+        "command": "sudo /home/pi/bt_sync_node_red",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 1060,
+        "y": 440,
+        "wires": [
+            [],
+            [],
+            []
+        ]
     }
 ]

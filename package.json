@@ -7,7 +7,9 @@
         "node-red-contrib-play-audio": "2.5.0",
         "node-red-contrib-play-sound": "0.2.0",
         "node-red-dashboard": "2.25.0",
-        "node-red-contrib-queue-gate": "1.5.2"
+        "node-red-contrib-queue-gate": "1.5.2",
+        "node-red-contrib-pi-omxplayer": "1.0.1",
+        "node-red-contrib-pythonshell": "1.5.4"
     },
     "node-red": {
         "settings": {
