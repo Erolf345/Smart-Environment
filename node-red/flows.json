@@ -35,6 +35,13 @@
         "info": ""
     },
     {
+        "id": "29c1db97.901354",
+        "type": "tab",
+        "label": "sync music",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "b0d2fcdd.369d6",
         "type": "ui_tab",
         "name": "Home",
@@ -758,6 +765,8 @@
         "tostatus": false,
         "complete": "payload",
         "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
         "x": 150,
         "y": 1820,
         "wires": []
@@ -2209,6 +2218,278 @@
             [
                 "5aabe545.44e30c"
             ]
+        ]
+    },
+    {
+        "id": "9b193d42.3ff5c8",
+        "type": "inject",
+        "z": "29c1db97.901354",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 260,
+        "y": 200,
+        "wires": [
+            [
+                "762fefef.03986"
+            ]
+        ]
+    },
+    {
+        "id": "16cca353.9df16d",
+        "type": "file in",
+        "z": "29c1db97.901354",
+        "name": "read ips",
+        "filename": "tessst",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 260,
+        "y": 500,
+        "wires": [
+            [
+                "c9a97b60.08c958"
+            ]
+        ]
+    },
+    {
+        "id": "c9a97b60.08c958",
+        "type": "csv",
+        "z": "29c1db97.901354",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 250,
+        "y": 560,
+        "wires": [
+            [
+                "165e6a7f.72b51e"
+            ]
+        ]
+    },
+    {
+        "id": "762fefef.03986",
+        "type": "exec",
+        "z": "29c1db97.901354",
+        "command": "sudo hcitool clock | grep Clock  | awk '{print $2}'",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "get bt_clock",
+        "x": 270,
+        "y": 260,
+        "wires": [
+            [
+                "5a8591bc.5ebcf"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "5a8591bc.5ebcf",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "rename payload and add delay",
+        "func": "msg.payload = parseInt(msg.payload);\nmsg.payload += 3200*8; //Add 5 seconds delay\nmsg.clock = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 330,
+        "y": 320,
+        "wires": [
+            [
+                "bac139c3.91a82",
+                "f2079758.54e2a"
+            ]
+        ]
+    },
+    {
+        "id": "bac139c3.91a82",
+        "type": "exec",
+        "z": "29c1db97.901354",
+        "command": "sudo hcitool dev | grep hci | awk '{print $2}'",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "get my bt_addr",
+        "x": 280,
+        "y": 380,
+        "wires": [
+            [
+                "f921402c.d28538"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "72b07d91.6e2d14",
+        "type": "tcp request",
+        "z": "29c1db97.901354",
+        "server": "",
+        "port": "55557",
+        "out": "immed",
+        "splitc": " ",
+        "name": "Send parameters to partner",
+        "x": 320,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "165e6a7f.72b51e",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "",
+        "func": "msg.host = msg.payload.col1;\nmsg.payload = msg.clock.toString() + \",\" + msg. bt_addr.toString();\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 260,
+        "y": 620,
+        "wires": [
+            [
+                "72b07d91.6e2d14"
+            ]
+        ]
+    },
+    {
+        "id": "f921402c.d28538",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "rename msg payload member",
+        "func": "msg.bt_addr = msg.payload;\nmsg.clock = msg.clock;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 330,
+        "y": 440,
+        "wires": [
+            [
+                "16cca353.9df16d"
+            ]
+        ]
+    },
+    {
+        "id": "f2079758.54e2a",
+        "type": "exec",
+        "z": "29c1db97.901354",
+        "command": "sudo /home/pi/start_at_bt_clock",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 670,
+        "y": 320,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "88af41f1.2f18c",
+        "type": "tcp in",
+        "z": "29c1db97.901354",
+        "name": "Receive clock and bt_addr",
+        "server": "server",
+        "host": "",
+        "port": "55557",
+        "datamode": "stream",
+        "datatype": "utf8",
+        "newline": "",
+        "topic": "",
+        "base64": false,
+        "x": 1060,
+        "y": 240,
+        "wires": [
+            [
+                "599e500e.33422"
+            ]
+        ]
+    },
+    {
+        "id": "599e500e.33422",
+        "type": "csv",
+        "z": "29c1db97.901354",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1060,
+        "y": 320,
+        "wires": [
+            [
+                "6cf05235.965574"
+            ]
+        ]
+    },
+    {
+        "id": "6cf05235.965574",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "",
+        "func": "msg.payload = msg.payload.col1 + \" \" + msg.payload.col2;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1050,
+        "y": 400,
+        "wires": [
+            [
+                "575591c3.9b5fd"
+            ]
+        ]
+    },
+    {
+        "id": "575591c3.9b5fd",
+        "type": "exec",
+        "z": "29c1db97.901354",
+        "command": "sudo /home/pi/bt_sync_node_red",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 1060,
+        "y": 480,
+        "wires": [
+            [],
+            [],
+            []
         ]
     }
 ]

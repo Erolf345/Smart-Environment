@@ -24,6 +24,20 @@
         "id": "e71c9d35.0449a",
         "type": "tab",
         "label": "Flow 1",
+        "disabled": true,
+        "info": ""
+    },
+    {
+        "id": "664289e.22d72f8",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "29c1db97.901354",
+        "type": "tab",
+        "label": "sync music",
         "disabled": false,
         "info": ""
     },
@@ -45,7 +59,7 @@
     {
         "id": "ce52a348.41d78",
         "type": "ui_group",
-        "name": "Chart",
+        "name": "Output",
         "tab": "b0d2fcdd.369d6",
         "order": 1,
         "disp": true,
@@ -751,6 +765,8 @@
         "tostatus": false,
         "complete": "payload",
         "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
         "x": 150,
         "y": 1820,
         "wires": []
@@ -1043,7 +1059,9 @@
         "y": 280,
         "wires": [
             [
-                "3f26ffd0.68ee18"
+                "3f26ffd0.68ee18",
+                "f42e36fa.cbacf8",
+                "c59d8205.125b8"
             ]
         ]
     },
@@ -1294,7 +1312,7 @@
         "type": "function",
         "z": "11ea8962.3c616f",
         "name": "",
-        "func": "\n\nif (\"status\" in msg && \"vol\" in msg.status && \"setvolume\" in msg){\n    notToBe = msg.status.vol\n    toBe = msg.setvolume\n    \n    node.status({fill:\"blue\",shape:\"dot\",text:\"set to\"+ toBe});\n    \n    diff = toBe - notToBe ;\n    \n    while (Math.abs(diff)>=0.05) {\n        \n        if (Math.abs(diff) <= 0.1) {\n            notToBe = notToBe + diff;\n            msg = {payload: \"setvolume \"+toBe};\n            diff = 0.0;\n        }\n        else{\n            \n            notToBe = notToBe + diff/Math.abs(diff) * 0.1;\n            msg = {payload: \"setvolume \"+notToBe};\n            diff = toBe - notToBe ;\n            \n        }\n        \n        node.send(msg)\n        \n    }\n    \n    //return {payload: msg.status.vol - msg.setvolume}    \n}\n\n\n",
+        "func": "\n\nif (\"status\" in msg && \"vol\" in msg.status && \"setvolume\" in msg){\n    notToBe = msg.status.vol\n    toBe = msg.setvolume\n    \n    diff = toBe - notToBe ;\n    \n    while (Math.abs(diff)>=0.05) {\n        \n        if (Math.abs(diff) <= 0.1) {\n            notToBe = notToBe + diff;\n            msg = {payload: \"setvolume \"+toBe};\n            diff = 0.0;\n        }\n        else{\n            \n            notToBe = notToBe + diff/Math.abs(diff) * 0.1;\n            msg = {payload: \"setvolume \"+notToBe};\n            diff = toBe - notToBe ;\n            \n        }\n        \n        node.send(msg)\n        \n    }\n    \n    //return {payload: msg.status.vol - msg.setvolume}    \n}\n\n\n",
         "outputs": 1,
         "noerr": 0,
         "x": 740,
@@ -1363,47 +1381,11 @@
         "y": 1000,
         "wires": [
             [
-                "e44ac4f8.a7b81",
-                "59726e8.5dd669"
+                "e44ac4f8.a7b81"
             ]
         ]
     },
     {
-        "id": "b7c2f9b.af7a508",
-        "type": "q-gate",
-        "z": "11ea8962.3c616f",
-        "name": "",
-        "controlTopic": "control",
-        "defaultState": "open",
-        "openCmd": "open",
-        "closeCmd": "close",
-        "toggleCmd": "toggle",
-        "queueCmd": "queue",
-        "defaultCmd": "default",
-        "triggerCmd": "trigger",
-        "flushCmd": "flush",
-        "resetCmd": "reset",
-        "peekCmd": "peek",
-        "dropCmd": "drop",
-        "statusCmd": "status",
-        "maxQueueLength": "1",
-        "keepNewest": true,
-        "qToggle": true,
-        "persist": false,
-        "storeName": "memory",
-        "x": 310,
-        "y": 660,
-        "wires": [
-            [
-                "6e3c33dd.a2cd24",
-                "69d8d1ee.a0e5e",
-                "121429ca.de7066"
-            ]
-        ]
-    },
-    {
-=======
->>>>>>> 512239abd4f8766e9cfcd3b91c0d962c4c59fe74
         "id": "4cadfd20.e5e70c",
         "type": "inject",
         "z": "11ea8962.3c616f",
@@ -1536,11 +1518,7 @@
         "id": "121429ca.de7066",
         "type": "tcp out",
         "z": "11ea8962.3c616f",
-<<<<<<< HEAD
         "host": "192.168.0.108",
-=======
-        "host": "192.168.0.102",
->>>>>>> 512239abd4f8766e9cfcd3b91c0d962c4c59fe74
         "port": "55554",
         "beserver": "client",
         "base64": false,
@@ -1551,25 +1529,6 @@
         "wires": []
     },
     {
-<<<<<<< HEAD
-        "id": "8e1d1546.691e3",
-        "type": "tcp in",
-        "z": "11ea8962.3c616f",
-        "name": "",
-        "server": "server",
-        "host": "",
-        "port": "55554",
-        "datamode": "stream",
-        "datatype": "buffer",
-        "newline": "",
-        "topic": "network",
-        "base64": false,
-        "x": 140,
-        "y": 1540,
-        "wires": [
-            [
-                "69d8d1ee.a0e5e"
-=======
         "id": "7a6093ad.512abc",
         "type": "rpi-omxplayer",
         "z": "f9e6941.9f5df68",
@@ -1609,17 +1568,10 @@
             [
                 "e8a7e884.00b53",
                 "e44ac4f8.a7b81"
->>>>>>> 512239abd4f8766e9cfcd3b91c0d962c4c59fe74
             ]
         ]
     },
     {
-<<<<<<< HEAD
-        "id": "59726e8.5dd669",
-        "type": "debug",
-        "z": "11ea8962.3c616f",
-        "name": "",
-=======
         "id": "e5d9eb.0eb01618",
         "type": "ui_colour_picker",
         "z": "7d7b30a8.5bc2b",
@@ -1687,7 +1639,6 @@
         "type": "debug",
         "z": "e71c9d35.0449a",
         "name": "",
->>>>>>> 512239abd4f8766e9cfcd3b91c0d962c4c59fe74
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -1695,11 +1646,6 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-<<<<<<< HEAD
-        "x": 470,
-        "y": 1080,
-        "wires": []
-=======
         "x": 530,
         "y": 220,
         "wires": []
@@ -1709,7 +1655,7 @@
         "type": "pythonshell in",
         "z": "e71c9d35.0449a",
         "name": "motion",
-        "pyfile": "/home/pi/surveillance/read_frames_faster.py",
+        "pyfile": "/home/pi/.node-red/projects/Smart-Environment/camera/motion-detection/motion_detector.py",
         "virtualenv": "/home/pi/.virtualenvs/cv",
         "continuous": true,
         "stdInData": false,
@@ -1873,7 +1819,7 @@
         "type": "rpi-omxplayer",
         "z": "e71c9d35.0449a",
         "name": "",
-        "filename": "/home/pi/Music/sinatra_boots.mp3",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
         "audiooutput": "local",
         "blackbackground": true,
         "disablekeys": false,
@@ -1950,6 +1896,541 @@
                 "cf67e593.0dae78"
             ]
         ]
->>>>>>> 512239abd4f8766e9cfcd3b91c0d962c4c59fe74
+    },
+    {
+        "id": "20cd612e.ad7976",
+        "type": "debug",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 330,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "bfdd6fbd.6b36e",
+        "type": "inject",
+        "z": "664289e.22d72f8",
+        "name": "Open music file",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "open",
+        "payloadType": "str",
+        "x": 600,
+        "y": 340,
+        "wires": [
+            [
+                "e98895de.973fd8"
+            ]
+        ]
+    },
+    {
+        "id": "caae6bb4.b253a",
+        "type": "inject",
+        "z": "664289e.22d72f8",
+        "name": "PlayPause music file",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "playpause",
+        "payloadType": "str",
+        "x": 590,
+        "y": 400,
+        "wires": [
+            [
+                "e98895de.973fd8"
+            ]
+        ]
+    },
+    {
+        "id": "e98895de.973fd8",
+        "type": "rpi-omxplayer",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": true,
+        "x": 830,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5c88545b.e8f244",
+        "type": "debug",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "c6ac92fc.1d9de8",
+        "type": "tcp in",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "server": "server",
+        "host": "",
+        "port": "55555",
+        "datamode": "stream",
+        "datatype": "buffer",
+        "newline": "",
+        "topic": "network",
+        "base64": false,
+        "x": 160,
+        "y": 140,
+        "wires": [
+            [
+                "20cd612e.ad7976",
+                "3bce1064.56afc8"
+            ]
+        ]
+    },
+    {
+        "id": "3bce1064.56afc8",
+        "type": "function",
+        "z": "664289e.22d72f8",
+        "name": "Get distance",
+        "func": "var payload=parseFloat(msg.payload);\nmsg.payload = payload;\nnode.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+payload});\nmsg.topic=\"distance\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 330,
+        "y": 180,
+        "wires": [
+            [
+                "5c88545b.e8f244",
+                "30928911.12788e",
+                "68368eec.13e8e8",
+                "64d5181d.d25578"
+            ]
+        ]
+    },
+    {
+        "id": "30928911.12788e",
+        "type": "function",
+        "z": "664289e.22d72f8",
+        "name": "Environment adjustments",
+        "func": "let ratio = msg.payload/800\nmsg.payload = \"setvolume \" + String(ratio)\nnode.status({fill:\"blue\",shape:\"dot\",text:\"Volume: \" + ratio});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 570,
+        "y": 200,
+        "wires": [
+            [
+                "9d633fdc.421f7",
+                "e98895de.973fd8"
+            ]
+        ]
+    },
+    {
+        "id": "9d633fdc.421f7",
+        "type": "debug",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 810,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "5aabe545.44e30c",
+        "type": "ui_gauge",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "group": "ce52a348.41d78",
+        "order": 1,
+        "width": "9",
+        "height": "5",
+        "gtype": "gage",
+        "title": "Speaker volume",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 600,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "68368eec.13e8e8",
+        "type": "function",
+        "z": "664289e.22d72f8",
+        "name": "Environment adjustments",
+        "func": "let ratio = msg.payload/800\nmsg.payload = (ratio * 100).toFixed(3)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 350,
+        "y": 600,
+        "wires": [
+            [
+                "5aabe545.44e30c"
+            ]
+        ]
+    },
+    {
+        "id": "64d5181d.d25578",
+        "type": "ui_chart",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "group": "ce52a348.41d78",
+        "order": 2,
+        "width": "9",
+        "height": "6",
+        "label": "Distance",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "cubic",
+        "nodata": "",
+        "dot": true,
+        "ymin": "0",
+        "ymax": "850",
+        "removeOlder": "1",
+        "removeOlderPoints": "60",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "x": 500,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4cca60de.be18d",
+        "type": "inject",
+        "z": "664289e.22d72f8",
+        "name": "clear chart",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "x": 320,
+        "y": 540,
+        "wires": [
+            [
+                "64d5181d.d25578"
+            ]
+        ]
+    },
+    {
+        "id": "b1fe4afe.3565a8",
+        "type": "inject",
+        "z": "664289e.22d72f8",
+        "name": "clear vol",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 300,
+        "y": 680,
+        "wires": [
+            [
+                "5aabe545.44e30c"
+            ]
+        ]
+    },
+    {
+        "id": "9b193d42.3ff5c8",
+        "type": "inject",
+        "z": "29c1db97.901354",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 260,
+        "y": 200,
+        "wires": [
+            [
+                "762fefef.03986"
+            ]
+        ]
+    },
+    {
+        "id": "16cca353.9df16d",
+        "type": "file in",
+        "z": "29c1db97.901354",
+        "name": "read ips",
+        "filename": "tessst",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 260,
+        "y": 500,
+        "wires": [
+            [
+                "c9a97b60.08c958"
+            ]
+        ]
+    },
+    {
+        "id": "c9a97b60.08c958",
+        "type": "csv",
+        "z": "29c1db97.901354",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 250,
+        "y": 560,
+        "wires": [
+            [
+                "165e6a7f.72b51e"
+            ]
+        ]
+    },
+    {
+        "id": "762fefef.03986",
+        "type": "exec",
+        "z": "29c1db97.901354",
+        "command": "sudo hcitool clock | grep Clock  | awk '{print $2}'",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "get bt_clock",
+        "x": 270,
+        "y": 260,
+        "wires": [
+            [
+                "5a8591bc.5ebcf"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "5a8591bc.5ebcf",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "rename payload and add delay",
+        "func": "msg.payload = parseInt(msg.payload);\nmsg.payload += 3200*8; //Add 5 seconds delay\nmsg.clock = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 330,
+        "y": 320,
+        "wires": [
+            [
+                "bac139c3.91a82",
+                "f2079758.54e2a"
+            ]
+        ]
+    },
+    {
+        "id": "bac139c3.91a82",
+        "type": "exec",
+        "z": "29c1db97.901354",
+        "command": "sudo hcitool dev | grep hci | awk '{print $2}'",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "get my bt_addr",
+        "x": 280,
+        "y": 380,
+        "wires": [
+            [
+                "f921402c.d28538"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "72b07d91.6e2d14",
+        "type": "tcp request",
+        "z": "29c1db97.901354",
+        "server": "",
+        "port": "55557",
+        "out": "immed",
+        "splitc": " ",
+        "name": "Send parameters to partner",
+        "x": 320,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "165e6a7f.72b51e",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "",
+        "func": "msg.host = msg.payload.col1;\nmsg.payload = msg.clock.toString() + \",\" + msg. bt_addr.toString();\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 260,
+        "y": 620,
+        "wires": [
+            [
+                "72b07d91.6e2d14"
+            ]
+        ]
+    },
+    {
+        "id": "f921402c.d28538",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "rename msg payload member",
+        "func": "msg.bt_addr = msg.payload;\nmsg.clock = msg.clock;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 330,
+        "y": 440,
+        "wires": [
+            [
+                "16cca353.9df16d"
+            ]
+        ]
+    },
+    {
+        "id": "f2079758.54e2a",
+        "type": "exec",
+        "z": "29c1db97.901354",
+        "command": "sudo /home/pi/start_at_bt_clock",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 740,
+        "y": 340,
+        "wires": [
+            [
+                "a8d986cf.fe5e48"
+            ],
+            [
+                "a8d986cf.fe5e48"
+            ],
+            [
+                "a8d986cf.fe5e48"
+            ]
+        ]
+    },
+    {
+        "id": "a8d986cf.fe5e48",
+        "type": "debug",
+        "z": "29c1db97.901354",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 300,
+        "wires": []
     }
 ]
