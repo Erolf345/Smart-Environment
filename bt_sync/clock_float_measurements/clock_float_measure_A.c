@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
 	sleep(10); // Give B time to catch up
 	bt_clock_now = cmd_clock(dd_local);
 	printf("real_clock = [");
-	int minutes = 5; // 8 hours
+	int minutes = 480; // 8 hours
 	for(int i = 0; i < minutes; i++){
 		while (bt_clock_now < bt_clock_init + i * 60 * 3200) // every minute
 			bt_clock_now = cmd_clock(dd_local);
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 		sleep(1);
 		digitalWrite(0, LOW);
 	}
-	printf("]");
+	printf("]\n");
 
 	return 0;
 }

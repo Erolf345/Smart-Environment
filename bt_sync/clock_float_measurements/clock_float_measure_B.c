@@ -233,7 +233,7 @@ int main(int argc, char *argv[])
 	bt_clock_A_now = cmd_clock(dd_local) + bt_offset;
 	printf("predicted_clock=[");
 
-	int minutes = 5; // 8 hours
+	int minutes = 480; // 8 hours
 	while (TRUE){
 		if (digitalRead(0) == HIGH){
 				bt_clock_A_now = cmd_clock(dd_local) + bt_offset;
@@ -244,6 +244,7 @@ int main(int argc, char *argv[])
 				sleep(1);
 		}	
 	}
+	printf("] \n");
 
 	hci_close_dev(dd);
 	hci_close_dev(dd_local);
