@@ -5,10 +5,15 @@ The code in this folder uses bluetooth clocks to synchronize the system clocks a
 
 
 # Perequisites 
+For bluetooth
  ```sudo apt install libbluetooth-dev```
  
+ For controlling LEDs
  ```sudo apt install wiringpi```
  
+ For playing music 
+  ```sudo apt install libao-dev libmpg123-dev```
+
 # Overview
 
 ![Drag Racing](bt_sync.png)
