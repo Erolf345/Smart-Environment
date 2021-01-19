@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
 	uint32_t bt_clock_trigger;
 	uint32_t bt_clock_now;
 
+	printf("THIS PROGRAM IS MEANT TO WORK IN CONJUNCTION WITH NODE-RED");
 
 	bt_clock_trigger = (uint32_t) atoi(argv[1]);
 	printf("wait until: %zu \n", bt_clock_trigger);

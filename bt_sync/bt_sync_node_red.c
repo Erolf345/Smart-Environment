@@ -132,6 +132,8 @@ int main(int argc, char *argv[])
     int channels, encoding;
     long rate;
 	
+	printf("THIS PROGRAM WILL ONLY WORK IF ACCURATE CLOCK TIMES ARE SPECIFIED BY OOB. e.g. NODE-RED");
+
 	if (argc < 3)
 
 	{
