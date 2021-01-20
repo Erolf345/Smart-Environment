@@ -42,29 +42,11 @@
         "info": ""
     },
     {
-        "id": "b0d2fcdd.369d6",
-        "type": "ui_tab",
-        "name": "Home",
-        "icon": "dashboard"
-    },
-    {
-        "id": "3aff5f59.0a6d88",
-        "type": "ui_tab",
-        "name": "Music Controls",
-        "icon": "dashboard",
-        "order": 1,
+        "id": "a93faece.d7746",
+        "type": "tab",
+        "label": "LED-Camera",
         "disabled": false,
-        "hidden": true
-    },
-    {
-        "id": "ce52a348.41d78",
-        "type": "ui_group",
-        "name": "Output",
-        "tab": "b0d2fcdd.369d6",
-        "order": 1,
-        "disp": true,
-        "width": "12",
-        "collapse": false
+        "info": ""
     },
     {
         "id": "875a7078.91fde",
@@ -161,6 +143,31 @@
                 "py": 0
             }
         }
+    },
+    {
+        "id": "b0d2fcdd.369d6",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard"
+    },
+    {
+        "id": "3aff5f59.0a6d88",
+        "type": "ui_tab",
+        "name": "Music Controls",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": true
+    },
+    {
+        "id": "ce52a348.41d78",
+        "type": "ui_group",
+        "name": "Output",
+        "tab": "b0d2fcdd.369d6",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false
     },
     {
         "id": "740a99d2.b07d1",
@@ -351,6 +358,8 @@
         "func": "\nreturn [\n    //need to invert for LED (maybe not here)\n    {payload:255 - msg.payload.r},\n    {payload:255 - msg.payload.g},\n    {payload:255 - msg.payload.b}\n];",
         "outputs": 3,
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
         "x": 420,
         "y": 820,
         "wires": [
@@ -1529,112 +1538,6 @@
         "wires": []
     },
     {
-        "id": "7a6093ad.512abc",
-        "type": "rpi-omxplayer",
-        "z": "f9e6941.9f5df68",
-        "name": "",
-        "filename": "/home/pi/music/sinatra_boots.mp3",
-        "audiooutput": "local",
-        "blackbackground": true,
-        "disablekeys": false,
-        "disableosd": true,
-        "disableghostbox": false,
-        "subtitlepath": "",
-        "loop": true,
-        "x": 750,
-        "y": 180,
-        "wires": [
-            [
-                "67eb6bf0.5a1ab4"
-            ]
-        ]
-    },
-    {
-        "id": "3814255d.914faa",
-        "type": "rpi-omxplayer",
-        "z": "11ea8962.3c616f",
-        "name": "",
-        "filename": "/home/pi/music/sinatra_boots.mp3",
-        "audiooutput": "local",
-        "blackbackground": true,
-        "disablekeys": false,
-        "disableosd": true,
-        "disableghostbox": false,
-        "subtitlepath": "",
-        "loop": true,
-        "x": 910,
-        "y": 860,
-        "wires": [
-            [
-                "e8a7e884.00b53",
-                "e44ac4f8.a7b81"
-            ]
-        ]
-    },
-    {
-        "id": "e5d9eb.0eb01618",
-        "type": "ui_colour_picker",
-        "z": "7d7b30a8.5bc2b",
-        "name": "",
-        "label": "Pick a color",
-        "group": "ce52a348.41d78",
-        "format": "rgb",
-        "outformat": "object",
-        "showSwatch": false,
-        "showPicker": true,
-        "showValue": false,
-        "showHue": false,
-        "showAlpha": false,
-        "showLightness": true,
-        "square": "false",
-        "dynOutput": "true",
-        "order": 0,
-        "width": "10",
-        "height": "5",
-        "passthru": true,
-        "topic": "",
-        "x": 90,
-        "y": 820,
-        "wires": [
-            [
-                "30e73299.7e539e"
-            ]
-        ]
-    },
-    {
-        "id": "b7c2f9b.af7a508",
-        "type": "q-gate",
-        "z": "11ea8962.3c616f",
-        "name": "",
-        "controlTopic": "control",
-        "defaultState": "open",
-        "openCmd": "open",
-        "closeCmd": "close",
-        "toggleCmd": "toggle",
-        "queueCmd": "queue",
-        "defaultCmd": "default",
-        "triggerCmd": "trigger",
-        "flushCmd": "flush",
-        "resetCmd": "reset",
-        "peekCmd": "peek",
-        "dropCmd": "drop",
-        "statusCmd": "status",
-        "maxQueueLength": "1",
-        "keepNewest": true,
-        "qToggle": true,
-        "persist": false,
-        "storeName": "memory",
-        "x": 310,
-        "y": 660,
-        "wires": [
-            [
-                "6e3c33dd.a2cd24",
-                "69d8d1ee.a0e5e",
-                "121429ca.de7066"
-            ]
-        ]
-    },
-    {
         "id": "82a14ed2.31551",
         "type": "debug",
         "z": "e71c9d35.0449a",
@@ -1649,24 +1552,6 @@
         "x": 530,
         "y": 220,
         "wires": []
-    },
-    {
-        "id": "e43f785c.f02eb8",
-        "type": "pythonshell in",
-        "z": "e71c9d35.0449a",
-        "name": "motion",
-        "pyfile": "/home/pi/.node-red/projects/Smart-Environment/camera/motion-detection/motion_detector.py",
-        "virtualenv": "/home/pi/.virtualenvs/cv",
-        "continuous": true,
-        "stdInData": false,
-        "x": 130,
-        "y": 220,
-        "wires": [
-            [
-                "82a14ed2.31551",
-                "cf67e593.0dae78"
-            ]
-        ]
     },
     {
         "id": "9f0c00ed.97aed",
@@ -1815,25 +1700,6 @@
         ]
     },
     {
-        "id": "4813fbf0.f351c4",
-        "type": "rpi-omxplayer",
-        "z": "e71c9d35.0449a",
-        "name": "",
-        "filename": "/home/pi/music/sinatra_boots.mp3",
-        "audiooutput": "local",
-        "blackbackground": true,
-        "disablekeys": false,
-        "disableosd": true,
-        "disableghostbox": false,
-        "subtitlepath": "",
-        "loop": true,
-        "x": 750,
-        "y": 360,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "cf67e593.0dae78",
         "type": "function",
         "z": "e71c9d35.0449a",
@@ -1972,25 +1838,6 @@
         ]
     },
     {
-        "id": "e98895de.973fd8",
-        "type": "rpi-omxplayer",
-        "z": "664289e.22d72f8",
-        "name": "",
-        "filename": "/home/pi/music/sinatra_boots.mp3",
-        "audiooutput": "local",
-        "blackbackground": true,
-        "disablekeys": false,
-        "disableosd": true,
-        "disableghostbox": false,
-        "subtitlepath": "",
-        "loop": true,
-        "x": 830,
-        "y": 300,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "5c88545b.e8f244",
         "type": "debug",
         "z": "664289e.22d72f8",
@@ -2085,32 +1932,6 @@
         "wires": []
     },
     {
-        "id": "5aabe545.44e30c",
-        "type": "ui_gauge",
-        "z": "664289e.22d72f8",
-        "name": "",
-        "group": "ce52a348.41d78",
-        "order": 1,
-        "width": "9",
-        "height": "5",
-        "gtype": "gage",
-        "title": "Speaker volume",
-        "label": "%",
-        "format": "{{value}}",
-        "min": 0,
-        "max": "100",
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "",
-        "seg2": "",
-        "x": 600,
-        "y": 600,
-        "wires": []
-    },
-    {
         "id": "68368eec.13e8e8",
         "type": "function",
         "z": "664289e.22d72f8",
@@ -2126,48 +1947,6 @@
             [
                 "5aabe545.44e30c"
             ]
-        ]
-    },
-    {
-        "id": "64d5181d.d25578",
-        "type": "ui_chart",
-        "z": "664289e.22d72f8",
-        "name": "",
-        "group": "ce52a348.41d78",
-        "order": 2,
-        "width": "9",
-        "height": "6",
-        "label": "Distance",
-        "chartType": "line",
-        "legend": "true",
-        "xformat": "HH:mm:ss",
-        "interpolate": "cubic",
-        "nodata": "",
-        "dot": true,
-        "ymin": "0",
-        "ymax": "850",
-        "removeOlder": "1",
-        "removeOlderPoints": "60",
-        "removeOlderUnit": "60",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "x": 500,
-        "y": 540,
-        "wires": [
-            []
         ]
     },
     {
@@ -2500,6 +2279,451 @@
         "info": "The execution of this flow requires that there be a file at /home/pi/tessst in which the ip-addresses of all devices that you want to synchronize are listed. \n Also all devices must have been paired and trusted at a prior time.(see github docs)",
         "x": 250,
         "y": 160,
+        "wires": []
+    },
+    {
+        "id": "e5d9eb.0eb01618",
+        "type": "ui_colour_picker",
+        "z": "7d7b30a8.5bc2b",
+        "name": "",
+        "label": "Pick a color",
+        "group": "ce52a348.41d78",
+        "format": "rgb",
+        "outformat": "object",
+        "showSwatch": false,
+        "showPicker": true,
+        "showValue": false,
+        "showHue": false,
+        "showAlpha": false,
+        "showLightness": true,
+        "square": "false",
+        "dynOutput": "true",
+        "order": 0,
+        "width": "10",
+        "height": "5",
+        "passthru": true,
+        "topic": "",
+        "x": 90,
+        "y": 820,
+        "wires": [
+            [
+                "30e73299.7e539e"
+            ]
+        ]
+    },
+    {
+        "id": "5aabe545.44e30c",
+        "type": "ui_gauge",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "group": "ce52a348.41d78",
+        "order": 1,
+        "width": "9",
+        "height": "5",
+        "gtype": "gage",
+        "title": "Speaker volume",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 600,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "64d5181d.d25578",
+        "type": "ui_chart",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "group": "ce52a348.41d78",
+        "order": 2,
+        "width": "9",
+        "height": "6",
+        "label": "Distance",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "cubic",
+        "nodata": "",
+        "dot": true,
+        "ymin": "0",
+        "ymax": "850",
+        "removeOlder": "1",
+        "removeOlderPoints": "60",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "x": 500,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7a6093ad.512abc",
+        "type": "rpi-omxplayer",
+        "z": "f9e6941.9f5df68",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": true,
+        "x": 750,
+        "y": 180,
+        "wires": [
+            [
+                "67eb6bf0.5a1ab4"
+            ]
+        ]
+    },
+    {
+        "id": "3814255d.914faa",
+        "type": "rpi-omxplayer",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": true,
+        "x": 910,
+        "y": 860,
+        "wires": [
+            [
+                "e8a7e884.00b53",
+                "e44ac4f8.a7b81"
+            ]
+        ]
+    },
+    {
+        "id": "4813fbf0.f351c4",
+        "type": "rpi-omxplayer",
+        "z": "e71c9d35.0449a",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": true,
+        "x": 750,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e98895de.973fd8",
+        "type": "rpi-omxplayer",
+        "z": "664289e.22d72f8",
+        "name": "",
+        "filename": "/home/pi/music/sinatra_boots.mp3",
+        "audiooutput": "local",
+        "blackbackground": true,
+        "disablekeys": false,
+        "disableosd": true,
+        "disableghostbox": false,
+        "subtitlepath": "",
+        "loop": true,
+        "x": 830,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e43f785c.f02eb8",
+        "type": "pythonshell in",
+        "z": "e71c9d35.0449a",
+        "name": "motion",
+        "pyfile": "/home/pi/.node-red/projects/Smart-Environment/camera/motion-detection/motion_detector.py",
+        "virtualenv": "/home/pi/.virtualenvs/cv",
+        "continuous": true,
+        "stdInData": false,
+        "x": 130,
+        "y": 220,
+        "wires": [
+            [
+                "82a14ed2.31551",
+                "cf67e593.0dae78"
+            ]
+        ]
+    },
+    {
+        "id": "b7c2f9b.af7a508",
+        "type": "q-gate",
+        "z": "11ea8962.3c616f",
+        "name": "",
+        "controlTopic": "control",
+        "defaultState": "open",
+        "openCmd": "open",
+        "closeCmd": "close",
+        "toggleCmd": "toggle",
+        "queueCmd": "queue",
+        "defaultCmd": "default",
+        "triggerCmd": "trigger",
+        "flushCmd": "flush",
+        "resetCmd": "reset",
+        "peekCmd": "peek",
+        "dropCmd": "drop",
+        "statusCmd": "status",
+        "maxQueueLength": "1",
+        "keepNewest": true,
+        "qToggle": true,
+        "persist": false,
+        "storeName": "memory",
+        "x": 310,
+        "y": 660,
+        "wires": [
+            [
+                "6e3c33dd.a2cd24",
+                "69d8d1ee.a0e5e",
+                "121429ca.de7066"
+            ]
+        ]
+    },
+    {
+        "id": "10c4705a.06994",
+        "type": "rpi-gpio out",
+        "z": "a93faece.d7746",
+        "name": "",
+        "pin": "13",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 680,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "5a2f46.a54810bc",
+        "type": "inject",
+        "z": "a93faece.d7746",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "10",
+        "payloadType": "num",
+        "x": 290,
+        "y": 340,
+        "wires": [
+            [
+                "10c4705a.06994"
+            ]
+        ]
+    },
+    {
+        "id": "6156e78e.9ddf58",
+        "type": "inject",
+        "z": "a93faece.d7746",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "50",
+        "payloadType": "num",
+        "x": 270,
+        "y": 380,
+        "wires": [
+            [
+                "10c4705a.06994"
+            ]
+        ]
+    },
+    {
+        "id": "fe998ebf.b775e",
+        "type": "inject",
+        "z": "a93faece.d7746",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "90",
+        "payloadType": "num",
+        "x": 250,
+        "y": 420,
+        "wires": [
+            [
+                "10c4705a.06994"
+            ]
+        ]
+    },
+    {
+        "id": "9ce10920.fa2ea8",
+        "type": "inject",
+        "z": "a93faece.d7746",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "100",
+        "payloadType": "num",
+        "x": 230,
+        "y": 460,
+        "wires": [
+            [
+                "10c4705a.06994",
+                "9df5e113.da853",
+                "939da3b2.d703a"
+            ]
+        ]
+    },
+    {
+        "id": "c3d0b3f2.c8fdc",
+        "type": "pythonshell in",
+        "z": "a93faece.d7746",
+        "name": "",
+        "pyfile": "/home/pi/Desktop/raspi-camera-stream/pi_motion.py",
+        "virtualenv": "/home/pi/.virtualenvs/cv",
+        "continuous": true,
+        "stdInData": false,
+        "x": 220,
+        "y": 140,
+        "wires": [
+            [
+                "32db511d.af19be",
+                "b2be3872.4b26a8"
+            ]
+        ]
+    },
+    {
+        "id": "32db511d.af19be",
+        "type": "debug",
+        "z": "a93faece.d7746",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "b2be3872.4b26a8",
+        "type": "range",
+        "z": "a93faece.d7746",
+        "minin": "0",
+        "maxin": "625",
+        "minout": "0",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "Map Distance to Brightness",
+        "x": 360,
+        "y": 200,
+        "wires": [
+            [
+                "10c4705a.06994",
+                "9df5e113.da853"
+            ]
+        ]
+    },
+    {
+        "id": "9df5e113.da853",
+        "type": "rpi-gpio out",
+        "z": "a93faece.d7746",
+        "name": "",
+        "pin": "11",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 680,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "939da3b2.d703a",
+        "type": "rpi-gpio out",
+        "z": "a93faece.d7746",
+        "name": "",
+        "pin": "15",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 680,
+        "y": 240,
         "wires": []
     }
 ]
