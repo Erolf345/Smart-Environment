@@ -2649,7 +2649,7 @@
         "z": "a93faece.d7746",
         "name": "",
         "pyfile": "/home/pi/Desktop/raspi-camera-stream/pi_motion.py",
-        "virtualenv": "/home/pi/.virtualenvs/cv",
+        "virtualenv": "/home/pi/cv",
         "continuous": true,
         "stdInData": false,
         "x": 220,
@@ -2666,7 +2666,7 @@
         "type": "debug",
         "z": "a93faece.d7746",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2694,7 +2694,8 @@
         "wires": [
             [
                 "10c4705a.06994",
-                "9df5e113.da853"
+                "9df5e113.da853",
+                "6ccef668.611bf"
             ]
         ]
     },
@@ -2725,5 +2726,136 @@
         "x": 680,
         "y": 240,
         "wires": []
+    },
+    {
+        "id": "6e9e5e73.be28",
+        "type": "exec",
+        "z": "a93faece.d7746",
+        "command": "sudo amixer sget 'Headphone' |grep -Po '[0-9][0-9]?[0-9]?%' | grep -m1 \"\" | grep -Po '[0-9][0-9]?[0-9]?'",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "get volume",
+        "x": 1000,
+        "y": 460,
+        "wires": [
+            [
+                "10e30242.52af86"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "10e30242.52af86",
+        "type": "debug",
+        "z": "a93faece.d7746",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1190,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "2e8e5d24.628e82",
+        "type": "inject",
+        "z": "a93faece.d7746",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 840,
+        "y": 460,
+        "wires": [
+            [
+                "6e9e5e73.be28"
+            ]
+        ]
+    },
+    {
+        "id": "383e295a.eeae16",
+        "type": "function",
+        "z": "a93faece.d7746",
+        "name": "prepare payload",
+        "func": "msg.payload = msg.payload + \"%\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 990,
+        "y": 360,
+        "wires": [
+            [
+                "43d646c0.c73c"
+            ]
+        ]
+    },
+    {
+        "id": "43d646c0.c73c",
+        "type": "exec",
+        "z": "a93faece.d7746",
+        "command": "sudo amixer sset 'Headphone' ",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "set volume",
+        "x": 1190,
+        "y": 360,
+        "wires": [
+            [
+                "950a9c1b.6cd048"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "950a9c1b.6cd048",
+        "type": "debug",
+        "z": "a93faece.d7746",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1270,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "6ccef668.611bf",
+        "type": "range",
+        "z": "a93faece.d7746",
+        "minin": "0",
+        "maxin": "100",
+        "minout": "60",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "minimum value should be 60",
+        "x": 740,
+        "y": 360,
+        "wires": [
+            [
+                "383e295a.eeae16"
+            ]
+        ]
     }
 ]
