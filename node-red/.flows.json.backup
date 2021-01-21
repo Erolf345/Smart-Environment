@@ -2695,7 +2695,7 @@
             [
                 "10c4705a.06994",
                 "9df5e113.da853",
-                "383e295a.eeae16"
+                "6ccef668.611bf"
             ]
         ]
     },
@@ -2741,28 +2741,10 @@
         "x": 1000,
         "y": 460,
         "wires": [
-            [
-                "10e30242.52af86"
-            ],
+            [],
             [],
             []
         ]
-    },
-    {
-        "id": "10e30242.52af86",
-        "type": "debug",
-        "z": "a93faece.d7746",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1190,
-        "y": 460,
-        "wires": []
     },
     {
         "id": "2e8e5d24.628e82",
@@ -2793,8 +2775,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 790,
-        "y": 380,
+        "x": 990,
+        "y": 360,
         "wires": [
             [
                 "43d646c0.c73c"
@@ -2812,30 +2794,32 @@
         "timer": "",
         "oldrc": false,
         "name": "set volume",
-        "x": 1010,
-        "y": 380,
+        "x": 1190,
+        "y": 360,
         "wires": [
-            [
-                "950a9c1b.6cd048"
-            ],
+            [],
             [],
             []
         ]
     },
     {
-        "id": "950a9c1b.6cd048",
-        "type": "debug",
+        "id": "6ccef668.611bf",
+        "type": "range",
         "z": "a93faece.d7746",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1250,
+        "minin": "0",
+        "maxin": "100",
+        "minout": "60",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "minimum value should be 60",
+        "x": 740,
         "y": 360,
-        "wires": []
+        "wires": [
+            [
+                "383e295a.eeae16"
+            ]
+        ]
     }
 ]
