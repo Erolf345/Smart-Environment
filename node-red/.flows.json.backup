@@ -49,6 +49,13 @@
         "info": ""
     },
     {
+        "id": "335a17ee.f1f5f8",
+        "type": "tab",
+        "label": "PositionTransform",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "875a7078.91fde",
         "type": "ui_base",
         "theme": {
@@ -2741,7 +2748,9 @@
         "x": 1000,
         "y": 460,
         "wires": [
-            [],
+            [
+                "10e30242.52af86"
+            ],
             [],
             []
         ]
@@ -2821,5 +2830,144 @@
                 "383e295a.eeae16"
             ]
         ]
+    },
+    {
+        "id": "10e30242.52af86",
+        "type": "debug",
+        "z": "a93faece.d7746",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1190,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "6b13518a.b7661",
+        "type": "pythonshell in",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "pyfile": "/home/pi/Desktop/raspi-camera-stream/pi_motion.py",
+        "virtualenv": "/home/pi/cv",
+        "continuous": true,
+        "stdInData": false,
+        "x": 160,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a82f30ed.c53d6",
+        "type": "function",
+        "z": "335a17ee.f1f5f8",
+        "name": "Get distance",
+        "func": "let payload=msg.payload.split(\",\");\nlet x = parseFloat(payload[0]);\nlet y = parseFloat(payload[1]);\n\nvar node_x = global.get(\"node_x\");\nvar node_y = global.get(\"node_y\");\n\nlet dist = Math.round(Math.sqrt((x-node_x)**2 + (y-node_y)**2))\nmsg.payload = dist;\n\nnode.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+dist});\nmsg.topic=\"distance\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 390,
+        "y": 80,
+        "wires": [
+            [
+                "feb6fcd8.b870f"
+            ]
+        ]
+    },
+    {
+        "id": "1de43042.962238",
+        "type": "function",
+        "z": "335a17ee.f1f5f8",
+        "name": "setting vars",
+        "func": "\nglobal.set(\"node_x\",msg.payload.x);\nglobal.set(\"node_y\",msg.payload.y);\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 350,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "21fc3ddd.3a5c12",
+        "type": "inject",
+        "z": "335a17ee.f1f5f8",
+        "name": "Inject position",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"x\":0.5,\"y\":0.7}",
+        "payloadType": "json",
+        "x": 150,
+        "y": 380,
+        "wires": [
+            [
+                "1de43042.962238"
+            ]
+        ]
+    },
+    {
+        "id": "1d707511.7e26d3",
+        "type": "inject",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "3.5,12.7",
+        "payloadType": "str",
+        "x": 140,
+        "y": 300,
+        "wires": [
+            [
+                "a82f30ed.c53d6"
+            ]
+        ]
+    },
+    {
+        "id": "feb6fcd8.b870f",
+        "type": "debug",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 80,
+        "wires": []
     }
 ]
