@@ -2852,7 +2852,7 @@
         "type": "pythonshell in",
         "z": "335a17ee.f1f5f8",
         "name": "",
-        "pyfile": "/home/pi/Desktop/raspi-camera-stream/pi_motion.py",
+        "pyfile": "/home/pi/Desktop/raspi-camera-stream/pi_motion_positioned.py",
         "virtualenv": "/home/pi/cv",
         "continuous": true,
         "stdInData": false,
@@ -2890,8 +2890,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 350,
-        "y": 380,
+        "x": 370,
+        "y": 260,
         "wires": [
             []
         ]
@@ -2918,7 +2918,7 @@
         "payload": "{\"x\":0.5,\"y\":0.7}",
         "payloadType": "json",
         "x": 150,
-        "y": 380,
+        "y": 260,
         "wires": [
             [
                 "1de43042.962238"
@@ -2947,7 +2947,7 @@
         "payload": "3.5,12.7",
         "payloadType": "str",
         "x": 140,
-        "y": 300,
+        "y": 180,
         "wires": [
             [
                 "a82f30ed.c53d6"

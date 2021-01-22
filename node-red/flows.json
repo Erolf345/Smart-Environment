@@ -2891,7 +2891,7 @@
         "initialize": "",
         "finalize": "",
         "x": 370,
-        "y": 260,
+        "y": 280,
         "wires": [
             []
         ]
@@ -2918,7 +2918,7 @@
         "payload": "{\"x\":0.5,\"y\":0.7}",
         "payloadType": "json",
         "x": 150,
-        "y": 260,
+        "y": 280,
         "wires": [
             [
                 "1de43042.962238"
@@ -2968,6 +2968,16 @@
         "statusType": "auto",
         "x": 640,
         "y": 80,
+        "wires": []
+    },
+    {
+        "id": "da028ad4.22f0e",
+        "type": "comment",
+        "z": "335a17ee.f1f5f8",
+        "name": "Set the node position here (later through dashboard)",
+        "info": "",
+        "x": 250,
+        "y": 240,
         "wires": []
     }
 ]
