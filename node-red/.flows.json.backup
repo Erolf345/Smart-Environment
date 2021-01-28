@@ -56,6 +56,45 @@
         "info": ""
     },
     {
+        "id": "df521596.125698",
+        "type": "subflow",
+        "name": "Persistence Helper",
+        "info": "",
+        "in": [
+            {
+                "x": 45.5,
+                "y": 85,
+                "wires": [
+                    {
+                        "id": "37028a91.0b1ffe"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 749.5,
+                "y": 53,
+                "wires": [
+                    {
+                        "id": "230dfeb6.8ba792",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 755,
+                "y": 169,
+                "wires": [
+                    {
+                        "id": "856afee0.348098",
+                        "port": 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "id": "875a7078.91fde",
         "type": "ui_base",
         "theme": {
@@ -175,6 +214,39 @@
         "disp": true,
         "width": "12",
         "collapse": false
+    },
+    {
+        "id": "5003631.3bc729c",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "44904efc.96d75",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "44904efc.96d75",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard"
+    },
+    {
+        "id": "5dedb706.b6d6a8",
+        "type": "ui_group",
+        "z": "335a17ee.f1f5f8",
+        "name": "Default",
+        "tab": "4a326350.5a3d6c",
+        "order": 1,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "4a326350.5a3d6c",
+        "type": "ui_tab",
+        "z": "335a17ee.f1f5f8",
+        "name": "Home",
+        "icon": "dashboard"
     },
     {
         "id": "740a99d2.b07d1",
@@ -2859,7 +2931,9 @@
         "x": 160,
         "y": 80,
         "wires": [
-            []
+            [
+                "80c9c6a8.36fc28"
+            ]
         ]
     },
     {
@@ -2891,7 +2965,7 @@
         "initialize": "",
         "finalize": "",
         "x": 370,
-        "y": 260,
+        "y": 280,
         "wires": [
             []
         ]
@@ -2918,7 +2992,7 @@
         "payload": "{\"x\":0.5,\"y\":0.7}",
         "payloadType": "json",
         "x": 150,
-        "y": 260,
+        "y": 280,
         "wires": [
             [
                 "1de43042.962238"
@@ -2950,7 +3024,8 @@
         "y": 180,
         "wires": [
             [
-                "a82f30ed.c53d6"
+                "a82f30ed.c53d6",
+                "80c9c6a8.36fc28"
             ]
         ]
     },
@@ -2969,5 +3044,343 @@
         "x": 640,
         "y": 80,
         "wires": []
+    },
+    {
+        "id": "da028ad4.22f0e",
+        "type": "comment",
+        "z": "335a17ee.f1f5f8",
+        "name": "Set the node position here (later through dashboard)",
+        "info": "",
+        "x": 250,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "80c9c6a8.36fc28",
+        "type": "file",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "filename": "position",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 390,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2b1d2dd6.c29392",
+        "type": "chartjs-bubble",
+        "z": "335a17ee.f1f5f8",
+        "name": "123321",
+        "path": "charts",
+        "charttitle": "Chart title",
+        "xaxis": "xxx",
+        "yaxis": "yyy",
+        "x": 920,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2e4707b3.35915",
+        "type": "inject",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 480,
+        "y": 380,
+        "wires": [
+            [
+                "aed10a1b.5d765"
+            ]
+        ]
+    },
+    {
+        "id": "aed10a1b.5d765",
+        "type": "function",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "func": "msg.payload={\n    \"channel\": \"Population\",\n    \"color\": \"Green\",\n    \"dataset\": [\n        {\n            \"x\": 1,\n            \"y\": 741\n        },\n        {\n            \"x\": 2,\n            \"y\": 24\n        },\n        {\n            \"x\": 3,\n            \"y\": 1.2\n        },\n        {\n            \"x\": 4,\n            \"y\": 325\n        },\n        {\n            \"x\": 5,\n            \"y\": 4.4\n        }\n    ]\n}               \nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 660,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "72fed3ea.f6d0a4",
+        "type": "pythonshell in",
+        "z": "335a17ee.f1f5f8",
+        "name": "a",
+        "pyfile": "/home/pi/a.py",
+        "virtualenv": "",
+        "continuous": true,
+        "stdInData": false,
+        "x": 330,
+        "y": 580,
+        "wires": [
+            [
+                "bd00ad7e.e33328"
+            ]
+        ]
+    },
+    {
+        "id": "f87111eb.45e5c8",
+        "type": "function",
+        "z": "335a17ee.f1f5f8",
+        "name": "write position to flow context",
+        "func": "var pos3 = msg.payload.split(\",\"); \n\nvar pos0 = flow.get(\"pos0\");\nvar pos1 = flow.get(\"pos1\");\nvar pos2 = flow.get(\"pos2\");\n\nmsg.payload={\n    \"channel\": \"Position\",\n    \"color\": \"Green\",\n    \"dataset\": [\n        {\n            \"x\": pos0[0],\n            \"y\": pos0[1],\n            \"r\": 1\n        },\n        {\n            \"x\": pos1[0],\n            \"y\": pos1[1],\n            \"r\": 3\n        },\n        {\n            \"x\": pos2[0],\n            \"y\": pos2[1],\n            \"r\": 4\n        },\n        {\n            \"x\": pos3[0],\n            \"y\": pos3[1],\n            \"r\": 5\n        },\n\n    ]\n}               \n\nflow.set(\"pos0\",pos1);\nflow.set(\"pos1\",pos2);\nflow.set(\"pos2\", pos3);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 740,
+        "y": 640,
+        "wires": [
+            [
+                "2b1d2dd6.c29392"
+            ]
+        ]
+    },
+    {
+        "id": "bd00ad7e.e33328",
+        "type": "json",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 580,
+        "y": 480,
+        "wires": [
+            [
+                "2b1d2dd6.c29392",
+                "feb6fcd8.b870f"
+            ]
+        ]
+    },
+    {
+        "id": "230dfeb6.8ba792",
+        "type": "change",
+        "z": "df521596.125698",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "action",
+                "pt": "msg",
+                "to": "restore",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 589.5,
+        "y": 53,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "37028a91.0b1ffe",
+        "type": "json",
+        "z": "df521596.125698",
+        "name": "",
+        "x": 175.5,
+        "y": 85,
+        "wires": [
+            [
+                "230dfeb6.8ba792"
+            ]
+        ]
+    },
+    {
+        "id": "b78fb72d.ec3d78",
+        "type": "catch",
+        "z": "df521596.125698",
+        "name": "",
+        "scope": [
+            "37028a91.0b1ffe"
+        ],
+        "x": 183.5,
+        "y": 117,
+        "wires": [
+            [
+                "c7f43b1c.b7b5d8"
+            ]
+        ]
+    },
+    {
+        "id": "c7f43b1c.b7b5d8",
+        "type": "change",
+        "z": "df521596.125698",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "[]",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 354.5,
+        "y": 116,
+        "wires": [
+            [
+                "230dfeb6.8ba792"
+            ]
+        ]
+    },
+    {
+        "id": "856afee0.348098",
+        "type": "inject",
+        "z": "df521596.125698",
+        "name": "Trigger restore",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 618.5,
+        "y": 169,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bfa9b689.96d9e8",
+        "type": "pythonshell in",
+        "z": "335a17ee.f1f5f8",
+        "name": "aa",
+        "pyfile": "/home/pi/aa.py",
+        "virtualenv": "",
+        "continuous": true,
+        "stdInData": false,
+        "x": 380,
+        "y": 680,
+        "wires": [
+            [
+                "f87111eb.45e5c8"
+            ]
+        ]
+    },
+    {
+        "id": "3e2b3e40.a44722",
+        "type": "inject",
+        "z": "335a17ee.f1f5f8",
+        "name": "initialize",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 620,
+        "y": 720,
+        "wires": [
+            [
+                "328e266f.bf954a"
+            ]
+        ]
+    },
+    {
+        "id": "328e266f.bf954a",
+        "type": "function",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "func": "flow.set(\"pos0\", [0,0]);\nflow.set(\"pos1\", [0,0]);\nflow.set(\"pos2\", [0,0]);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 810,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "eda94cb4.d5363",
+        "type": "inject",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 650,
+        "y": 880,
+        "wires": [
+            [
+                "3b75c235.bb0a46"
+            ]
+        ]
+    },
+    {
+        "id": "3b75c235.bb0a46",
+        "type": "function",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "func": "var1 = flow.get(\"pos0\");\nvar2 = flow.get(\"pos1\");\nvar3 = flow.get(\"pos2\");\n\n\nnode.warn(var1 + \"\" + var2+ \"\" + var3);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 890,
+        "y": 900,
+        "wires": [
+            []
+        ]
     }
 ]
