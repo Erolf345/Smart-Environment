@@ -28,7 +28,7 @@ rawCapture = PiRGBArray(camera, size=tuple([640, 480]))
 
 # allow the camera to warmup, then initialize the average frame,
 # and frame motion counter
-print("[INFO] warming up...")
+#print("[INFO] warming up...")
 time.sleep(2.5)
 avg = None
 motionCounter = 0
@@ -46,8 +46,8 @@ class PositionTransformer:
         x_dist = self.r[0] - self.l[0]
         y_dist = self.r[1] - self.l[1]
 
-        self.x_scale = x_dist/resize_width#camera.resolution[0]
-        self.y_scale = y_dist/(camera.resolution[1] * resize_width/camera.resolution[0])
+        self.x_scale = abs(x_dist)/resize_width#camera.resolution[0]
+        self.y_scale = abs(y_dist)/(camera.resolution[1] * resize_width/camera.resolution[0])
 
 
         if x_dist > 0:
@@ -72,9 +72,10 @@ class PositionTransformer:
         new_coord = coord
         
         #print(str(coord) + " before")
+        #print(coord,"first")
         
         coord = self.scale(coord)
-
+        #print(coord)
         if self.pos == 0:
             new_coord = [self.l[0] + coord[0], self.l[1]+coord[1]] 
         elif self.pos == 2: #upside down
@@ -102,7 +103,7 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
 	# if the average frame is None, initialize it
 	if avg is None:
-		print("[INFO] starting background model...")
+		#print("[INFO] starting background model...")
 		avg = gray.copy().astype("float")
 		rawCapture.truncate(0)
 		continue
