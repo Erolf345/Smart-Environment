@@ -2913,7 +2913,7 @@
         "type": "function",
         "z": "335a17ee.f1f5f8",
         "name": "Get distance",
-        "func": "let payload=msg.payload.split(\",\");\nlet x = parseFloat(payload[0]);\nlet y = parseFloat(payload[1]);\n\nvar node_x = global.get(\"node_x\");\nvar node_y = global.get(\"node_y\");\n\nlet dist = Math.round(Math.sqrt((x-node_x)**2 + (y-node_y)**2))\nmsg.payload = dist;\n\nnode.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+dist});\nmsg.topic=\"distance\"\nreturn msg;",
+        "func": "if (msg.payload.includes(\",\")){\n    let payload=msg.payload.split(\",\");\n    let x = parseFloat(payload[0]);\n    let y = parseFloat(payload[1]);\n\n\n    var node_x = global.get(\"node_x\");\n    var node_y = global.get(\"node_y\");\n\n    let dist = Math.round(Math.sqrt((x-node_x)**2 + (y-node_y)**2))\n    msg.payload = dist;\n\n    if (isNaN(dist)){\n        node.warn(payload)\n    }\n\n    node.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+dist});\n    msg.topic=\"distance\"\n    return msg;\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -2922,7 +2922,8 @@
         "y": 240,
         "wires": [
             [
-                "f2510df6.4e544"
+                "f2510df6.4e544",
+                "3b7a51ab.88ecbe"
             ]
         ]
     },
@@ -2961,7 +2962,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "{\"x\":500,\"y\":400}",
+        "payload": "{\"x\":35,\"y\":54}",
         "payloadType": "json",
         "x": 560,
         "y": 100,
@@ -2980,21 +2981,6 @@
         "x": 640,
         "y": 60,
         "wires": []
-    },
-    {
-        "id": "2b1d2dd6.c29392",
-        "type": "chartjs-bubble",
-        "z": "335a17ee.f1f5f8",
-        "name": "Show Position in graph",
-        "path": "position_plot",
-        "charttitle": "Camera model",
-        "xaxis": "X",
-        "yaxis": "Y",
-        "x": 1030,
-        "y": 500,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "f87111eb.45e5c8",
@@ -3118,15 +3104,13 @@
         "z": "335a17ee.f1f5f8",
         "name": "camera_coordinates",
         "pyfile": "/home/pi/Desktop/raspi-camera-stream/pi_motion_positioned.py",
-        "virtualenv": "/home/pi/cv",
+        "virtualenv": "/home/pi/.virtualenvs/cv",
         "continuous": true,
         "stdInData": false,
-        "x": 380,
-        "y": 500,
+        "x": 200,
+        "y": 660,
         "wires": [
-            [
-                "f87111eb.45e5c8"
-            ]
+            []
         ]
     },
     {
@@ -3442,6 +3426,145 @@
         "info": "",
         "x": 360,
         "y": 200,
+        "wires": []
+    },
+    {
+        "id": "2b1d2dd6.c29392",
+        "type": "chartjs-bubble",
+        "z": "335a17ee.f1f5f8",
+        "name": "Show Position in graph",
+        "path": "position_plot",
+        "charttitle": "Camera model",
+        "xaxis": "X",
+        "yaxis": "Y",
+        "x": 1030,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6ee611d3.623e9",
+        "type": "exec",
+        "z": "335a17ee.f1f5f8",
+        "command": "/home/pi/.virtualenvs/cv/bin/python3.7 /home/pi/Desktop/raspi-camera-stream/pi_motion_positioned.py",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "true",
+        "timer": "",
+        "oldrc": false,
+        "name": "camera_coordinates",
+        "x": 390,
+        "y": 420,
+        "wires": [
+            [
+                "f87111eb.45e5c8",
+                "a82f30ed.c53d6"
+            ],
+            [
+                "df8f88b9.23d1d8"
+            ],
+            [
+                "8fe29bd0.9541b8"
+            ]
+        ]
+    },
+    {
+        "id": "c7dd7fa.24ba4",
+        "type": "inject",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0,27.5 35,54",
+        "payloadType": "str",
+        "x": 170,
+        "y": 420,
+        "wires": [
+            [
+                "6ee611d3.623e9"
+            ]
+        ]
+    },
+    {
+        "id": "96837b28.01d6e",
+        "type": "inject",
+        "z": "335a17ee.f1f5f8",
+        "name": "kill",
+        "props": [
+            {
+                "p": "kill",
+                "v": "SIGKILL",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 160,
+        "y": 500,
+        "wires": [
+            [
+                "6ee611d3.623e9"
+            ]
+        ]
+    },
+    {
+        "id": "df8f88b9.23d1d8",
+        "type": "debug",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "8fe29bd0.9541b8",
+        "type": "debug",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "3b7a51ab.88ecbe",
+        "type": "debug",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 300,
         "wires": []
     }
 ]
