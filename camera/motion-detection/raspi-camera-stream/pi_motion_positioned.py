@@ -8,6 +8,7 @@ import imutils
 import json
 import time
 import cv2
+import sys
 
 # construct the argument parser and parse the arguments
 #ap = argparse.ArgumentParser()
@@ -32,6 +33,9 @@ time.sleep(2.5)
 avg = None
 motionCounter = 0
 
+
+resize_width=500
+
 ### Transforms a coordinate to the cameras relative position in the room
 class PositionTransformer:
     
@@ -42,8 +46,9 @@ class PositionTransformer:
         x_dist = self.r[0] - self.l[0]
         y_dist = self.r[1] - self.l[1]
 
-        self.x_scale = x_dist/camera.resolution[0]
-        self.y_sclae = y_dist/camera.resolution[1]
+        self.x_scale = x_dist/resize_width#camera.resolution[0]
+        self.y_scale = y_dist/(camera.resolution[1] * resize_width/camera.resolution[0])
+
 
         if x_dist > 0:
             if y_dist > 0:
@@ -55,14 +60,20 @@ class PositionTransformer:
                 self.pos = 3 # left turn
             else:
                 self.pos = 2 #upside down
+        
+        #print(self.pos)
 
     def scale(self,coord):
-        return [self.x_scale*coord[0], self.y_sclae*coord[1]]
+        return [self.x_scale*coord[0], self.y_scale*coord[1]]
 
     def transform(self, coord):
         #assuming that all cams use same resolution
         # if not add scaling
         new_coord = coord
+        
+        #print(str(coord) + " before")
+        
+        coord = self.scale(coord)
 
         if self.pos == 0:
             new_coord = [self.l[0] + coord[0], self.l[1]+coord[1]] 
@@ -73,10 +84,12 @@ class PositionTransformer:
         else: # turned left
             new_coord = [self.l[0] - coord[1], self.l[1] + coord[0]]
 
-        return self.scale(new_coord)
+        #print(str(coord) + " after")
+        return new_coord#self.scale(new_coord)
 
-x_pos_cam = [0,0]
-y_pos_cam = [640,480]#[1,1]
+# pass arguments as python3 filenam.py xleft,yleft xright,yright
+x_pos_cam = [float(sys.argv[1].split(",")[0]),float(sys.argv[1].split(",")[1])]
+y_pos_cam = [float(sys.argv[2].split(",")[0]),float(sys.argv[2].split(",")[1])]#[1,1]
 pos_trans = PositionTransformer(x_pos_cam,y_pos_cam)
 
 # capture frames from the camera
@@ -84,7 +97,7 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 	# grab the raw NumPy array representing the image
 	frame = f.array
 	# resize the frame, convert it to grayscale, and blur it
-	frame = imutils.resize(frame, width=500)
+	frame = imutils.resize(frame, width=resize_width)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
 	# if the average frame is None, initialize it
@@ -127,12 +140,13 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 	distance = np.round(np.sqrt((x+w_half)**2 + (y+h_half)**2))
 	
 	if distance == 0: distance = 625
-
 	#compute motion's position based on cameras relative position 
+	
 	centroid = pos_trans.transform([x+w_half,y+h_half])
+	#centroid = [x+w_half,y+h_half]
 	
 	if distance < 625: #print(distance)
-		print(str(centroid[0])+","+centroid[1])
+		print(str(centroid[0])+","+str(centroid[1]))
 	#cv2.putText(frame, "Distance: {}".format(distance), (10, 20), cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 1)
 	# check to see if the frames should be displayed to screen
 	if show_video:
@@ -146,4 +160,3 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 			break
 	# clear the stream in preparation for the next frame
 	rawCapture.truncate(0)
-        
