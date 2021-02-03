@@ -2962,7 +2962,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "{\"x\":35,\"y\":54}",
+        "payload": "{\"x\":0,\"y\":0}",
         "payloadType": "json",
         "x": 560,
         "y": 100,
@@ -2987,7 +2987,7 @@
         "type": "function",
         "z": "335a17ee.f1f5f8",
         "name": "pass position to chart.js and store in flow vars",
-        "func": "var pos3 = msg.payload.split(\",\"); \n\nvar pos0 = flow.get(\"pos0\");\nvar pos1 = flow.get(\"pos1\");\nvar pos2 = flow.get(\"pos2\");\n\nmsg.payload={\n    \"channel\": \"Position\",\n    \"color\": \"Green\",\n    \"dataset\": [\n        {\n            \"x\": pos0[0],\n            \"y\": pos0[1],\n            \"r\": 1\n        },\n        {\n            \"x\": pos1[0],\n            \"y\": pos1[1],\n            \"r\": 3\n        },\n        {\n            \"x\": pos2[0],\n            \"y\": pos2[1],\n            \"r\": 4\n        },\n        {\n            \"x\": pos3[0],\n            \"y\": pos3[1],\n            \"r\": 5\n        },\n\n    ]\n}               \n\nflow.set(\"pos0\",pos1);\nflow.set(\"pos1\",pos2);\nflow.set(\"pos2\", pos3);\n\nreturn msg;",
+        "func": "if (msg.payload.includes(\",\")){\nvar pos3 = msg.payload.split(\",\"); \n\nvar pos0 = flow.get(\"pos0\");\nvar pos1 = flow.get(\"pos1\");\nvar pos2 = flow.get(\"pos2\");\n\nmsg.payload={\n    \"channel\": \"Position\",\n    \"color\": \"Green\",\n    \"dataset\": [\n        {\n            \"x\": pos0[0],\n            \"y\": pos0[1],\n            \"r\": 1\n        },\n        {\n            \"x\": pos1[0],\n            \"y\": pos1[1],\n            \"r\": 3\n        },\n        {\n            \"x\": pos2[0],\n            \"y\": pos2[1],\n            \"r\": 4\n        },\n        {\n            \"x\": pos3[0],\n            \"y\": pos3[1],\n            \"r\": 5\n        },\n\n    ]\n}               \n\nflow.set(\"pos0\",pos1);\nflow.set(\"pos1\",pos2);\nflow.set(\"pos2\", pos3);\n\nreturn msg;\n\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3328,8 +3328,7 @@
         "id": "3fcff8ef.da0dc8",
         "type": "tcp out",
         "z": "335a17ee.f1f5f8",
-        "d": true,
-        "host": "192.168.0.162",
+        "host": "192.168.0.246",
         "port": "55559",
         "beserver": "client",
         "base64": false,
@@ -3343,7 +3342,6 @@
         "id": "6a5e6e97.24169",
         "type": "function",
         "z": "335a17ee.f1f5f8",
-        "d": true,
         "name": "get latest position",
         "func": "var pos2 = flow.get(\"pos2\");\nvar ref = flow.get(\"ref_pos\");\n\n//only pass if position has changed\nif(ref == pos2){\n    node.done();\n    return;\n}\nflow.set(\"ref_pos\", pos2);\n\nmsg.payload = pos2[0] + \",\" + pos2[1];\nreturn msg;",
         "outputs": 1,
@@ -3362,7 +3360,6 @@
         "id": "8c285105.db5848",
         "type": "inject",
         "z": "335a17ee.f1f5f8",
-        "d": true,
         "name": "every 0.5 seconds",
         "props": [],
         "repeat": "0.5",
@@ -3429,21 +3426,6 @@
         "wires": []
     },
     {
-        "id": "2b1d2dd6.c29392",
-        "type": "chartjs-bubble",
-        "z": "335a17ee.f1f5f8",
-        "name": "Show Position in graph",
-        "path": "position_plot",
-        "charttitle": "Camera model",
-        "xaxis": "X",
-        "yaxis": "Y",
-        "x": 1030,
-        "y": 500,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "6ee611d3.623e9",
         "type": "exec",
         "z": "335a17ee.f1f5f8",
@@ -3484,9 +3466,9 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "0,27.5 35,54",
+        "payload": "35,27 0,0",
         "payloadType": "str",
-        "x": 170,
+        "x": 160,
         "y": 420,
         "wires": [
             [
@@ -3566,5 +3548,20 @@
         "x": 600,
         "y": 300,
         "wires": []
+    },
+    {
+        "id": "2b1d2dd6.c29392",
+        "type": "chartjs-bubble",
+        "z": "335a17ee.f1f5f8",
+        "name": "Show Position in graph",
+        "path": "position_plot",
+        "charttitle": "Camera model",
+        "xaxis": "X",
+        "yaxis": "Y",
+        "x": 1030,
+        "y": 500,
+        "wires": [
+            []
+        ]
     }
 ]
