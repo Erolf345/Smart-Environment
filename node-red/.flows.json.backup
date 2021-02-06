@@ -3410,7 +3410,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\n\nlet width = confs.room_x;\nlet height = confs.room_y;\nlet x = confs.actuator_x;\nlet y = confs.actuator_y;\n\nvar max_distance = Math.sqrt((Math.max((width-x), x))**2 + (Math.max(y, (height-y)))**2);\n\nreturn msg;",
+        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\n\nlet width = confs.room_x;\nlet height = confs.room_y;\nlet x = confs.actuator_x;\nlet y = confs.actuator_y;\n\nlet max_distance = Math.sqrt((Math.max((width-x), x))**2 + (Math.max(y, (height-y)))**2);\n\nglobal.set(\"max_distance\",max_distance);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3730,7 +3730,8 @@
         "wires": [
             [
                 "9093b781.6c11b8",
-                "1d98ea33.7afa26"
+                "1d98ea33.7afa26",
+                "15d917c6.d190e"
             ]
         ]
     },
@@ -3936,7 +3937,7 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "calc loudness",
-        "func": "var distance = msg.payload;\nvar max_distance = global.get(\"max_distance\");\n\nloudness = distance / max_distance * 30 + 70;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"loudness \"+ loudness});\n\nmsg.payload = \"\" + loudness;\n\nreturn msg;",
+        "func": "var distance = msg.payload;\nvar max_distance = global.get(\"max_distance\");\n\nloudness = 100 - distance / max_distance * 30;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"loudness \"+ loudness});\n\nmsg.payload = \"\" + loudness;\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
