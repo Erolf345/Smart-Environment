@@ -3198,7 +3198,7 @@
         "id": "3fcff8ef.da0dc8",
         "type": "tcp out",
         "z": "335a17ee.f1f5f8",
-        "host": "192.168.0.246",
+        "host": "192.168.0.120",
         "port": "55559",
         "beserver": "client",
         "base64": false,
@@ -3655,8 +3655,7 @@
         "id": "b5d08baa.4c9a58",
         "type": "exec",
         "z": "3f43a09.7e6556",
-        "d": true,
-        "command": "sudo amixer sset 'Headphone' ",
+        "command": "sudo amixer -c 1 sset 'Headphone' ",
         "addpay": true,
         "append": "",
         "useSpawn": "false",
@@ -3669,26 +3668,6 @@
             [],
             [],
             []
-        ]
-    },
-    {
-        "id": "8684c81d.b55158",
-        "type": "range",
-        "z": "3f43a09.7e6556",
-        "minin": "0",
-        "maxin": "64",
-        "minout": "60",
-        "maxout": "100",
-        "action": "scale",
-        "round": true,
-        "property": "payload",
-        "name": "Map Distance to Volume",
-        "x": 690,
-        "y": 520,
-        "wires": [
-            [
-                "694a32fe.6dd99c"
-            ]
         ]
     },
     {
@@ -3891,6 +3870,82 @@
             [
                 "2f3d48f2.af02b",
                 "173895b4.9b3f6a"
+            ]
+        ]
+    },
+    {
+        "id": "8dcf4459.16f1c",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "70",
+        "payloadType": "str",
+        "x": 700,
+        "y": 620,
+        "wires": [
+            [
+                "694a32fe.6dd99c"
+            ]
+        ]
+    },
+    {
+        "id": "d924849b.8d9738",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "100",
+        "payloadType": "str",
+        "x": 710,
+        "y": 680,
+        "wires": [
+            [
+                "694a32fe.6dd99c"
+            ]
+        ]
+    },
+    {
+        "id": "15d917c6.d190e",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "calc loudness",
+        "func": "var distance = msg.payload;\nvar max_distance = global.get(\"max_distance\");\n\nloudness = distance / max_distance * 30 + 70;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"loudness \"+ loudness});\n\nmsg.payload = \"\" + loudness;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 540,
+        "y": 460,
+        "wires": [
+            [
+                "694a32fe.6dd99c"
             ]
         ]
     },
