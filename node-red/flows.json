@@ -56,6 +56,13 @@
         "info": ""
     },
     {
+        "id": "169d6861.ad61d",
+        "type": "tab",
+        "label": "Dashboard config",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "df521596.125698",
         "type": "subflow",
         "name": "Persistence Helper",
@@ -194,14 +201,15 @@
         "id": "b0d2fcdd.369d6",
         "type": "ui_tab",
         "name": "Home",
-        "icon": "dashboard"
+        "icon": "dashboard",
+        "order": 1
     },
     {
         "id": "3aff5f59.0a6d88",
         "type": "ui_tab",
         "name": "Music Controls",
         "icon": "dashboard",
-        "order": 1,
+        "order": 3,
         "disabled": false,
         "hidden": true
     },
@@ -229,7 +237,8 @@
         "id": "44904efc.96d75",
         "type": "ui_tab",
         "name": "Home",
-        "icon": "dashboard"
+        "icon": "dashboard",
+        "order": 4
     },
     {
         "id": "5dedb706.b6d6a8",
@@ -246,7 +255,27 @@
         "type": "ui_tab",
         "z": "335a17ee.f1f5f8",
         "name": "Home",
-        "icon": "dashboard"
+        "icon": "dashboard",
+        "order": 5
+    },
+    {
+        "id": "ead80a27.d2327",
+        "type": "ui_tab",
+        "name": "Configuration",
+        "icon": "font-awesome/fa-cog",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "a29f7c61.ee366",
+        "type": "ui_group",
+        "name": "Startup Config",
+        "tab": "ead80a27.d2327",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
     },
     {
         "id": "740a99d2.b07d1",
@@ -2452,6 +2481,7 @@
             "#c5b0d5"
         ],
         "outputs": 1,
+        "useDifferentColor": false,
         "x": 500,
         "y": 540,
         "wires": [
@@ -3329,7 +3359,7 @@
         "id": "3fcff8ef.da0dc8",
         "type": "tcp out",
         "z": "335a17ee.f1f5f8",
-        "host": "192.168.0.246",
+        "host": "192.168.0.120",
         "port": "55559",
         "beserver": "client",
         "base64": false,
@@ -3411,7 +3441,7 @@
         "id": "6ee611d3.623e9",
         "type": "exec",
         "z": "335a17ee.f1f5f8",
-        "command": "/home/pi/.virtualenvs/cv/bin/python3.7 /home/pi/Desktop/raspi-camera-stream/pi_motion_positioned.py",
+        "command": "/home/pi/.virtualenvs/cv/bin/python3.7 /home/pi/.node-red/projects/Smart-Environment/camera/motion-detection/raspi-camera-stream/pi_motion_positioned.py",
         "addpay": true,
         "append": "",
         "useSpawn": "true",
@@ -3568,6 +3598,173 @@
             [
                 "6a5e6e97.24169"
             ]
+        ]
+    },
+    {
+        "id": "8013867a.cfb4e8",
+        "type": "debug",
+        "z": "169d6861.ad61d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "ac0f6165.c18cc",
+        "type": "function",
+        "z": "169d6861.ad61d",
+        "name": "set globals",
+        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.axctuator_y);\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 570,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5865c7d2.ffe4c",
+        "type": "ui_form",
+        "z": "169d6861.ad61d",
+        "name": "",
+        "label": "Camera Configuration",
+        "group": "a29f7c61.ee366",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Camera left (x,y)",
+                "value": "camera_l",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Camera right (x,y)",
+                "value": "camera_r",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "camera_l": "",
+            "camera_r": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "",
+        "x": 300,
+        "y": 180,
+        "wires": [
+            [
+                "8013867a.cfb4e8",
+                "d358d81c.ba7318"
+            ]
+        ]
+    },
+    {
+        "id": "3e339e1f.d5de52",
+        "type": "ui_form",
+        "z": "169d6861.ad61d",
+        "name": "",
+        "label": "Actuator Configuration",
+        "group": "a29f7c61.ee366",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Room width",
+                "value": "room_x",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Room height",
+                "value": "room_y",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Actuator x position",
+                "value": "actuator_x",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Actuator y position",
+                "value": "actuator_y",
+                "type": "number",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "room_x": "",
+            "room_y": "",
+            "actuator_x": "",
+            "actuator_y": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "",
+        "x": 300,
+        "y": 300,
+        "wires": [
+            [
+                "ac0f6165.c18cc",
+                "332410d7.ce996"
+            ]
+        ]
+    },
+    {
+        "id": "332410d7.ce996",
+        "type": "debug",
+        "z": "169d6861.ad61d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 490,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "d358d81c.ba7318",
+        "type": "function",
+        "z": "169d6861.ad61d",
+        "name": "set globals",
+        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 510,
+        "y": 140,
+        "wires": [
+            []
         ]
     }
 ]
