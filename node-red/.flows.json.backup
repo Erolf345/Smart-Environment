@@ -3307,7 +3307,7 @@
         "id": "3fcff8ef.da0dc8",
         "type": "tcp out",
         "z": "335a17ee.f1f5f8",
-        "host": "192.168.0.246",
+        "host": "192.168.0.120",
         "port": "55559",
         "beserver": "client",
         "base64": false,
@@ -3417,7 +3417,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "0,27 35,54",
+        "payload": "35,27 0,0",
         "payloadType": "str",
         "x": 160,
         "y": 420,
@@ -3551,8 +3551,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 600,
-        "y": 180,
+        "x": 510,
+        "y": 200,
         "wires": []
     },
     {
@@ -3565,7 +3565,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 570,
+        "x": 530,
         "y": 300,
         "wires": [
             []
@@ -3685,8 +3685,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 490,
-        "y": 380,
+        "x": 530,
+        "y": 360,
         "wires": []
     },
     {
@@ -3694,7 +3694,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n}\n\n\nreturn msg;",
+        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n    \n    msg.payload = confs.camera_l+\" \" +confs.camera_r;\n    return msg;\n}\n\n\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3702,7 +3702,9 @@
         "x": 510,
         "y": 140,
         "wires": [
-            []
+            [
+                "fc4514e2.adfb6"
+            ]
         ]
     },
     {
@@ -3710,7 +3712,7 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "expo brightness",
-        "func": "var distance = global.get(\"distance\");\nvar width = global.get(\"room_width\");\nvar height = global.get(\"room_height\");\nvar x = global.get(\"node_x\");\nvar y = global.get(\"node_y\");\n\n\nvar max_distance = Math.sqrt((Math.max((width-x), x))**2 + (Math.max(y, (height-y)))**2);\n\n\n/*\nif (distance < 50 && distance >= 0) {\n    brightness = 5/7 * distance;\n} \nif (distance >= 50) {\n    brightness = 30/14 * distance - 37;\n}\nif(brightness < 0)\nbrightness = 0;\n*/\n\nbrightness = distance / max_distance * 100;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"brightness \"+ brightness});\n\nmsg.payload = \"\" + brightness;\n\nreturn msg;",
+        "func": "var distance = global.get(\"distance\");\n\nif (distance < 50 && distance >= 0) {\n    brightness = 5/7 * distance;\n} \nif (distance >= 50) {\n    brightness = 30/14 * distance - 37;\n}\nif(brightness < 0)\nbrightness = 0;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"brightness \"+ brightness});\n\nmsg.payload = \"\" + brightness;\n\nreturn msg;",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
