@@ -3116,7 +3116,6 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payloadType": "str",
         "x": 120,
         "y": 100,
         "wires": [
@@ -3399,7 +3398,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.axctuator_y);\n\n\nreturn msg;",
+        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3730,7 +3729,7 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "Get distance",
-        "func": "if (msg.payload.includes(\",\")){\n    let payload=msg.payload.split(\",\");\n    let x = parseFloat(payload[0]);\n    let y = parseFloat(payload[1]);\n\n\n    var node_x = global.get(\"node_x\");\n    var node_y = global.get(\"node_y\");\n\n    let dist = Math.round(Math.sqrt((x-node_x)**2 + (y-node_y)**2))\n    msg.payload = dist;\n\n    if (isNaN(dist)){\n        node.warn(payload)\n    }\n\n    node.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+dist});\n    msg.topic=\"distance\"\n    return msg;\n}",
+        "func": "if (msg.payload.includes(\",\")){\n    let payload=msg.payload.split(\",\");\n    let x = parseFloat(payload[0]);\n    let y = parseFloat(payload[1]);\n\n\n    var node_x = global.get(\"node_x\");\n    var node_y = global.get(\"node_y\");\n\n    let dist = Math.round(Math.sqrt((x-node_x)**2 + (y-node_y)**2))\n    msg.payload = dist;\n    \n\n    if (isNaN(dist)){\n        node.warn(payload)\n    }\n\n    node.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+dist});\n    msg.topic=\"distance\"\n    return msg;\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3878,8 +3877,59 @@
         "y": 100,
         "wires": [
             [
-                "2f3d48f2.af02b"
+                "2f3d48f2.af02b",
+                "173895b4.9b3f6a"
             ]
         ]
+    },
+    {
+        "id": "4b8f6182.6b627",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "initialize",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 260,
+        "y": 280,
+        "wires": [
+            [
+                "19afac50.ae6184"
+            ]
+        ]
+    },
+    {
+        "id": "19afac50.ae6184",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "func": "flow.set(\"pos0\", [0,0]);\nflow.set(\"pos1\", [0,0]);\nflow.set(\"pos2\", [0,0]);\nflow.set(\"ref_pos\", [0,0]);\n\nflow.set(\"goal_brightness\", 0);\nflow.set(\"brightness\",0)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 420,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cfb7173b.6030a8",
+        "type": "comment",
+        "z": "3f43a09.7e6556",
+        "name": "Initialize global variables",
+        "info": "",
+        "x": 340,
+        "y": 240,
+        "wires": []
     }
 ]

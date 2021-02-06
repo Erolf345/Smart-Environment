@@ -65,7 +65,7 @@
     {
         "id": "3f43a09.7e6556",
         "type": "tab",
-        "label": "Flow 3",
+        "label": "Actuator",
         "disabled": false,
         "info": ""
     },
@@ -2948,25 +2948,6 @@
         "wires": []
     },
     {
-        "id": "a82f30ed.c53d6",
-        "type": "function",
-        "z": "335a17ee.f1f5f8",
-        "name": "Get distance",
-        "func": "if (msg.payload.includes(\",\")){\n    let payload=msg.payload.split(\",\");\n    let x = parseFloat(payload[0]);\n    let y = parseFloat(payload[1]);\n\n\n    var node_x = global.get(\"node_x\");\n    var node_y = global.get(\"node_y\");\n\n    let dist = Math.round(Math.sqrt((x-node_x)**2 + (y-node_y)**2))\n    msg.payload = dist;\n\n    if (isNaN(dist)){\n        node.warn(payload)\n    }\n\n    node.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+dist});\n    msg.topic=\"distance\"\n    return msg;\n}",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 330,
-        "y": 240,
-        "wires": [
-            [
-                "f2510df6.4e544",
-                "3b7a51ab.88ecbe"
-            ]
-        ]
-    },
-    {
         "id": "1de43042.962238",
         "type": "function",
         "z": "335a17ee.f1f5f8",
@@ -3020,24 +3001,6 @@
         "x": 640,
         "y": 60,
         "wires": []
-    },
-    {
-        "id": "f87111eb.45e5c8",
-        "type": "function",
-        "z": "335a17ee.f1f5f8",
-        "name": "pass position to chart.js and store in flow vars",
-        "func": "if (msg.payload.includes(\",\")){\nvar pos3 = msg.payload.split(\",\"); \n\nvar pos0 = flow.get(\"pos0\");\nvar pos1 = flow.get(\"pos1\");\nvar pos2 = flow.get(\"pos2\");\n\nmsg.payload={\n    \"channel\": \"Position\",\n    \"color\": \"Green\",\n    \"dataset\": [\n        {\n            \"x\": pos0[0],\n            \"y\": pos0[1],\n            \"r\": 1\n        },\n        {\n            \"x\": pos1[0],\n            \"y\": pos1[1],\n            \"r\": 3\n        },\n        {\n            \"x\": pos2[0],\n            \"y\": pos2[1],\n            \"r\": 4\n        },\n        {\n            \"x\": pos3[0],\n            \"y\": pos3[1],\n            \"r\": 5\n        },\n\n    ]\n}               \n\nflow.set(\"pos0\",pos1);\nflow.set(\"pos1\",pos2);\nflow.set(\"pos2\", pos3);\n\nreturn msg;\n\n}",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 930,
-        "y": 480,
-        "wires": [
-            [
-                "2b1d2dd6.c29392"
-            ]
-        ]
     },
     {
         "id": "230dfeb6.8ba792",
@@ -3138,21 +3101,6 @@
         ]
     },
     {
-        "id": "bfa9b689.96d9e8",
-        "type": "pythonshell in",
-        "z": "335a17ee.f1f5f8",
-        "name": "camera_coordinates",
-        "pyfile": "/home/pi/Desktop/raspi-camera-stream/pi_motion_positioned.py",
-        "virtualenv": "/home/pi/.virtualenvs/cv",
-        "continuous": true,
-        "stdInData": false,
-        "x": 200,
-        "y": 660,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "3e2b3e40.a44722",
         "type": "inject",
         "z": "335a17ee.f1f5f8",
@@ -3168,7 +3116,6 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payloadType": "str",
         "x": 120,
         "y": 100,
         "wires": [
@@ -3223,28 +3170,6 @@
         ]
     },
     {
-        "id": "81ba9a01.6b3348",
-        "type": "tcp in",
-        "z": "335a17ee.f1f5f8",
-        "name": "receive pos",
-        "server": "server",
-        "host": "",
-        "port": "55559",
-        "datamode": "stream",
-        "datatype": "utf8",
-        "newline": "",
-        "topic": "",
-        "base64": false,
-        "x": 110,
-        "y": 200,
-        "wires": [
-            [
-                "a82f30ed.c53d6",
-                "f87111eb.45e5c8"
-            ]
-        ]
-    },
-    {
         "id": "9df5e113.da853",
         "type": "rpi-gpio out",
         "z": "a93faece.d7746",
@@ -3259,55 +3184,10 @@
         "wires": []
     },
     {
-        "id": "f2510df6.4e544",
-        "type": "function",
-        "z": "335a17ee.f1f5f8",
-        "name": "set global distance var",
-        "func": "global.set(\"distance\", msg.payload);",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 560,
-        "y": 240,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "1d707511.7e26d3",
-        "type": "inject",
-        "z": "335a17ee.f1f5f8",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "3.5,12.7",
-        "payloadType": "str",
-        "x": 120,
-        "y": 280,
-        "wires": [
-            [
-                "a82f30ed.c53d6"
-            ]
-        ]
-    },
-    {
         "id": "3fcff8ef.da0dc8",
         "type": "tcp out",
         "z": "335a17ee.f1f5f8",
-        "host": "192.168.0.120",
+        "host": "192.168.0.246",
         "port": "55559",
         "beserver": "client",
         "base64": false,
@@ -3366,16 +3246,6 @@
         "wires": []
     },
     {
-        "id": "83c2b404.ed457",
-        "type": "comment",
-        "z": "335a17ee.f1f5f8",
-        "name": "Get brightness from partners",
-        "info": "",
-        "x": 360,
-        "y": 200,
-        "wires": []
-    },
-    {
         "id": "6ee611d3.623e9",
         "type": "exec",
         "z": "335a17ee.f1f5f8",
@@ -3390,9 +3260,8 @@
         "y": 420,
         "wires": [
             [
-                "a82f30ed.c53d6",
-                "f87111eb.45e5c8",
-                "65a8b66e.26e828"
+                "65a8b66e.26e828",
+                "ed4edcd6.3c3f48"
             ],
             [
                 "df8f88b9.23d1d8"
@@ -3485,37 +3354,6 @@
         "wires": []
     },
     {
-        "id": "3b7a51ab.88ecbe",
-        "type": "debug",
-        "z": "335a17ee.f1f5f8",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 600,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "2b1d2dd6.c29392",
-        "type": "chartjs-bubble",
-        "z": "335a17ee.f1f5f8",
-        "name": "Show Position in graph",
-        "path": "position_plot",
-        "charttitle": "Camera model",
-        "xaxis": "X",
-        "yaxis": "Y",
-        "x": 1240,
-        "y": 480,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "65a8b66e.26e828",
         "type": "delay",
         "z": "335a17ee.f1f5f8",
@@ -3560,7 +3398,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.axctuator_y);\n\n\nreturn msg;",
+        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3712,13 +3550,13 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "expo brightness",
-        "func": "var distance = global.get(\"distance\");\n\nif (distance < 50 && distance >= 0) {\n    brightness = 5/7 * distance;\n} \nif (distance >= 50) {\n    brightness = 30/14 * distance - 37;\n}\nif(brightness < 0)\nbrightness = 0;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"brightness \"+ brightness});\n\nmsg.payload = \"\" + brightness;\n\nreturn msg;",
+        "func": "var distance = msg.payload;\nvar width = global.get(\"room_width\");\nvar height = global.get(\"room_height\");\nvar x = global.get(\"node_x\");\nvar y = global.get(\"node_y\");\n\n\nvar max_distance = Math.sqrt((Math.max((width-x), x))**2 + (Math.max(y, (height-y)))**2);\n\n\n/*\nif (distance < 50 && distance >= 0) {\n    brightness = 5/7 * distance;\n} \nif (distance >= 50) {\n    brightness = 30/14 * distance - 37;\n}\nif(brightness < 0)\nbrightness = 0;\n*/\n\nbrightness = distance / max_distance * 100;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"brightness \"+ brightness});\n\nmsg.payload = \"\" + brightness;\n\nreturn msg;",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 420,
-        "y": 240,
+        "x": 760,
+        "y": 340,
         "wires": [
             [
                 "69084e2a.b34f2",
@@ -3737,39 +3575,9 @@
         "level": "0",
         "freq": "",
         "out": "pwm",
-        "x": 630,
-        "y": 240,
+        "x": 970,
+        "y": 340,
         "wires": []
-    },
-    {
-        "id": "fd728049.4f6a1",
-        "type": "inject",
-        "z": "3f43a09.7e6556",
-        "name": "every 0.3 seconds",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "0.3",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "2",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 170,
-        "y": 240,
-        "wires": [
-            [
-                "1d98ea33.7afa26",
-                "8684c81d.b55158"
-            ]
-        ]
     },
     {
         "id": "d30f5b3d.6f5388",
@@ -3777,8 +3585,8 @@
         "z": "3f43a09.7e6556",
         "name": "Increment brightness in smaller steps",
         "info": "",
-        "x": 390,
-        "y": 180,
+        "x": 850,
+        "y": 260,
         "wires": []
     },
     {
@@ -3791,8 +3599,8 @@
         "level": "0",
         "freq": "",
         "out": "pwm",
-        "x": 830,
-        "y": 300,
+        "x": 1170,
+        "y": 400,
         "wires": []
     },
     {
@@ -3805,8 +3613,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 640,
-        "y": 300,
+        "x": 980,
+        "y": 400,
         "wires": [
             [
                 "474c9a87.cb5614"
@@ -3823,8 +3631,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 600,
-        "y": 420,
+        "x": 940,
+        "y": 520,
         "wires": [
             [
                 "b5d08baa.4c9a58"
@@ -3835,6 +3643,7 @@
         "id": "b5d08baa.4c9a58",
         "type": "exec",
         "z": "3f43a09.7e6556",
+        "d": true,
         "command": "sudo amixer sset 'Headphone' ",
         "addpay": true,
         "append": "",
@@ -3842,8 +3651,8 @@
         "timer": "",
         "oldrc": false,
         "name": "set volume",
-        "x": 810,
-        "y": 420,
+        "x": 1150,
+        "y": 520,
         "wires": [
             [],
             [],
@@ -3862,12 +3671,264 @@
         "round": true,
         "property": "payload",
         "name": "Map Distance to Volume",
-        "x": 350,
-        "y": 420,
+        "x": 690,
+        "y": 520,
         "wires": [
             [
                 "694a32fe.6dd99c"
             ]
         ]
+    },
+    {
+        "id": "4df54040.8f7e6",
+        "type": "debug",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 310,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "fc4514e2.adfb6",
+        "type": "link out",
+        "z": "169d6861.ad61d",
+        "name": "Start Camera script",
+        "links": [
+            "da0a3f8f.1954d"
+        ],
+        "x": 655,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "da0a3f8f.1954d",
+        "type": "link in",
+        "z": "335a17ee.f1f5f8",
+        "name": "Cam init",
+        "links": [
+            "fc4514e2.adfb6"
+        ],
+        "x": 155,
+        "y": 360,
+        "wires": [
+            [
+                "6ee611d3.623e9",
+                "4df54040.8f7e6"
+            ]
+        ]
+    },
+    {
+        "id": "2f3d48f2.af02b",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "Get distance",
+        "func": "if (msg.payload.includes(\",\")){\n    let payload=msg.payload.split(\",\");\n    let x = parseFloat(payload[0]);\n    let y = parseFloat(payload[1]);\n\n\n    var node_x = global.get(\"node_x\");\n    var node_y = global.get(\"node_y\");\n\n    let dist = Math.round(Math.sqrt((x-node_x)**2 + (y-node_y)**2))\n    msg.payload = dist;\n    \n\n    if (isNaN(dist)){\n        node.warn(payload)\n    }\n\n    node.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+dist});\n    msg.topic=\"distance\"\n    return msg;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 430,
+        "y": 100,
+        "wires": [
+            [
+                "9093b781.6c11b8",
+                "1d98ea33.7afa26"
+            ]
+        ]
+    },
+    {
+        "id": "173895b4.9b3f6a",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "pass position to chart.js and store in flow vars",
+        "func": "if (msg.payload.includes(\",\")){\nvar pos3 = msg.payload.split(\",\"); \n\nvar pos0 = flow.get(\"pos0\");\nvar pos1 = flow.get(\"pos1\");\nvar pos2 = flow.get(\"pos2\");\n\nmsg.payload={\n    \"channel\": \"Position\",\n    \"color\": \"Green\",\n    \"dataset\": [\n        {\n            \"x\": pos0[0],\n            \"y\": pos0[1],\n            \"r\": 1\n        },\n        {\n            \"x\": pos1[0],\n            \"y\": pos1[1],\n            \"r\": 3\n        },\n        {\n            \"x\": pos2[0],\n            \"y\": pos2[1],\n            \"r\": 4\n        },\n        {\n            \"x\": pos3[0],\n            \"y\": pos3[1],\n            \"r\": 5\n        },\n\n    ]\n}               \n\nflow.set(\"pos0\",pos1);\nflow.set(\"pos1\",pos2);\nflow.set(\"pos2\", pos3);\n\nreturn msg;\n\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 890,
+        "y": 60,
+        "wires": [
+            [
+                "276e2ab3.fb8336"
+            ]
+        ]
+    },
+    {
+        "id": "5e78513c.d469d8",
+        "type": "tcp in",
+        "z": "3f43a09.7e6556",
+        "name": "receive pos",
+        "server": "server",
+        "host": "",
+        "port": "55559",
+        "datamode": "stream",
+        "datatype": "utf8",
+        "newline": "",
+        "topic": "",
+        "base64": false,
+        "x": 210,
+        "y": 60,
+        "wires": [
+            [
+                "2f3d48f2.af02b",
+                "173895b4.9b3f6a"
+            ]
+        ]
+    },
+    {
+        "id": "2d8da099.58024",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "3.5,12.7",
+        "payloadType": "str",
+        "x": 220,
+        "y": 140,
+        "wires": [
+            [
+                "2f3d48f2.af02b"
+            ]
+        ]
+    },
+    {
+        "id": "73693e25.38c448",
+        "type": "comment",
+        "z": "3f43a09.7e6556",
+        "name": "Get brightness from partners",
+        "info": "",
+        "x": 460,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "9093b781.6c11b8",
+        "type": "debug",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "276e2ab3.fb8336",
+        "type": "chartjs-bubble",
+        "z": "3f43a09.7e6556",
+        "name": "Show Position in graph",
+        "path": "position_plot",
+        "charttitle": "Camera model",
+        "xaxis": "X",
+        "yaxis": "Y",
+        "x": 1240,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ed4edcd6.3c3f48",
+        "type": "link out",
+        "z": "335a17ee.f1f5f8",
+        "name": "Cam out",
+        "links": [
+            "cd7b24a8.35988"
+        ],
+        "x": 625,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "cd7b24a8.35988",
+        "type": "link in",
+        "z": "3f43a09.7e6556",
+        "name": "Distance in",
+        "links": [
+            "ed4edcd6.3c3f48"
+        ],
+        "x": 175,
+        "y": 100,
+        "wires": [
+            [
+                "2f3d48f2.af02b"
+            ]
+        ]
+    },
+    {
+        "id": "4b8f6182.6b627",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "initialize",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 260,
+        "y": 280,
+        "wires": [
+            [
+                "19afac50.ae6184"
+            ]
+        ]
+    },
+    {
+        "id": "19afac50.ae6184",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "func": "flow.set(\"pos0\", [0,0]);\nflow.set(\"pos1\", [0,0]);\nflow.set(\"pos2\", [0,0]);\nflow.set(\"ref_pos\", [0,0]);\n\nflow.set(\"goal_brightness\", 0);\nflow.set(\"brightness\",0)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 420,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cfb7173b.6030a8",
+        "type": "comment",
+        "z": "3f43a09.7e6556",
+        "name": "Initialize global variables",
+        "info": "",
+        "x": 340,
+        "y": 240,
+        "wires": []
     }
 ]
