@@ -3116,7 +3116,6 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payloadType": "str",
         "x": 120,
         "y": 100,
         "wires": [
@@ -3188,7 +3187,7 @@
         "id": "3fcff8ef.da0dc8",
         "type": "tcp out",
         "z": "335a17ee.f1f5f8",
-        "host": "192.168.0.120",
+        "host": "192.168.0.246",
         "port": "55559",
         "beserver": "client",
         "base64": false,
@@ -3708,8 +3707,73 @@
         "id": "2f3d48f2.af02b",
         "type": "function",
         "z": "3f43a09.7e6556",
+<<<<<<< HEAD
         "name": "Get distance",
-        "func": "if (msg.payload.includes(\",\")){\n    let payload=msg.payload.split(\",\");\n    let x = parseFloat(payload[0]);\n    let y = parseFloat(payload[1]);\n\n\n    var node_x = global.get(\"node_x\");\n    var node_y = global.get(\"node_y\");\n\n    let dist = Math.round(Math.sqrt((x-node_x)**2 + (y-node_y)**2))\n    msg.payload = dist;\n\n    if (isNaN(dist)){\n        node.warn(payload)\n    }\n\n    node.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+dist});\n    msg.topic=\"distance\"\n    return msg;\n}",
+        "minout": "60",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "Map Distance to Volume",
+        "x": 690,
+        "y": 520,
+>>>>>>> 35a27407d46a3e924bf46c59e77e9a01056798f1
+        "wires": [
+                "694a32fe.6dd99c"
+            ]
+        ]
+    },
+    {
+        "id": "4df54040.8f7e6",
+        "type": "debug",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 310,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "fc4514e2.adfb6",
+        "type": "link out",
+        "z": "169d6861.ad61d",
+        "name": "Start Camera script",
+        "links": [
+            "da0a3f8f.1954d"
+        ],
+        "x": 655,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "da0a3f8f.1954d",
+        "type": "link in",
+        "z": "335a17ee.f1f5f8",
+        "name": "Cam init",
+        "links": [
+            "fc4514e2.adfb6"
+        ],
+        "x": 155,
+        "y": 360,
+        "wires": [
+            [
+                "6ee611d3.623e9",
+                "4df54040.8f7e6"
+            ]
+        ]
+    },
+    {
+        "id": "2f3d48f2.af02b",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "Get distance",
+        "func": "if (msg.payload.includes(\",\")){\n    let payload=msg.payload.split(\",\");\n    let x = parseFloat(payload[0]);\n    let y = parseFloat(payload[1]);\n\n\n    var node_x = global.get(\"node_x\");\n    var node_y = global.get(\"node_y\");\n\n    let dist = Math.round(Math.sqrt((x-node_x)**2 + (y-node_y)**2))\n    msg.payload = dist;\n    \n\n    if (isNaN(dist)){\n        node.warn(payload)\n    }\n\n    node.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+dist});\n    msg.topic=\"distance\"\n    return msg;\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3719,8 +3783,7 @@
         "wires": [
             [
                 "9093b781.6c11b8",
-                "1d98ea33.7afa26",
-                "15d917c6.d190e"
+                "1d98ea33.7afa26"
             ]
         ]
     },
@@ -3863,14 +3926,11 @@
         ]
     },
     {
-        "id": "8dcf4459.16f1c",
+        "id": "4b8f6182.6b627",
         "type": "inject",
         "z": "3f43a09.7e6556",
-        "name": "",
+        "name": "initialize",
         "props": [
-            {
-                "p": "payload"
-            },
             {
                 "p": "topic",
                 "vt": "str"
@@ -3878,64 +3938,41 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": false,
+        "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "50",
-        "payloadType": "str",
-        "x": 700,
-        "y": 620,
+        "x": 260,
+        "y": 280,
         "wires": [
             [
-                "694a32fe.6dd99c"
+                "19afac50.ae6184"
             ]
         ]
     },
     {
-        "id": "d924849b.8d9738",
-        "type": "inject",
-        "z": "3f43a09.7e6556",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "100",
-        "payloadType": "str",
-        "x": 710,
-        "y": 680,
-        "wires": [
-            [
-                "694a32fe.6dd99c"
-            ]
-        ]
-    },
-    {
-        "id": "15d917c6.d190e",
+        "id": "19afac50.ae6184",
         "type": "function",
         "z": "3f43a09.7e6556",
-        "name": "calc loudness",
-        "func": "var distance = msg.payload;\nvar max_distance = global.get(\"max_distance\");\n\nloudness = distance / max_distance * 30 + 70;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"loudness \"+ loudness});\n\nmsg.payload = \"\" + loudness;\n\nreturn msg;",
+        "name": "",
+        "func": "flow.set(\"pos0\", [0,0]);\nflow.set(\"pos1\", [0,0]);\nflow.set(\"pos2\", [0,0]);\nflow.set(\"ref_pos\", [0,0]);\n\nflow.set(\"goal_brightness\", 0);\nflow.set(\"brightness\",0)\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 540,
-        "y": 460,
+        "x": 420,
+        "y": 280,
         "wires": [
-            [
-                "694a32fe.6dd99c"
-            ]
+            []
         ]
+    },
+    {
+        "id": "cfb7173b.6030a8",
+        "type": "comment",
+        "z": "3f43a09.7e6556",
+        "name": "Initialize global variables",
+        "info": "",
+        "x": 340,
+        "y": 240,
+        "wires": []
     }
 ]
