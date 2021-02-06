@@ -56,6 +56,13 @@
         "info": ""
     },
     {
+        "id": "3f43a09.7e6556",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "df521596.125698",
         "type": "subflow",
         "name": "Persistence Helper",
@@ -663,6 +670,8 @@
         "func": "let local_pir = msg.payload[\"pi/36\"]\nlet net = msg.payload[\"network\"]\n\nlet red=0\nlet green=0\nlet blue=0\n\n//compute rgb values\nif (local_pir == 1) {\n  if (net == 1){\n      red = 255;\n      green = 255;\n      blue = 255;\n  }\n  else {\n      red = 255\n  }\n}\nelse if (net==1){\n    blue = 255\n}\n\n\n//return RGB values\nreturn {payload: {r: red,b: blue, g:green}}\n\n\n//return {payload: (1 - local_pir)*100};\n//invert",
         "outputs": 1,
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
         "x": 520,
         "y": 660,
         "wires": [
@@ -2962,7 +2971,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "{\"x\":0,\"y\":0}",
+        "payload": "{\"x\":35,\"y\":54}",
         "payloadType": "json",
         "x": 560,
         "y": 100,
@@ -3184,20 +3193,6 @@
         ]
     },
     {
-        "id": "a97e7a55.30c308",
-        "type": "rpi-gpio out",
-        "z": "335a17ee.f1f5f8",
-        "name": "",
-        "pin": "11",
-        "set": "",
-        "level": "0",
-        "freq": "",
-        "out": "pwm",
-        "x": 1240,
-        "y": 240,
-        "wires": []
-    },
-    {
         "id": "81ba9a01.6b3348",
         "type": "tcp in",
         "z": "335a17ee.f1f5f8",
@@ -3237,63 +3232,16 @@
         "id": "f2510df6.4e544",
         "type": "function",
         "z": "335a17ee.f1f5f8",
-        "name": "expo brightness",
-        "func": "var expected_max = 575;\n\n//msg.payload = Math.pow(101, (1/expected_max) * x) - 1;\nvar brightness = Math.exp((1/290)*(msg.payload+800)) - 15.7780650841;\nbrightness = Math.round(100 - brightness);\nif(brightness < 0)\nbrightness = 0;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"brightness \"+ brightness});\nflow.set(\"goal_brightness\", brightness);\n\nreturn;",
+        "name": "set global distance var",
+        "func": "global.set(\"distance\", msg.payload);",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 540,
+        "x": 560,
         "y": 240,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "cc674c3e.4a118",
-        "type": "function",
-        "z": "335a17ee.f1f5f8",
-        "name": "brightness smoother",
-        "func": "var goal = flow.get(\"goal_brightness\");\nvar brightness = flow.get(\"brightness\")\nif(brightness < goal){\n    if(brightness + 5 < goal){\n        brightness = brightness + 5;\n    }else{\n        brightness = brightness + 1;\n    }\n}else if (brightness > goal){\n    if(brightness - 5 >= goal){\n        brightness = brightness - 5;\n    }else{\n        brightness = brightness - 1;\n    }\n}else{\n    return\n}\nnode.status({fill:\"green\",shape:\"dot\",text:\"actual brightness \"+ brightness});\nmsg.payload = brightness;\nflow.set(\"brightness\", brightness)\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 1040,
-        "y": 240,
-        "wires": [
-            [
-                "a97e7a55.30c308"
-            ]
-        ]
-    },
-    {
-        "id": "3e75942f.6797ac",
-        "type": "inject",
-        "z": "335a17ee.f1f5f8",
-        "name": "every 0.3 seconds",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "0.3",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "2",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 800,
-        "y": 240,
-        "wires": [
-            [
-                "cc674c3e.4a118"
-            ]
         ]
     },
     {
@@ -3363,8 +3311,8 @@
         "z": "335a17ee.f1f5f8",
         "name": "Start camera detection script",
         "info": "",
-        "x": 490,
-        "y": 460,
+        "x": 480,
+        "y": 480,
         "wires": []
     },
     {
@@ -3375,16 +3323,6 @@
         "info": "",
         "x": 470,
         "y": 560,
-        "wires": []
-    },
-    {
-        "id": "819abcd.08cce4",
-        "type": "comment",
-        "z": "335a17ee.f1f5f8",
-        "name": "Increment brightness in smaller steps",
-        "info": "",
-        "x": 880,
-        "y": 200,
         "wires": []
     },
     {
@@ -3411,7 +3349,7 @@
         "id": "6ee611d3.623e9",
         "type": "exec",
         "z": "335a17ee.f1f5f8",
-        "command": "/home/pi/.virtualenvs/cv/bin/python3.7 /home/pi/Desktop/raspi-camera-stream/pi_motion_positioned.py",
+        "command": "/home/pi/.virtualenvs/cv/bin/python3.7 /home/pi/.node-red/projects/Smart-Environment/camera/motion-detection/raspi-camera-stream/pi_motion_positioned.py ",
         "addpay": true,
         "append": "",
         "useSpawn": "true",
@@ -3449,7 +3387,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "35,27 0,0",
+        "payload": "0,27 35,54",
         "payloadType": "str",
         "x": 160,
         "y": 420,
@@ -3567,6 +3505,474 @@
         "wires": [
             [
                 "6a5e6e97.24169"
+            ]
+        ]
+    },
+    {
+        "id": "7f634f84.07097",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "Invert and split",
+        "func": "\nreturn [\n    //need to invert for LED (maybe not here)\n    {payload:255 - msg.payload.r},\n    {payload:255 - msg.payload.g},\n    {payload:255 - msg.payload.b}\n];",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 220,
+        "y": 280,
+        "wires": [
+            [
+                "62e0ad5.9635554"
+            ],
+            [
+                "bc2dc226.49fcf"
+            ],
+            [
+                "d04dcf59.e4bb3"
+            ]
+        ]
+    },
+    {
+        "id": "d04dcf59.e4bb3",
+        "type": "range",
+        "z": "3f43a09.7e6556",
+        "minin": "0",
+        "maxin": "255",
+        "minout": "0",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "B",
+        "x": 410,
+        "y": 320,
+        "wires": [
+            [
+                "2d3aec73.41ebc4",
+                "c0fb8cf6.2f367"
+            ]
+        ]
+    },
+    {
+        "id": "bc2dc226.49fcf",
+        "type": "range",
+        "z": "3f43a09.7e6556",
+        "minin": "0",
+        "maxin": "255",
+        "minout": "0",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "G",
+        "x": 410,
+        "y": 280,
+        "wires": [
+            [
+                "2259d77f.15dc28",
+                "99d262be.753d2"
+            ]
+        ]
+    },
+    {
+        "id": "62e0ad5.9635554",
+        "type": "range",
+        "z": "3f43a09.7e6556",
+        "minin": "0",
+        "maxin": "255",
+        "minout": "0",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "R",
+        "x": 410,
+        "y": 240,
+        "wires": [
+            [
+                "3654a25e.f8590e",
+                "42656e37.56f42"
+            ]
+        ]
+    },
+    {
+        "id": "c0fb8cf6.2f367",
+        "type": "debug",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 670,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "99d262be.753d2",
+        "type": "debug",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 830,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "42656e37.56f42",
+        "type": "debug",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 670,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "2259d77f.15dc28",
+        "type": "rpi-gpio out",
+        "z": "3f43a09.7e6556",
+        "d": true,
+        "name": "",
+        "pin": "19",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 660,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "3654a25e.f8590e",
+        "type": "rpi-gpio out",
+        "z": "3f43a09.7e6556",
+        "d": true,
+        "name": "",
+        "pin": "21",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 660,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "2d3aec73.41ebc4",
+        "type": "rpi-gpio out",
+        "z": "3f43a09.7e6556",
+        "d": true,
+        "name": "",
+        "pin": "23",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 660,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "d289bf93.fd6e4",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "on",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 250,
+        "y": 180,
+        "wires": [
+            [
+                "3654a25e.f8590e",
+                "2259d77f.15dc28",
+                "2d3aec73.41ebc4"
+            ]
+        ]
+    },
+    {
+        "id": "3f0a7782.33ac98",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "off",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "100",
+        "payloadType": "num",
+        "x": 250,
+        "y": 440,
+        "wires": [
+            [
+                "3654a25e.f8590e",
+                "2259d77f.15dc28",
+                "2d3aec73.41ebc4"
+            ]
+        ]
+    },
+    {
+        "id": "a8d0e08a.fdebc",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "adjust to rbg led",
+        "func": "let local_pir = msg.payload[\"pi/36\"]\nlet net = msg.payload[\"network\"]\n\nlet red=0\nlet green=0\nlet blue=0\n\n//compute rgb values\nif (local_pir == 1) {\n  if (net == 1){\n      red = 255;\n      green = 255;\n      blue = 255;\n  }\n  else {\n      red = 255\n  }\n}\nelse if (net==1){\n    blue = 255\n}\n\n\n//return RGB values\nreturn {payload: {r: red,b: blue, g:green}}\n\n\n//return {payload: (1 - local_pir)*100};\n//invert",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 120,
+        "y": 360,
+        "wires": [
+            [
+                "7f634f84.07097"
+            ]
+        ]
+    },
+    {
+        "id": "1d98ea33.7afa26",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "expo brightness",
+        "func": "var distance = global.get(\"distance\");\n\n//var brightness = Math.exp(0.0207683*(distance+172.546)) - 35.9984;\n//brightness = Math.round(100 - brightness);\nif (distance < 50 && distance >= 0) {\n    brightness = 5/7 * distance;\n} \nif (distance >= 50) {\n    brightness = 30/14 * distance - 37;\n}\nif(brightness < 0)\nbrightness = 0;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"brightness \"+ brightness});\n\nmsg.payload = \"\" + brightness;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 400,
+        "y": 560,
+        "wires": [
+            [
+                "b0dcccf0.005c5",
+                "69084e2a.b34f2",
+                "e6d7cec.ab0e03"
+            ]
+        ]
+    },
+    {
+        "id": "69084e2a.b34f2",
+        "type": "rpi-gpio out",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "pin": "11",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 860,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "b0dcccf0.005c5",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "d": true,
+        "name": "brightness smoother",
+        "func": "var goal = msg.payload;\nvar brightness = flow.get(\"brightness\")\nif(brightness < goal){\n    if(brightness + 5 < goal){\n        brightness = brightness + 5;\n    }else{\n        brightness = brightness + 1;\n    }\n}else if (brightness > goal){\n    if(brightness - 5 >= goal){\n        brightness = brightness - 5;\n    }else{\n        brightness = brightness - 1;\n    }\n}else{\n    return\n}\nnode.status({fill:\"green\",shape:\"dot\",text:\"actual brightness \"+ brightness});\nmsg.payload = brightness;\nflow.set(\"brightness\", brightness)\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 760,
+        "y": 620,
+        "wires": [
+            [
+                "69084e2a.b34f2"
+            ]
+        ]
+    },
+    {
+        "id": "fd728049.4f6a1",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "every 0.3 seconds",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0.3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 560,
+        "wires": [
+            [
+                "1d98ea33.7afa26"
+            ]
+        ]
+    },
+    {
+        "id": "d30f5b3d.6f5388",
+        "type": "comment",
+        "z": "3f43a09.7e6556",
+        "name": "Increment brightness in smaller steps",
+        "info": "",
+        "x": 460,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "e047e73d.a3b0b8",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "d": true,
+        "name": "",
+        "func": "brightness = flow.get(\"brightness\");\nbrightness +=5;\nmsg.payload = brightness;\nflow.set(\"brightness\",brightness);\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 300,
+        "y": 640,
+        "wires": [
+            [
+                "af1dc627.ccd238",
+                "69084e2a.b34f2",
+                "e6d7cec.ab0e03"
+            ]
+        ]
+    },
+    {
+        "id": "9692c316.d9dda",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "d": true,
+        "name": "",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0.5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 640,
+        "wires": [
+            [
+                "e047e73d.a3b0b8"
+            ]
+        ]
+    },
+    {
+        "id": "af1dc627.ccd238",
+        "type": "debug",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "a0880f45.9c28",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 720,
+        "wires": [
+            [
+                "adc52da0.03e2b"
+            ]
+        ]
+    },
+    {
+        "id": "adc52da0.03e2b",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "func": "flow.set(\"brightness\",0);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 350,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "474c9a87.cb5614",
+        "type": "rpi-gpio out",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "pin": "13",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 880,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "e6d7cec.ab0e03",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "func": "msg.payload = 100 - msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 720,
+        "y": 580,
+        "wires": [
+            [
+                "474c9a87.cb5614"
             ]
         ]
     }
