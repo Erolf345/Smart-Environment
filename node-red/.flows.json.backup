@@ -31,7 +31,7 @@
         "id": "664289e.22d72f8",
         "type": "tab",
         "label": "Flow 2",
-        "disabled": false,
+        "disabled": true,
         "info": ""
     },
     {
@@ -66,6 +66,13 @@
         "id": "3f43a09.7e6556",
         "type": "tab",
         "label": "Actuator",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "ea714443.5c3f38",
+        "type": "tab",
+        "label": "Dashboard stats",
         "disabled": false,
         "info": ""
     },
@@ -2335,7 +2342,8 @@
         "y": 260,
         "wires": [
             [
-                "599e500e.33422"
+                "599e500e.33422",
+                "928d0699.7c9058"
             ]
         ]
     },
@@ -2394,7 +2402,9 @@
         "x": 1060,
         "y": 440,
         "wires": [
-            [],
+            [
+                "928d0699.7c9058"
+            ],
             [],
             []
         ]
@@ -3198,7 +3208,7 @@
         "id": "3fcff8ef.da0dc8",
         "type": "tcp out",
         "z": "335a17ee.f1f5f8",
-        "host": "192.168.0.120",
+        "host": "192.168.0.246",
         "port": "55559",
         "beserver": "client",
         "base64": false,
@@ -3410,7 +3420,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\n\nlet width = confs.room_x;\nlet height = confs.room_y;\nlet x = confs.actuator_x;\nlet y = confs.actuator_y;\n\nvar max_distance = Math.sqrt((Math.max((width-x), x))**2 + (Math.max(y, (height-y)))**2);\n\nreturn msg;",
+        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\n\nlet width = confs.room_x;\nlet height = confs.room_y;\nlet x = confs.actuator_x;\nlet y = confs.actuator_y;\n\nlet max_distance = Math.sqrt((Math.max((width-x), x))**2 + (Math.max(y, (height-y)))**2);\n\nglobal.set(\"max_distance\",max_distance);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3998,5 +4008,178 @@
         "x": 340,
         "y": 240,
         "wires": []
+    },
+    {
+        "id": "37d85069.c0e6c8",
+        "type": "ui_template",
+        "z": "ea714443.5c3f38",
+        "group": "ce52a348.41d78",
+        "name": "Position Chart",
+        "order": 3,
+        "width": "12",
+        "height": "12",
+        "format": "<div><iframe id=\"inlineFrameExample\"\n    title=\"Inline Frame Example\"\n    width=\"600\"\n    height=\"600\"\n    src=\"http://192.168.0.120:1880/position_plot\">\n</iframe></div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "x": 290,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "928d0699.7c9058",
+        "type": "debug",
+        "z": "29c1db97.901354",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1270,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "68979dbb.682abc",
+        "type": "function",
+        "z": "ea714443.5c3f38",
+        "name": "Environment adjustments",
+        "func": "let ratio = msg.payload/800\nmsg.payload = (ratio * 100).toFixed(3)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 310,
+        "y": 360,
+        "wires": [
+            [
+                "aca31413.40e1c"
+            ]
+        ]
+    },
+    {
+        "id": "97d07491.a71ff8",
+        "type": "inject",
+        "z": "ea714443.5c3f38",
+        "name": "clear chart",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "x": 280,
+        "y": 300,
+        "wires": [
+            [
+                "269e0798.5d5c4"
+            ]
+        ]
+    },
+    {
+        "id": "8ed79db1.696cb",
+        "type": "inject",
+        "z": "ea714443.5c3f38",
+        "name": "clear vol",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 260,
+        "y": 440,
+        "wires": [
+            [
+                "aca31413.40e1c"
+            ]
+        ]
+    },
+    {
+        "id": "aca31413.40e1c",
+        "type": "ui_gauge",
+        "z": "ea714443.5c3f38",
+        "name": "",
+        "group": "ce52a348.41d78",
+        "order": 1,
+        "width": "9",
+        "height": "5",
+        "gtype": "gage",
+        "title": "Speaker volume",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 560,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "269e0798.5d5c4",
+        "type": "ui_chart",
+        "z": "ea714443.5c3f38",
+        "name": "",
+        "group": "ce52a348.41d78",
+        "order": 2,
+        "width": "9",
+        "height": "6",
+        "label": "Distance",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "cubic",
+        "nodata": "",
+        "dot": true,
+        "ymin": "0",
+        "ymax": "850",
+        "removeOlder": "1",
+        "removeOlderPoints": "60",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 460,
+        "y": 300,
+        "wires": [
+            []
+        ]
     }
 ]
