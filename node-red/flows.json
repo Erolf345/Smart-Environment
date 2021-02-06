@@ -63,6 +63,13 @@
         "info": ""
     },
     {
+        "id": "3f43a09.7e6556",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": true,
+        "info": ""
+    },
+    {
         "id": "df521596.125698",
         "type": "subflow",
         "name": "Persistence Helper",
@@ -3131,21 +3138,6 @@
         ]
     },
     {
-        "id": "bfa9b689.96d9e8",
-        "type": "pythonshell in",
-        "z": "335a17ee.f1f5f8",
-        "name": "camera_coordinates",
-        "pyfile": "/home/pi/Desktop/raspi-camera-stream/pi_motion_positioned.py",
-        "virtualenv": "/home/pi/.virtualenvs/cv",
-        "continuous": true,
-        "stdInData": false,
-        "x": 200,
-        "y": 660,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "3e2b3e40.a44722",
         "type": "inject",
         "z": "335a17ee.f1f5f8",
@@ -3410,7 +3402,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "0,27 35,54",
+        "payload": "35,27 0,0",
         "payloadType": "str",
         "x": 160,
         "y": 420,
@@ -3544,8 +3536,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 600,
-        "y": 180,
+        "x": 510,
+        "y": 200,
         "wires": []
     },
     {
@@ -3558,7 +3550,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 570,
+        "x": 530,
         "y": 300,
         "wires": [
             []
@@ -3678,8 +3670,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 490,
-        "y": 380,
+        "x": 530,
+        "y": 360,
         "wires": []
     },
     {
@@ -3687,7 +3679,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n}\n\n\nreturn msg;",
+        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n    \n    msg.payload = confs.camera_l+\" \" +confs.camera_r;\n    return msg;\n}\n\n\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3695,15 +3687,10 @@
         "x": 510,
         "y": 140,
         "wires": [
-            []
+            [
+                "fc4514e2.adfb6"
+            ]
         ]
-    },
-    {
-        "id": "3f43a09.7e6556",
-        "type": "tab",
-        "label": "Flow 3",
-        "disabled": false,
-        "info": ""
     },
     {
         "id": "1d98ea33.7afa26",
@@ -3807,6 +3794,51 @@
         "wires": [
             [
                 "474c9a87.cb5614"
+            ]
+        ]
+    },
+    {
+        "id": "4df54040.8f7e6",
+        "type": "debug",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 310,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "fc4514e2.adfb6",
+        "type": "link out",
+        "z": "169d6861.ad61d",
+        "name": "Start Camera script",
+        "links": [
+            "da0a3f8f.1954d"
+        ],
+        "x": 655,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "da0a3f8f.1954d",
+        "type": "link in",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "links": [
+            "fc4514e2.adfb6"
+        ],
+        "x": 155,
+        "y": 360,
+        "wires": [
+            [
+                "6ee611d3.623e9",
+                "4df54040.8f7e6"
             ]
         ]
     }

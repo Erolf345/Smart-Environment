@@ -56,10 +56,17 @@
         "info": ""
     },
     {
+        "id": "169d6861.ad61d",
+        "type": "tab",
+        "label": "Dashboard config",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "3f43a09.7e6556",
         "type": "tab",
         "label": "Flow 3",
-        "disabled": false,
+        "disabled": true,
         "info": ""
     },
     {
@@ -201,14 +208,15 @@
         "id": "b0d2fcdd.369d6",
         "type": "ui_tab",
         "name": "Home",
-        "icon": "dashboard"
+        "icon": "dashboard",
+        "order": 1
     },
     {
         "id": "3aff5f59.0a6d88",
         "type": "ui_tab",
         "name": "Music Controls",
         "icon": "dashboard",
-        "order": 1,
+        "order": 3,
         "disabled": false,
         "hidden": true
     },
@@ -236,7 +244,8 @@
         "id": "44904efc.96d75",
         "type": "ui_tab",
         "name": "Home",
-        "icon": "dashboard"
+        "icon": "dashboard",
+        "order": 4
     },
     {
         "id": "5dedb706.b6d6a8",
@@ -253,7 +262,27 @@
         "type": "ui_tab",
         "z": "335a17ee.f1f5f8",
         "name": "Home",
-        "icon": "dashboard"
+        "icon": "dashboard",
+        "order": 5
+    },
+    {
+        "id": "ead80a27.d2327",
+        "type": "ui_tab",
+        "name": "Configuration",
+        "icon": "font-awesome/fa-cog",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "a29f7c61.ee366",
+        "type": "ui_group",
+        "name": "Startup Config",
+        "tab": "ead80a27.d2327",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
     },
     {
         "id": "740a99d2.b07d1",
@@ -2461,6 +2490,7 @@
             "#c5b0d5"
         ],
         "outputs": 1,
+        "useDifferentColor": false,
         "x": 500,
         "y": 540,
         "wires": [
@@ -3277,7 +3307,7 @@
         "id": "3fcff8ef.da0dc8",
         "type": "tcp out",
         "z": "335a17ee.f1f5f8",
-        "host": "192.168.0.246",
+        "host": "192.168.0.120",
         "port": "55559",
         "beserver": "client",
         "base64": false,
@@ -3349,7 +3379,7 @@
         "id": "6ee611d3.623e9",
         "type": "exec",
         "z": "335a17ee.f1f5f8",
-        "command": "/home/pi/.virtualenvs/cv/bin/python3.7 /home/pi/.node-red/projects/Smart-Environment/camera/motion-detection/raspi-camera-stream/pi_motion_positioned.py ",
+        "command": "/home/pi/.virtualenvs/cv/bin/python3.7 /home/pi/.node-red/projects/Smart-Environment/camera/motion-detection/raspi-camera-stream/pi_motion_positioned.py",
         "addpay": true,
         "append": "",
         "useSpawn": "true",
@@ -3387,7 +3417,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "0,27 35,54",
+        "payload": "35,27 0,0",
         "payloadType": "str",
         "x": 160,
         "y": 420,
@@ -3509,239 +3539,171 @@
         ]
     },
     {
-        "id": "7f634f84.07097",
-        "type": "function",
-        "z": "3f43a09.7e6556",
-        "name": "Invert and split",
-        "func": "\nreturn [\n    //need to invert for LED (maybe not here)\n    {payload:255 - msg.payload.r},\n    {payload:255 - msg.payload.g},\n    {payload:255 - msg.payload.b}\n];",
-        "outputs": 3,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 220,
-        "y": 280,
-        "wires": [
-            [
-                "62e0ad5.9635554"
-            ],
-            [
-                "bc2dc226.49fcf"
-            ],
-            [
-                "d04dcf59.e4bb3"
-            ]
-        ]
-    },
-    {
-        "id": "d04dcf59.e4bb3",
-        "type": "range",
-        "z": "3f43a09.7e6556",
-        "minin": "0",
-        "maxin": "255",
-        "minout": "0",
-        "maxout": "100",
-        "action": "scale",
-        "round": true,
-        "property": "payload",
-        "name": "B",
-        "x": 410,
-        "y": 320,
-        "wires": [
-            [
-                "2d3aec73.41ebc4",
-                "c0fb8cf6.2f367"
-            ]
-        ]
-    },
-    {
-        "id": "bc2dc226.49fcf",
-        "type": "range",
-        "z": "3f43a09.7e6556",
-        "minin": "0",
-        "maxin": "255",
-        "minout": "0",
-        "maxout": "100",
-        "action": "scale",
-        "round": true,
-        "property": "payload",
-        "name": "G",
-        "x": 410,
-        "y": 280,
-        "wires": [
-            [
-                "2259d77f.15dc28",
-                "99d262be.753d2"
-            ]
-        ]
-    },
-    {
-        "id": "62e0ad5.9635554",
-        "type": "range",
-        "z": "3f43a09.7e6556",
-        "minin": "0",
-        "maxin": "255",
-        "minout": "0",
-        "maxout": "100",
-        "action": "scale",
-        "round": true,
-        "property": "payload",
-        "name": "R",
-        "x": 410,
-        "y": 240,
-        "wires": [
-            [
-                "3654a25e.f8590e",
-                "42656e37.56f42"
-            ]
-        ]
-    },
-    {
-        "id": "c0fb8cf6.2f367",
+        "id": "8013867a.cfb4e8",
         "type": "debug",
-        "z": "3f43a09.7e6556",
+        "z": "169d6861.ad61d",
         "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 670,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "99d262be.753d2",
-        "type": "debug",
-        "z": "3f43a09.7e6556",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 830,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "42656e37.56f42",
-        "type": "debug",
-        "z": "3f43a09.7e6556",
-        "name": "",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
         "complete": "payload",
         "targetType": "msg",
-        "x": 670,
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
         "y": 200,
         "wires": []
     },
     {
-        "id": "2259d77f.15dc28",
-        "type": "rpi-gpio out",
-        "z": "3f43a09.7e6556",
-        "d": true,
-        "name": "",
-        "pin": "19",
-        "set": "",
-        "level": "0",
-        "freq": "",
-        "out": "pwm",
-        "x": 660,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "3654a25e.f8590e",
-        "type": "rpi-gpio out",
-        "z": "3f43a09.7e6556",
-        "d": true,
-        "name": "",
-        "pin": "21",
-        "set": "",
-        "level": "0",
-        "freq": "",
-        "out": "pwm",
-        "x": 660,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "2d3aec73.41ebc4",
-        "type": "rpi-gpio out",
-        "z": "3f43a09.7e6556",
-        "d": true,
-        "name": "",
-        "pin": "23",
-        "set": "",
-        "level": "0",
-        "freq": "",
-        "out": "pwm",
-        "x": 660,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "d289bf93.fd6e4",
-        "type": "inject",
-        "z": "3f43a09.7e6556",
-        "name": "on",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "0",
-        "payloadType": "num",
-        "x": 250,
-        "y": 180,
-        "wires": [
-            [
-                "3654a25e.f8590e",
-                "2259d77f.15dc28",
-                "2d3aec73.41ebc4"
-            ]
-        ]
-    },
-    {
-        "id": "3f0a7782.33ac98",
-        "type": "inject",
-        "z": "3f43a09.7e6556",
-        "name": "off",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "100",
-        "payloadType": "num",
-        "x": 250,
-        "y": 440,
-        "wires": [
-            [
-                "3654a25e.f8590e",
-                "2259d77f.15dc28",
-                "2d3aec73.41ebc4"
-            ]
-        ]
-    },
-    {
-        "id": "a8d0e08a.fdebc",
+        "id": "ac0f6165.c18cc",
         "type": "function",
-        "z": "3f43a09.7e6556",
-        "name": "adjust to rbg led",
-        "func": "let local_pir = msg.payload[\"pi/36\"]\nlet net = msg.payload[\"network\"]\n\nlet red=0\nlet green=0\nlet blue=0\n\n//compute rgb values\nif (local_pir == 1) {\n  if (net == 1){\n      red = 255;\n      green = 255;\n      blue = 255;\n  }\n  else {\n      red = 255\n  }\n}\nelse if (net==1){\n    blue = 255\n}\n\n\n//return RGB values\nreturn {payload: {r: red,b: blue, g:green}}\n\n\n//return {payload: (1 - local_pir)*100};\n//invert",
+        "z": "169d6861.ad61d",
+        "name": "set globals",
+        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.axctuator_y);\n\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 120,
-        "y": 360,
+        "x": 530,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5865c7d2.ffe4c",
+        "type": "ui_form",
+        "z": "169d6861.ad61d",
+        "name": "",
+        "label": "Camera Configuration",
+        "group": "a29f7c61.ee366",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Camera left (x,y)",
+                "value": "camera_l",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Camera right (x,y)",
+                "value": "camera_r",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "camera_l": "",
+            "camera_r": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "",
+        "x": 300,
+        "y": 180,
         "wires": [
             [
-                "7f634f84.07097"
+                "8013867a.cfb4e8",
+                "d358d81c.ba7318"
+            ]
+        ]
+    },
+    {
+        "id": "3e339e1f.d5de52",
+        "type": "ui_form",
+        "z": "169d6861.ad61d",
+        "name": "",
+        "label": "Actuator Configuration",
+        "group": "a29f7c61.ee366",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Room width",
+                "value": "room_x",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Room height",
+                "value": "room_y",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Actuator x position",
+                "value": "actuator_x",
+                "type": "number",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Actuator y position",
+                "value": "actuator_y",
+                "type": "number",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "room_x": "",
+            "room_y": "",
+            "actuator_x": "",
+            "actuator_y": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "",
+        "x": 300,
+        "y": 300,
+        "wires": [
+            [
+                "ac0f6165.c18cc",
+                "332410d7.ce996"
+            ]
+        ]
+    },
+    {
+        "id": "332410d7.ce996",
+        "type": "debug",
+        "z": "169d6861.ad61d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "d358d81c.ba7318",
+        "type": "function",
+        "z": "169d6861.ad61d",
+        "name": "set globals",
+        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n    \n    msg.payload = confs.camera_l+\" \" +confs.camera_r;\n    return msg;\n}\n\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 510,
+        "y": 140,
+        "wires": [
+            [
+                "fc4514e2.adfb6"
             ]
         ]
     },
@@ -3750,53 +3712,34 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "expo brightness",
-        "func": "var distance = global.get(\"distance\");\n\n//var brightness = Math.exp(0.0207683*(distance+172.546)) - 35.9984;\n//brightness = Math.round(100 - brightness);\nif (distance < 50 && distance >= 0) {\n    brightness = 5/7 * distance;\n} \nif (distance >= 50) {\n    brightness = 30/14 * distance - 37;\n}\nif(brightness < 0)\nbrightness = 0;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"brightness \"+ brightness});\n\nmsg.payload = \"\" + brightness;\n\nreturn msg;",
-        "outputs": 1,
+        "func": "var distance = global.get(\"distance\");\n\nif (distance < 50 && distance >= 0) {\n    brightness = 5/7 * distance;\n} \nif (distance >= 50) {\n    brightness = 30/14 * distance - 37;\n}\nif(brightness < 0)\nbrightness = 0;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"brightness \"+ brightness});\n\nmsg.payload = \"\" + brightness;\n\nreturn msg;",
+        "outputs": 2,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 400,
-        "y": 560,
+        "x": 380,
+        "y": 240,
         "wires": [
             [
-                "b0dcccf0.005c5",
                 "69084e2a.b34f2",
                 "e6d7cec.ab0e03"
-            ]
+            ],
+            []
         ]
     },
     {
         "id": "69084e2a.b34f2",
         "type": "rpi-gpio out",
         "z": "3f43a09.7e6556",
-        "name": "",
+        "name": "Red",
         "pin": "11",
         "set": "",
         "level": "0",
         "freq": "",
         "out": "pwm",
-        "x": 860,
-        "y": 500,
+        "x": 630,
+        "y": 240,
         "wires": []
-    },
-    {
-        "id": "b0dcccf0.005c5",
-        "type": "function",
-        "z": "3f43a09.7e6556",
-        "d": true,
-        "name": "brightness smoother",
-        "func": "var goal = msg.payload;\nvar brightness = flow.get(\"brightness\")\nif(brightness < goal){\n    if(brightness + 5 < goal){\n        brightness = brightness + 5;\n    }else{\n        brightness = brightness + 1;\n    }\n}else if (brightness > goal){\n    if(brightness - 5 >= goal){\n        brightness = brightness - 5;\n    }else{\n        brightness = brightness - 1;\n    }\n}else{\n    return\n}\nnode.status({fill:\"green\",shape:\"dot\",text:\"actual brightness \"+ brightness});\nmsg.payload = brightness;\nflow.set(\"brightness\", brightness)\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 760,
-        "y": 620,
-        "wires": [
-            [
-                "69084e2a.b34f2"
-            ]
-        ]
     },
     {
         "id": "fd728049.4f6a1",
@@ -3819,8 +3762,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 190,
-        "y": 560,
+        "x": 170,
+        "y": 240,
         "wires": [
             [
                 "1d98ea33.7afa26"
@@ -3833,60 +3776,46 @@
         "z": "3f43a09.7e6556",
         "name": "Increment brightness in smaller steps",
         "info": "",
-        "x": 460,
-        "y": 520,
+        "x": 390,
+        "y": 180,
         "wires": []
     },
     {
-        "id": "e047e73d.a3b0b8",
+        "id": "474c9a87.cb5614",
+        "type": "rpi-gpio out",
+        "z": "3f43a09.7e6556",
+        "name": "Blue",
+        "pin": "13",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 830,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "e6d7cec.ab0e03",
         "type": "function",
         "z": "3f43a09.7e6556",
-        "d": true,
-        "name": "",
-        "func": "brightness = flow.get(\"brightness\");\nbrightness +=5;\nmsg.payload = brightness;\nflow.set(\"brightness\",brightness);\nreturn msg;\n",
+        "name": "Change to Blue",
+        "func": "msg.payload = 100 - msg.payload;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 300,
-        "y": 640,
+        "x": 640,
+        "y": 300,
         "wires": [
             [
-                "af1dc627.ccd238",
-                "69084e2a.b34f2",
-                "e6d7cec.ab0e03"
+                "474c9a87.cb5614"
             ]
         ]
     },
     {
-        "id": "9692c316.d9dda",
-        "type": "inject",
-        "z": "3f43a09.7e6556",
-        "d": true,
-        "name": "",
-        "props": [
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "0.5",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 90,
-        "y": 640,
-        "wires": [
-            [
-                "e047e73d.a3b0b8"
-            ]
-        ]
-    },
-    {
-        "id": "af1dc627.ccd238",
+        "id": "4df54040.8f7e6",
         "type": "debug",
-        "z": "3f43a09.7e6556",
+        "z": "335a17ee.f1f5f8",
         "name": "",
         "active": true,
         "tosidebar": true,
@@ -3895,84 +3824,36 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 670,
-        "y": 680,
+        "x": 310,
+        "y": 360,
         "wires": []
     },
     {
-        "id": "a0880f45.9c28",
-        "type": "inject",
-        "z": "3f43a09.7e6556",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
+        "id": "fc4514e2.adfb6",
+        "type": "link out",
+        "z": "169d6861.ad61d",
+        "name": "Start Camera script",
+        "links": [
+            "da0a3f8f.1954d"
         ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 170,
-        "y": 720,
-        "wires": [
-            [
-                "adc52da0.03e2b"
-            ]
-        ]
-    },
-    {
-        "id": "adc52da0.03e2b",
-        "type": "function",
-        "z": "3f43a09.7e6556",
-        "name": "",
-        "func": "flow.set(\"brightness\",0);\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 350,
-        "y": 720,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "474c9a87.cb5614",
-        "type": "rpi-gpio out",
-        "z": "3f43a09.7e6556",
-        "name": "",
-        "pin": "13",
-        "set": "",
-        "level": "0",
-        "freq": "",
-        "out": "pwm",
-        "x": 880,
-        "y": 560,
+        "x": 655,
+        "y": 140,
         "wires": []
     },
     {
-        "id": "e6d7cec.ab0e03",
-        "type": "function",
-        "z": "3f43a09.7e6556",
+        "id": "da0a3f8f.1954d",
+        "type": "link in",
+        "z": "335a17ee.f1f5f8",
         "name": "",
-        "func": "msg.payload = 100 - msg.payload;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 720,
-        "y": 580,
+        "links": [
+            "fc4514e2.adfb6"
+        ],
+        "x": 155,
+        "y": 360,
         "wires": [
             [
-                "474c9a87.cb5614"
+                "6ee611d3.623e9",
+                "4df54040.8f7e6"
             ]
         ]
     }
