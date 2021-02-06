@@ -3715,7 +3715,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 380,
+        "x": 420,
         "y": 240,
         "wires": [
             [
@@ -3764,7 +3764,8 @@
         "y": 240,
         "wires": [
             [
-                "1d98ea33.7afa26"
+                "1d98ea33.7afa26",
+                "8684c81d.b55158"
             ]
         ]
     },
@@ -3807,6 +3808,64 @@
         "wires": [
             [
                 "474c9a87.cb5614"
+            ]
+        ]
+    },
+    {
+        "id": "694a32fe.6dd99c",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "prepare payload",
+        "func": "msg.payload = msg.payload + \"%\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 600,
+        "y": 420,
+        "wires": [
+            [
+                "b5d08baa.4c9a58"
+            ]
+        ]
+    },
+    {
+        "id": "b5d08baa.4c9a58",
+        "type": "exec",
+        "z": "3f43a09.7e6556",
+        "d": true,
+        "command": "sudo amixer sset 'Headphone' ",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "set volume",
+        "x": 810,
+        "y": 420,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "8684c81d.b55158",
+        "type": "range",
+        "z": "3f43a09.7e6556",
+        "minin": "0",
+        "maxin": "64",
+        "minout": "60",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "Map Distance to Volume",
+        "x": 350,
+        "y": 420,
+        "wires": [
+            [
+                "694a32fe.6dd99c"
             ]
         ]
     }
