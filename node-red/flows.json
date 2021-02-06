@@ -3742,7 +3742,8 @@
         "wires": [
             [
                 "9093b781.6c11b8",
-                "1d98ea33.7afa26"
+                "1d98ea33.7afa26",
+                "15d917c6.d190e"
             ]
         ]
     },
@@ -3948,7 +3949,7 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "calc loudness",
-        "func": "var distance = msg.payload;\nvar max_distance = global.get(\"max_distance\");\n\nloudness = distance / max_distance * 30 + 70;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"loudness \"+ loudness});\n\nmsg.payload = \"\" + loudness;\n\nreturn msg;",
+        "func": "var distance = msg.payload;\nvar max_distance = global.get(\"max_distance\");\n\nloudness = 70 + distance / max_distance * 30;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"loudness \"+ loudness});\n\nmsg.payload = \"\" + loudness;\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
