@@ -692,6 +692,8 @@
         "func": "let local_pir = msg.payload[\"pi/36\"]\nlet net = msg.payload[\"network\"]\n\nlet red=0\nlet green=0\nlet blue=0\n\n//compute rgb values\nif (local_pir == 1) {\n  if (net == 1){\n      red = 255;\n      green = 255;\n      blue = 255;\n  }\n  else {\n      red = 255\n  }\n}\nelse if (net==1){\n    blue = 255\n}\n\n\n//return RGB values\nreturn {payload: {r: red,b: blue, g:green}}\n\n\n//return {payload: (1 - local_pir)*100};\n//invert",
         "outputs": 1,
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
         "x": 520,
         "y": 660,
         "wires": [
@@ -2992,7 +2994,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "{\"x\":0,\"y\":0}",
+        "payload": "{\"x\":35,\"y\":54}",
         "payloadType": "json",
         "x": 560,
         "y": 100,
@@ -3214,20 +3216,6 @@
         ]
     },
     {
-        "id": "a97e7a55.30c308",
-        "type": "rpi-gpio out",
-        "z": "335a17ee.f1f5f8",
-        "name": "",
-        "pin": "11",
-        "set": "",
-        "level": "0",
-        "freq": "",
-        "out": "pwm",
-        "x": 1240,
-        "y": 240,
-        "wires": []
-    },
-    {
         "id": "81ba9a01.6b3348",
         "type": "tcp in",
         "z": "335a17ee.f1f5f8",
@@ -3267,63 +3255,16 @@
         "id": "f2510df6.4e544",
         "type": "function",
         "z": "335a17ee.f1f5f8",
-        "name": "expo brightness",
-        "func": "var expected_max = 575;\n\n//msg.payload = Math.pow(101, (1/expected_max) * x) - 1;\nvar brightness = Math.exp((1/290)*(msg.payload+800)) - 15.7780650841;\nbrightness = Math.round(100 - brightness);\nif(brightness < 0)\nbrightness = 0;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"brightness \"+ brightness});\nflow.set(\"goal_brightness\", brightness);\n\nreturn;",
+        "name": "set global distance var",
+        "func": "global.set(\"distance\", msg.payload);",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 540,
+        "x": 560,
         "y": 240,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "cc674c3e.4a118",
-        "type": "function",
-        "z": "335a17ee.f1f5f8",
-        "name": "brightness smoother",
-        "func": "var goal = flow.get(\"goal_brightness\");\nvar brightness = flow.get(\"brightness\")\nif(brightness < goal){\n    if(brightness + 5 < goal){\n        brightness = brightness + 5;\n    }else{\n        brightness = brightness + 1;\n    }\n}else if (brightness > goal){\n    if(brightness - 5 >= goal){\n        brightness = brightness - 5;\n    }else{\n        brightness = brightness - 1;\n    }\n}else{\n    return\n}\nnode.status({fill:\"green\",shape:\"dot\",text:\"actual brightness \"+ brightness});\nmsg.payload = brightness;\nflow.set(\"brightness\", brightness)\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 1040,
-        "y": 240,
-        "wires": [
-            [
-                "a97e7a55.30c308"
-            ]
-        ]
-    },
-    {
-        "id": "3e75942f.6797ac",
-        "type": "inject",
-        "z": "335a17ee.f1f5f8",
-        "name": "every 0.3 seconds",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "0.3",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "2",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 800,
-        "y": 240,
-        "wires": [
-            [
-                "cc674c3e.4a118"
-            ]
         ]
     },
     {
@@ -3408,16 +3349,6 @@
         "wires": []
     },
     {
-        "id": "819abcd.08cce4",
-        "type": "comment",
-        "z": "335a17ee.f1f5f8",
-        "name": "Increment brightness in smaller steps",
-        "info": "",
-        "x": 880,
-        "y": 200,
-        "wires": []
-    },
-    {
         "id": "dfaa6c75.d68188",
         "type": "comment",
         "z": "335a17ee.f1f5f8",
@@ -3479,7 +3410,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "35,27 0,0",
+        "payload": "0,27 35,54",
         "payloadType": "str",
         "x": 160,
         "y": 420,
@@ -3765,6 +3696,118 @@
         "y": 140,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "3f43a09.7e6556",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "1d98ea33.7afa26",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "expo brightness",
+        "func": "var distance = global.get(\"distance\");\n\nif (distance < 50 && distance >= 0) {\n    brightness = 5/7 * distance;\n} \nif (distance >= 50) {\n    brightness = 30/14 * distance - 37;\n}\nif(brightness < 0)\nbrightness = 0;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"brightness \"+ brightness});\n\nmsg.payload = \"\" + brightness;\n\nreturn msg;",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 380,
+        "y": 240,
+        "wires": [
+            [
+                "69084e2a.b34f2",
+                "e6d7cec.ab0e03"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "69084e2a.b34f2",
+        "type": "rpi-gpio out",
+        "z": "3f43a09.7e6556",
+        "name": "Red",
+        "pin": "11",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 630,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "fd728049.4f6a1",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "every 0.3 seconds",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0.3",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 240,
+        "wires": [
+            [
+                "1d98ea33.7afa26"
+            ]
+        ]
+    },
+    {
+        "id": "d30f5b3d.6f5388",
+        "type": "comment",
+        "z": "3f43a09.7e6556",
+        "name": "Increment brightness in smaller steps",
+        "info": "",
+        "x": 390,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "474c9a87.cb5614",
+        "type": "rpi-gpio out",
+        "z": "3f43a09.7e6556",
+        "name": "Blue",
+        "pin": "13",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 830,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "e6d7cec.ab0e03",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "Change to Blue",
+        "func": "msg.payload = 100 - msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 640,
+        "y": 300,
+        "wires": [
+            [
+                "474c9a87.cb5614"
+            ]
         ]
     }
 ]
