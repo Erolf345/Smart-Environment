@@ -207,9 +207,11 @@
     {
         "id": "b0d2fcdd.369d6",
         "type": "ui_tab",
-        "name": "Home",
+        "name": "Statistics",
         "icon": "dashboard",
-        "order": 1
+        "order": 2,
+        "disabled": false,
+        "hidden": false
     },
     {
         "id": "3aff5f59.0a6d88",
@@ -270,7 +272,7 @@
         "type": "ui_tab",
         "name": "Configuration",
         "icon": "font-awesome/fa-cog",
-        "order": 2,
+        "order": 1,
         "disabled": false,
         "hidden": false
     },
@@ -283,6 +285,15 @@
         "disp": true,
         "width": "6",
         "collapse": false
+    },
+    {
+        "id": "6301760e.798bb8",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "a29f7c61.ee366",
+        "order": 2,
+        "width": 1,
+        "height": 1
     },
     {
         "id": "740a99d2.b07d1",
@@ -3187,7 +3198,7 @@
         "id": "3fcff8ef.da0dc8",
         "type": "tcp out",
         "z": "335a17ee.f1f5f8",
-        "host": "192.168.0.246",
+        "host": "192.168.0.120",
         "port": "55559",
         "beserver": "client",
         "base64": false,
@@ -3313,6 +3324,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
+        "payloadType": "str",
         "x": 160,
         "y": 500,
         "wires": [
@@ -3389,8 +3401,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 510,
-        "y": 200,
+        "x": 550,
+        "y": 180,
         "wires": []
     },
     {
@@ -3398,7 +3410,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\n\nreturn msg;",
+        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\n\nlet width = confs.room_x;\nlet height = confs.room_y;\nlet x = confs.actuator_x;\nlet y = confs.actuator_y;\n\nvar max_distance = Math.sqrt((Math.max((width-x), x))**2 + (Math.max(y, (height-y)))**2);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3416,7 +3428,7 @@
         "name": "",
         "label": "Camera Configuration",
         "group": "a29f7c61.ee366",
-        "order": 3,
+        "order": 1,
         "width": 0,
         "height": 0,
         "options": [
@@ -3447,8 +3459,8 @@
         "y": 180,
         "wires": [
             [
-                "8013867a.cfb4e8",
-                "d358d81c.ba7318"
+                "d358d81c.ba7318",
+                "8013867a.cfb4e8"
             ]
         ]
     },
@@ -3532,7 +3544,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n    \n    msg.payload = confs.camera_l+\" \" +confs.camera_r;\n    return msg;\n}\n\n\n\n",
+        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n    \n    //first kill to be sure\n    msg2 = {};\n    msg2.kill = \"SIGKILL\";\n    node.send(msg2);\n    \n    msg.payload = confs.camera_l+\" \" +confs.camera_r;\n    node.send(msg);\n}\n\n\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3656,71 +3668,6 @@
             [],
             [],
             []
-        ]
-    },
-    {
-        "id": "4df54040.8f7e6",
-        "type": "debug",
-        "z": "335a17ee.f1f5f8",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 310,
-        "y": 360,
-        "wires": []
-    },
-    {
-        "id": "fc4514e2.adfb6",
-        "type": "link out",
-        "z": "169d6861.ad61d",
-        "name": "Start Camera script",
-        "links": [
-            "da0a3f8f.1954d"
-        ],
-        "x": 655,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "da0a3f8f.1954d",
-        "type": "link in",
-        "z": "335a17ee.f1f5f8",
-        "name": "Cam init",
-        "links": [
-            "fc4514e2.adfb6"
-        ],
-        "x": 155,
-        "y": 360,
-        "wires": [
-            [
-                "6ee611d3.623e9",
-                "4df54040.8f7e6"
-            ]
-        ]
-    },
-    {
-        "id": "2f3d48f2.af02b",
-        "type": "function",
-        "z": "3f43a09.7e6556",
-<<<<<<< HEAD
-        "name": "Get distance",
-        "minout": "60",
-        "maxout": "100",
-        "action": "scale",
-        "round": true,
-        "property": "payload",
-        "name": "Map Distance to Volume",
-        "x": 690,
-        "y": 520,
->>>>>>> 35a27407d46a3e924bf46c59e77e9a01056798f1
-        "wires": [
-                "694a32fe.6dd99c"
-            ]
         ]
     },
     {
@@ -3921,7 +3868,84 @@
         "y": 100,
         "wires": [
             [
-                "2f3d48f2.af02b"
+                "2f3d48f2.af02b",
+                "173895b4.9b3f6a"
+            ]
+        ]
+    },
+    {
+        "id": "8dcf4459.16f1c",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "70",
+        "payloadType": "str",
+        "x": 700,
+        "y": 620,
+        "wires": [
+            [
+                "694a32fe.6dd99c"
+            ]
+        ]
+    },
+    {
+        "id": "d924849b.8d9738",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "100",
+        "payloadType": "str",
+        "x": 710,
+        "y": 680,
+        "wires": [
+            [
+                "694a32fe.6dd99c"
+            ]
+        ]
+    },
+    {
+        "id": "15d917c6.d190e",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "calc loudness",
+        "func": "var distance = msg.payload;\nvar max_distance = global.get(\"max_distance\");\n\nloudness = distance / max_distance * 30 + 70;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"loudness \"+ loudness});\n\nmsg.payload = \"\" + loudness;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 540,
+        "y": 460,
+        "wires": [
+            [
+                "694a32fe.6dd99c"
             ]
         ]
     },
