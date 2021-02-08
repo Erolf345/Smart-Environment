@@ -3437,7 +3437,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\nglobal.set(\"exit_x\",confs.ex_x)\nglobal.set(\"exit_y\",confs.ex_y)\nglobal.set(\"exit_time\",\"\")\n\nlet width = confs.room_x;\nlet height = confs.room_y;\nlet x = confs.actuator_x;\nlet y = confs.actuator_y;\n\nlet max_distance = Math.sqrt((Math.max((width-x), x))**2 + (Math.max(y, (height-y)))**2);\n\nglobal.set(\"max_distance\",max_distance);\n\nreturn msg;",
+        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\nglobal.set(\"exit_x\",confs.ex_x)\nglobal.set(\"exit_y\",confs.ex_y)\nglobal.set(\"exit_time\",\"\");\n\nlet width = confs.room_x;\nlet height = confs.room_y;\nlet x = confs.actuator_x;\nlet y = confs.actuator_y;\n\nlet max_distance = Math.sqrt((Math.max((width-x), x))**2 + (Math.max(y, (height-y)))**2);\n\nglobal.set(\"max_distance\",max_distance);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3774,7 +3774,8 @@
             [
                 "9093b781.6c11b8",
                 "1d98ea33.7afa26",
-                "15d917c6.d190e"
+                "15d917c6.d190e",
+                "165fef48.4648f1"
             ]
         ]
     },
@@ -4515,14 +4516,14 @@
                 "p": "payload"
             }
         ],
-        "repeat": "",
+        "repeat": ".5",
         "crontab": "",
-        "once": false,
+        "once": true,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 150,
+        "x": 160,
         "y": 540,
         "wires": [
             [
@@ -4535,7 +4536,7 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "Check if system should hibernate",
-        "func": "var exit_time = global.get(\"exit_time\");\nif(exit_time == \"\") return;\n\nvar time_passed = msg.payload - exit_time;\n\nif(time_passed / 1000 > 5){\n    global.set(\"exit_time\",\"\");\n}\nreturn msg;",
+        "func": "var exit_time = global.get(\"exit_time\");\n\nif(exit_time == \"\") return;\n\nvar time_passed = msg.payload - exit_time;\n\nif(time_passed / 1000 > 5){\n    global.set(\"exit_time\",\"\");\n    return msg;\n}\nreturn;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -4560,12 +4561,11 @@
         "initialize": "",
         "finalize": "",
         "x": 670,
-        "y": 500,
+        "y": 540,
         "wires": [
             [
-                "69084e2a.b34f2",
-                "474c9a87.cb5614",
-                "694a32fe.6dd99c"
+                "694a32fe.6dd99c",
+                "e1b9ea77.f097b8"
             ]
         ]
     },
@@ -4594,10 +4594,59 @@
         "initialize": "",
         "finalize": "",
         "x": 670,
-        "y": 540,
+        "y": 500,
+        "wires": [
+            [
+                "69084e2a.b34f2",
+                "474c9a87.cb5614"
+            ]
+        ]
+    },
+    {
+        "id": "165fef48.4648f1",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "100",
+        "func": "msg.payload = 100;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 730,
+        "y": 400,
         "wires": [
             [
                 "e1b9ea77.f097b8"
+            ]
+        ]
+    },
+    {
+        "id": "4ccaaf47.0da9e",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "initial state hibernate",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "on",
+        "payloadType": "str",
+        "x": 420,
+        "y": 620,
+        "wires": [
+            [
+                "c6cefae8.52bb1",
+                "295336f1.c0c50a"
             ]
         ]
     }
