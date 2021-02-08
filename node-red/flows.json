@@ -84,6 +84,13 @@
         "info": ""
     },
     {
+        "id": "34e8f73a.4fe288",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "df521596.125698",
         "type": "subflow",
         "name": "Persistence Helper",
@@ -889,27 +896,6 @@
         ]
     },
     {
-        "id": "cfe97850.9c6638",
-        "type": "exec",
-        "z": "7d7b30a8.5bc2b",
-        "command": "sudo batctl dc",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "",
-        "x": 160,
-        "y": 1600,
-        "wires": [
-            [
-                "503aa18.be17e6"
-            ],
-            [],
-            []
-        ]
-    },
-    {
         "id": "503aa18.be17e6",
         "type": "function",
         "z": "7d7b30a8.5bc2b",
@@ -1000,48 +986,6 @@
         "x": 700,
         "y": 1380,
         "wires": [
-            []
-        ]
-    },
-    {
-        "id": "13b0ffe6.347ac",
-        "type": "exec",
-        "z": "7d7b30a8.5bc2b",
-        "command": "ping -c3 -b 169.254.255.255 && sleep 5",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "Refresh batman table",
-        "x": 180,
-        "y": 1540,
-        "wires": [
-            [
-                "cfe97850.9c6638"
-            ],
-            [],
-            []
-        ]
-    },
-    {
-        "id": "1f336213.81595e",
-        "type": "exec",
-        "z": "7d7b30a8.5bc2b",
-        "command": "ifconfig bat0 | grep -o \"inet [0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*\" | grep -o \"[0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*\"",
-        "addpay": false,
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "oldrc": false,
-        "name": "get my own IP",
-        "x": 160,
-        "y": 1720,
-        "wires": [
-            [
-                "600f1f97.226c4"
-            ],
-            [],
             []
         ]
     },
@@ -2350,7 +2294,8 @@
         "y": 320,
         "wires": [
             [
-                "7a32260b.857ba"
+                "7a32260b.857ba",
+                "ce09635d.9d0ba8"
             ],
             [],
             [
@@ -2425,19 +2370,20 @@
         "id": "575591c3.9b5fd",
         "type": "exec",
         "z": "29c1db97.901354",
-        "command": "sudo /home/pi/bt_sync_node_red",
+        "command": "sudo /home/pi/.node-red/projects/Smart-Environment/music_sync/bt_sync/bt_sync_node_red",
         "addpay": true,
         "append": "",
-        "useSpawn": "false",
+        "useSpawn": "true",
         "timer": "",
         "oldrc": false,
         "name": "",
-        "x": 1060,
-        "y": 440,
+        "x": 1220,
+        "y": 460,
         "wires": [
             [
                 "928d0699.7c9058",
-                "7a32260b.857ba"
+                "7a32260b.857ba",
+                "ce09635d.9d0ba8"
             ],
             [
                 "928d0699.7c9058"
@@ -4085,7 +4031,7 @@
         "type": "debug",
         "z": "29c1db97.901354",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -4681,32 +4627,6 @@
         ]
     },
     {
-        "id": "8cb9aa9b.1b4e6",
-        "type": "inject",
-        "z": "29c1db97.901354",
-        "name": "kill",
-        "props": [
-            {
-                "p": "kill",
-                "v": "SIGKILL",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payloadType": "str",
-        "x": 570,
-        "y": 180,
-        "wires": [
-            [
-                "bb5cea9b.65a38"
-            ]
-        ]
-    },
-    {
         "id": "c5802ec0.80e558",
         "type": "function",
         "z": "29c1db97.901354",
@@ -4835,7 +4755,7 @@
         "type": "function",
         "z": "29c1db97.901354",
         "name": "store pid as global",
-        "func": "if (msg.payload.includes(\"PID:4\"))\n    flow.set(\"PID\", msg.payload.substr(4));",
+        "func": "if (msg.payload.includes(\"PID:\"))\n    flow.set(\"PID\", msg.payload.substr(4));",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -4847,25 +4767,195 @@
         ]
     },
     {
-        "id": "bb5cea9b.65a38",
-        "type": "function",
+        "id": "ce09635d.9d0ba8",
+        "type": "debug",
         "z": "29c1db97.901354",
         "name": "",
-        "func": "msg.payload = flow.get(\"PID\")\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 750,
-        "y": 180,
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "13b0ffe6.347ac",
+        "type": "exec",
+        "z": "7d7b30a8.5bc2b",
+        "command": "ping -c3 -b 169.254.255.255 && sleep 5",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Refresh batman table",
+        "x": 180,
+        "y": 1540,
         "wires": [
             [
-                "ea2d0244.635ba8"
+                "cfe97850.9c6638"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "cfe97850.9c6638",
+        "type": "exec",
+        "z": "7d7b30a8.5bc2b",
+        "command": "sudo batctl dc",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 160,
+        "y": 1600,
+        "wires": [
+            [
+                "503aa18.be17e6"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "1f336213.81595e",
+        "type": "exec",
+        "z": "7d7b30a8.5bc2b",
+        "command": "ifconfig bat0 | grep -o \"inet [0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*\" | grep -o \"[0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*\"",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "get my own IP",
+        "x": 160,
+        "y": 1720,
+        "wires": [
+            [
+                "600f1f97.226c4"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "70176102.fa3d98",
+        "type": "inject",
+        "z": "29c1db97.901354",
+        "name": "kill",
+        "props": [
+            {
+                "p": "kill",
+                "v": "SIGKILL",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 510,
+        "y": 60,
+        "wires": [
+            [
+                "a7013287.205a6"
             ]
         ]
     },
     {
-        "id": "ea2d0244.635ba8",
+        "id": "a7013287.205a6",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "",
+        "func": "msg = {payload: flow.get(\"PID\")};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 660,
+        "y": 60,
+        "wires": [
+            [
+                "b1e7f16e.2eaf6",
+                "2a8ee814.5c29e"
+            ]
+        ]
+    },
+    {
+        "id": "b1e7f16e.2eaf6",
+        "type": "debug",
+        "z": "29c1db97.901354",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 870,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "4e60eaa8.b2c05c",
+        "type": "debug",
+        "z": "29c1db97.901354",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "64d15db3.39549c",
+        "type": "debug",
+        "z": "29c1db97.901354",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "7708abfc.ac5394",
+        "type": "debug",
+        "z": "29c1db97.901354",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "2a8ee814.5c29e",
         "type": "exec",
         "z": "29c1db97.901354",
         "command": "sudo kill ",
@@ -4875,12 +4965,18 @@
         "timer": "",
         "oldrc": false,
         "name": "",
-        "x": 930,
-        "y": 180,
+        "x": 820,
+        "y": 120,
         "wires": [
-            [],
-            [],
-            []
+            [
+                "4e60eaa8.b2c05c"
+            ],
+            [
+                "64d15db3.39549c"
+            ],
+            [
+                "7708abfc.ac5394"
+            ]
         ]
     }
 ]

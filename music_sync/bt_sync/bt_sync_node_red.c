@@ -118,7 +118,8 @@ void error(const char *msg)
 
 int main(int argc, char *argv[])
 {
-	printf("PID:%i\n",getpid());
+	printf("PID:%i",getpid());
+	fflush(stdout);
 	int error;
 	mpg123_handle *mh;
     unsigned char *buffer;
