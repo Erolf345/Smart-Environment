@@ -3727,7 +3727,7 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "Get distance",
-        "func": "if (msg.payload.includes(\",\")){\n    let payload=msg.payload.split(\",\");\n    let x = parseFloat(payload[0]);\n    let y = parseFloat(payload[1]);\n\n\n    var node_x = global.get(\"node_x\");\n    var node_y = global.get(\"node_y\");\n\n    let dist = Math.round(Math.sqrt((x-node_x)**2 + (y-node_y)**2))\n    msg.payload = dist;\n    \n\n    if (isNaN(dist)){\n        node.warn(payload)\n    }\n\n    node.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+dist});\n    msg.topic=\"distance\"\n    return msg;\n}",
+        "func": "if (msg.payload.includes(\",\")){\n    let payload=msg.payload.split(\",\");\n    let x = parseFloat(payload[0]);\n    let y = parseFloat(payload[1]);\n\n\n    var node_x = global.get(\"node_x\");\n    var node_y = global.get(\"node_y\");\n    \n    exit_x = global.get(\"exit_x\");\n    exit_y = global.get(\"exit_y\");\n    exit_dist = Math.round(Math.sqrt((x-exit_x)**2 + (y-exit_y)**2))\n\n    if(exit_dist < 4){\n        global.set(\"exit_time\",Date.now());\n    }else{\n        global.set(\"exit_time\",\"\");\n    }\n\n    \n    let dist = Math.round(Math.sqrt((x-node_x)**2 + (y-node_y)**2))\n    msg.payload = dist;\n    \n\n    if (isNaN(dist)){\n        node.warn(payload)\n    }\n\n    node.status({fill:\"blue\",shape:\"dot\",text:\"Dist: \"+dist});\n    msg.topic=\"distance\"\n    return msg;\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3902,8 +3902,8 @@
         "topic": "",
         "payload": "70",
         "payloadType": "str",
-        "x": 700,
-        "y": 620,
+        "x": 930,
+        "y": 640,
         "wires": [
             [
                 "694a32fe.6dd99c"
@@ -3931,8 +3931,8 @@
         "topic": "",
         "payload": "100",
         "payloadType": "str",
-        "x": 710,
-        "y": 680,
+        "x": 930,
+        "y": 700,
         "wires": [
             [
                 "694a32fe.6dd99c"
@@ -4468,5 +4468,101 @@
         "x": 860,
         "y": 680,
         "wires": []
+    },
+    {
+        "id": "d7335edf.0caa98",
+        "type": "inject",
+        "z": "3f43a09.7e6556",
+        "name": "Every 0.5 seconds",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 540,
+        "wires": [
+            [
+                "6da61024.82b2d8"
+            ]
+        ]
+    },
+    {
+        "id": "6da61024.82b2d8",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "Check if system should hibernate",
+        "func": "var exit_time = global.get(\"exit_time\");\nif(exit_time == \"\") return;\n\nvar time_passed = msg.payload - exit_time;\n\nif(time_passed / 1000 > 5){\n    global.set(\"exit_time\",\"\");\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 420,
+        "y": 540,
+        "wires": [
+            [
+                "295336f1.c0c50a",
+                "c6cefae8.52bb1"
+            ]
+        ]
+    },
+    {
+        "id": "295336f1.c0c50a",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "0",
+        "func": "msg.payload = 0;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 670,
+        "y": 500,
+        "wires": [
+            [
+                "69084e2a.b34f2",
+                "474c9a87.cb5614",
+                "694a32fe.6dd99c"
+            ]
+        ]
+    },
+    {
+        "id": "e1b9ea77.f097b8",
+        "type": "rpi-gpio out",
+        "z": "3f43a09.7e6556",
+        "name": "Green",
+        "pin": "15",
+        "set": "",
+        "level": "0",
+        "freq": "",
+        "out": "pwm",
+        "x": 1010,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "c6cefae8.52bb1",
+        "type": "function",
+        "z": "3f43a09.7e6556",
+        "name": "100",
+        "func": "msg.payload = 100;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 670,
+        "y": 540,
+        "wires": [
+            [
+                "e1b9ea77.f097b8"
+            ]
+        ]
     }
 ]
