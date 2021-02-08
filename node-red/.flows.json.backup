@@ -3423,19 +3423,11 @@
                 "type": "text",
                 "required": true,
                 "rows": null
-            },
-            {
-                "label": "Bluetooth Leader",
-                "value": "bluetooth_leader",
-                "type": "checkbox",
-                "required": true,
-                "rows": null
             }
         ],
         "formValue": {
             "camera_l": "",
-            "camera_r": "",
-            "bluetooth_leader": false
+            "camera_r": ""
         },
         "payload": "",
         "submit": "submit",
@@ -3446,8 +3438,7 @@
         "wires": [
             [
                 "d358d81c.ba7318",
-                "8013867a.cfb4e8",
-                "616408f.3891ef8"
+                "8013867a.cfb4e8"
             ]
         ]
     },
@@ -3503,6 +3494,13 @@
                 "type": "number",
                 "required": true,
                 "rows": null
+            },
+            {
+                "label": "Buetooth Leader",
+                "value": "bluetooth_leader",
+                "type": "checkbox",
+                "required": true,
+                "rows": null
             }
         ],
         "formValue": {
@@ -3511,7 +3509,8 @@
             "actuator_x": "",
             "actuator_y": "",
             "ex_x": "",
-            "ex_y": ""
+            "ex_y": "",
+            "bluetooth_leader": false
         },
         "payload": "",
         "submit": "submit",
@@ -3522,7 +3521,8 @@
         "wires": [
             [
                 "ac0f6165.c18cc",
-                "332410d7.ce996"
+                "332410d7.ce996",
+                "616408f.3891ef8"
             ]
         ]
     },
@@ -4013,9 +4013,9 @@
         "group": "ee294c5e.76f168",
         "name": "Position Chart",
         "order": 1,
-        "width": "12",
+        "width": "8",
         "height": "12",
-        "format": "<div><iframe id=\"inlineFrameExample\"\n    title=\"Inline Frame Example\"\n    width=\"600\"\n    height=\"600\"\n    src=\"http://192.168.0.120:1880/position_plot\">\n</iframe></div>",
+        "format": "<div><iframe id=\"inlineFrameExample\"\n    title=\"Inline Frame Example\"\n    width=\"350\"\n    height=\"540\"\n    src=\"http://192.168.0.120:1880/position_plot\">\n</iframe></div>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -4670,8 +4670,8 @@
         "links": [
             "e4ef7ae2.328ae"
         ],
-        "x": 645,
-        "y": 80,
+        "x": 535,
+        "y": 240,
         "wires": []
     },
     {

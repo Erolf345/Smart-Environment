@@ -333,7 +333,7 @@
         "tab": "b0d2fcdd.369d6",
         "order": 2,
         "disp": true,
-        "width": "12",
+        "width": "8",
         "collapse": false
     },
     {
@@ -4013,9 +4013,9 @@
         "group": "ee294c5e.76f168",
         "name": "Position Chart",
         "order": 1,
-        "width": "12",
+        "width": "8",
         "height": "12",
-        "format": "<div><iframe id=\"inlineFrameExample\"\n    title=\"Inline Frame Example\"\n    width=\"600\"\n    height=\"600\"\n    src=\"http://192.168.0.120:1880/position_plot\">\n</iframe></div>",
+        "format": "<div><iframe id=\"inlineFrameExample\"\n    title=\"Inline Frame Example\"\n    width=\"350\"\n    height=\"540\"\n    src=\"http://192.168.0.120:1880/position_plot\">\n</iframe></div>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
