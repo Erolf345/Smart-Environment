@@ -3942,7 +3942,7 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "calc loudness",
-        "func": "var distance = msg.payload;\nvar max_distance = global.get(\"max_distance\");\n\nloudness = 70 + distance / max_distance * 30;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"loudness \"+ loudness});\n\nmsg.payload = \"\" + loudness;\n\nreturn msg;",
+        "func": "var distance = msg.payload;\nvar max_distance = global.get(\"max_distance\");\n\n//loudness = 70 + distance / max_distance * 30;\n// get volume in decibel\nlet db_vol = Math.max(6*Math.log2(distance),0);\nnode.warn(db_vol);\nlet max_decibel = 6*Math.log2(max_distance);\nnode.warn(max_decibel);\n\nlet loudness = 70 + (30/max_decibel * db_vol);\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"loudness \"+ loudness});\n\nmsg.payload = \"\" + loudness;\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

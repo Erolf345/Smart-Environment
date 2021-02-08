@@ -3423,19 +3423,11 @@
                 "type": "text",
                 "required": true,
                 "rows": null
-            },
-            {
-                "label": "Bluetooth Leader",
-                "value": "bluetooth_leader",
-                "type": "checkbox",
-                "required": true,
-                "rows": null
             }
         ],
         "formValue": {
             "camera_l": "",
-            "camera_r": "",
-            "bluetooth_leader": false
+            "camera_r": ""
         },
         "payload": "",
         "submit": "submit",
@@ -3446,8 +3438,7 @@
         "wires": [
             [
                 "d358d81c.ba7318",
-                "8013867a.cfb4e8",
-                "616408f.3891ef8"
+                "8013867a.cfb4e8"
             ]
         ]
     },
@@ -3503,6 +3494,13 @@
                 "type": "number",
                 "required": true,
                 "rows": null
+            },
+            {
+                "label": "Buetooth Leader",
+                "value": "bluetooth_leader",
+                "type": "checkbox",
+                "required": true,
+                "rows": null
             }
         ],
         "formValue": {
@@ -3511,7 +3509,8 @@
             "actuator_x": "",
             "actuator_y": "",
             "ex_x": "",
-            "ex_y": ""
+            "ex_y": "",
+            "bluetooth_leader": false
         },
         "payload": "",
         "submit": "submit",
@@ -3522,7 +3521,8 @@
         "wires": [
             [
                 "ac0f6165.c18cc",
-                "332410d7.ce996"
+                "332410d7.ce996",
+                "616408f.3891ef8"
             ]
         ]
     },
@@ -3942,7 +3942,7 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "calc loudness",
-        "func": "var distance = msg.payload;\nvar max_distance = global.get(\"max_distance\");\n\nloudness = 70 + distance / max_distance * 30;\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"loudness \"+ loudness});\n\nmsg.payload = \"\" + loudness;\n\nreturn msg;",
+        "func": "var distance = msg.payload;\nvar max_distance = global.get(\"max_distance\");\n\n//loudness = 70 + distance / max_distance * 30;\n// get volume in decibel\nlet db_vol = Math.max(6*Math.log2(distance),0);\nnode.warn(db_vol);\nlet max_decibel = 6*Math.log2(max_distance);\nnode.warn(max_decibel);\n\nlet loudness = 70 + (30/max_decibel * db_vol);\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"loudness \"+ loudness});\n\nmsg.payload = \"\" + loudness;\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -4670,8 +4670,8 @@
         "links": [
             "e4ef7ae2.328ae"
         ],
-        "x": 645,
-        "y": 80,
+        "x": 535,
+        "y": 240,
         "wires": []
     },
     {
