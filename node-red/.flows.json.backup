@@ -2351,7 +2351,9 @@
         "wires": [
             [],
             [],
-            []
+            [
+                "762fefef.03986"
+            ]
         ]
     },
     {
@@ -3437,7 +3439,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\nglobal.set(\"exit_x\",confs.ex_x)\nglobal.set(\"exit_y\",confs.ex_y)\nglobal.set(\"exit_time\",\"\");\n\nlet width = confs.room_x;\nlet height = confs.room_y;\nlet x = confs.actuator_x;\nlet y = confs.actuator_y;\n\nlet max_distance = Math.sqrt((Math.max((width-x), x))**2 + (Math.max(y, (height-y)))**2);\n\nglobal.set(\"max_distance\",max_distance);\n\nreturn msg;",
+        "func": "let confs = msg.payload;\n\n//check if inputs ok\nif (confs.room_x<0) { // just allow it || confs.room_y>confs.room\n    return msg;\n}\nif (confs.room_y<0) {\n    return msg;\n}\nif (confs.actuator_x<0) {\n    return msg;\n}\nif (confs.actuator_y<0) {\n    return msg;\n}\n\n\nglobal.set(\"room_width\",confs.room_x);\nglobal.set(\"room_height\",confs.room_y);\n\nglobal.set(\"node_x\",confs.actuator_x);\nglobal.set(\"node_y\",confs.actuator_y);\n\nglobal.set(\"exit_x\",confs.ex_x)\nglobal.set(\"exit_y\",confs.ex_y)\nglobal.set(\"exit_time\",\"i\");\n\nlet width = confs.room_x;\nlet height = confs.room_y;\nlet x = confs.actuator_x;\nlet y = confs.actuator_y;\n\nlet max_distance = Math.sqrt((Math.max((width-x), x))**2 + (Math.max(y, (height-y)))**2);\n\nglobal.set(\"max_distance\",max_distance);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3587,7 +3589,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n    \n    //first kill to be sure\n    msg2 = {};\n    msg2.kill = \"SIGKILL\";\n    node.send(msg2);\n    \n    msg.payload = confs.camera_l+\" \" +confs.camera_r;\n    node.send(msg);\n}\n\n\n\n",
+        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n    \n    //first kill to be sure\n    msg2 = {};\n    msg2.kill = \"SIGKILL\";\n    node.send(msg2);\n    \n    msg.payload = confs.camera_l+\" \" +confs.camera_r + \" \" + 1;\n    node.send(msg);\n\n}\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3784,7 +3786,7 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "pass position to chart.js and store in flow vars",
-        "func": "if (msg.payload.includes(\",\")){\nvar pos3 = msg.payload.split(\",\"); \n\nvar pos0 = flow.get(\"pos0\");\nvar pos1 = flow.get(\"pos1\");\nvar pos2 = flow.get(\"pos2\");\n\nmsg.payload={\n    \"channel\": \"Position\",\n    \"color\": \"Green\",\n    \"dataset\": [\n        {\n            \"x\": pos0[0],\n            \"y\": pos0[1],\n            \"r\": 1\n        },\n        {\n            \"x\": pos1[0],\n            \"y\": pos1[1],\n            \"r\": 3\n        },\n        {\n            \"x\": pos2[0],\n            \"y\": pos2[1],\n            \"r\": 4\n        },\n        {\n            \"x\": pos3[0],\n            \"y\": pos3[1],\n            \"r\": 5\n        },\n\n    ]\n}               \n\nflow.set(\"pos0\",pos1);\nflow.set(\"pos1\",pos2);\nflow.set(\"pos2\", pos3);\n\nreturn msg;\n\n}",
+        "func": "if (msg.payload.includes(\",\")){\nvar pos3 = msg.payload.split(\",\"); \n\nvar pos0 = flow.get(\"pos0\");\nvar pos1 = flow.get(\"pos1\");\nvar pos2 = flow.get(\"pos2\");\n\nmsg.payload={\n    \"channel\": \"Position\",\n    \"color\": \"Green\",\n    \"dataset\": [\n        {\n            \"x\": pos0[0],\n            \"y\": pos0[1],\n            \"r\": 1\n        },\n        {\n            \"x\": pos1[0],\n            \"y\": pos1[1],\n            \"r\": 3\n        },\n        {\n            \"x\": pos2[0],\n            \"y\": pos2[1],\n            \"r\": 4\n        },\n        {\n            \"x\": pos3[0],\n            \"y\": pos3[1],\n            \"r\": 5\n        },\n        {\n            \"color\": \"red\",\n            \"x\": global.get(\"exit_x\"),\n            \"y\": global.get(\"exit_y\"),\n            \"r\": 20\n        }\n\n    ],\n}               \n\nflow.set(\"pos0\",pos1);\nflow.set(\"pos1\",pos2);\nflow.set(\"pos2\", pos3);\n\nreturn msg;\n\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3986,8 +3988,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 540,
-        "y": 460,
+        "x": 520,
+        "y": 400,
         "wires": [
             [
                 "694a32fe.6dd99c"
@@ -4382,7 +4384,7 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": false,
+        "once": true,
         "onceDelay": 0.1,
         "topic": "ip_addresses",
         "payload": "{\"0\": \"192.168.0.246\"}",
@@ -4536,7 +4538,7 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "Check if system should hibernate",
-        "func": "var exit_time = global.get(\"exit_time\");\nnode.warn(exit_time);\n\nif(exit_time == \"\") return;\n\nvar time_passed = msg.payload - exit_time;\n\nif(time_passed / 1000 > 5){\n    global.set(\"exit_time\",\"\");\n    return msg;\n}\nreturn;",
+        "func": "var exit_time = global.get(\"exit_time\");\nif(exit_time == \"i\") return msg;\nif(exit_time == \"\") return;\n\nvar time_passed = msg.payload - exit_time;\n\nif(time_passed / 1000 > 5){\n    global.set(\"exit_time\",\"\");\n    return msg;\n}\nreturn;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -4624,7 +4626,7 @@
         "id": "4ccaaf47.0da9e",
         "type": "inject",
         "z": "3f43a09.7e6556",
-        "name": "initial state hibernate",
+        "name": "initial state off",
         "props": [
             {
                 "p": "payload"
@@ -4639,14 +4641,14 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "on",
+        "payload": "off",
         "payloadType": "str",
         "x": 460,
-        "y": 620,
+        "y": 480,
         "wires": [
             [
                 "c6cefae8.52bb1",
-                "295336f1.c0c50a"
+                "165fef48.4648f1"
             ]
         ]
     }
