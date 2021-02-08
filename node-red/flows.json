@@ -1,5 +1,47 @@
 [
     {
+        "id": "29c1db97.901354",
+        "type": "tab",
+        "label": "sync music",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "335a17ee.f1f5f8",
+        "type": "tab",
+        "label": "PositionTransform",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "169d6861.ad61d",
+        "type": "tab",
+        "label": "Dashboard config",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "3f43a09.7e6556",
+        "type": "tab",
+        "label": "Actuator",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "ea714443.5c3f38",
+        "type": "tab",
+        "label": "Dashboard stats",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "22e80240.5cd7d6",
+        "type": "tab",
+        "label": "Network",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "7d7b30a8.5bc2b",
         "type": "tab",
         "label": "LED test flow",
@@ -35,45 +77,10 @@
         "info": ""
     },
     {
-        "id": "29c1db97.901354",
-        "type": "tab",
-        "label": "sync music",
-        "disabled": false,
-        "info": ""
-    },
-    {
         "id": "a93faece.d7746",
         "type": "tab",
         "label": "LED-Camera",
         "disabled": true,
-        "info": ""
-    },
-    {
-        "id": "335a17ee.f1f5f8",
-        "type": "tab",
-        "label": "PositionTransform",
-        "disabled": false,
-        "info": ""
-    },
-    {
-        "id": "169d6861.ad61d",
-        "type": "tab",
-        "label": "Dashboard config",
-        "disabled": false,
-        "info": ""
-    },
-    {
-        "id": "3f43a09.7e6556",
-        "type": "tab",
-        "label": "Actuator",
-        "disabled": false,
-        "info": ""
-    },
-    {
-        "id": "ea714443.5c3f38",
-        "type": "tab",
-        "label": "Dashboard stats",
-        "disabled": false,
         "info": ""
     },
     {
@@ -951,6 +958,8 @@
         "func": "let motion = msg.payload[\"pi/36\"];\nlet addresses = msg.payload[\"ip_addresses\"];\n\nfor (ip of addresses){\n    msg = {host: ip, payload: motion };\n    node.send(motion);\n}\n\n//return msg;",
         "outputs": 1,
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
         "x": 520,
         "y": 1380,
         "wires": [
@@ -3207,25 +3216,11 @@
         "wires": []
     },
     {
-        "id": "3fcff8ef.da0dc8",
-        "type": "tcp out",
-        "z": "335a17ee.f1f5f8",
-        "host": "192.168.0.246",
-        "port": "55559",
-        "beserver": "client",
-        "base64": false,
-        "end": false,
-        "name": "Send new position",
-        "x": 830,
-        "y": 620,
-        "wires": []
-    },
-    {
         "id": "6a5e6e97.24169",
         "type": "function",
         "z": "335a17ee.f1f5f8",
         "name": "get latest position",
-        "func": "if (msg.payload.includes(\",\")){\n\nvar pos2 = msg.payload.split(\",\"); \n\nvar ref = flow.get(\"ref_pos\");\n\n//only pass if position has changed\nif(ref == pos2){\n    node.done();\n    return;\n}\nflow.set(\"ref_pos\", pos2);\n\nmsg.payload = pos2[0] + \",\" + pos2[1];\nreturn msg;\n\n}",
+        "func": "if (msg.payload.includes(\",\")){\n\nvar pos2 = msg.payload.split(\",\"); \n\nvar ref = flow.get(\"ref_pos\");\n\n//only pass if position has changed\nif(ref == pos2){\n    node.done();\n    return;\n}\nflow.set(\"ref_pos\", pos2);\n\nmsg.payload = pos2[0] + \",\" + pos2[1];\nmsg.topic=\"position\";\nreturn msg;\n\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3234,7 +3229,7 @@
         "y": 620,
         "wires": [
             [
-                "3fcff8ef.da0dc8"
+                "aed1fd4a.f1253"
             ]
         ]
     },
@@ -3309,7 +3304,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "35,27 0,0",
+        "payload": "35,27 0,0 1",
         "payloadType": "str",
         "x": 160,
         "y": 420,
@@ -4184,5 +4179,294 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "7f77e88f.c06a7",
+        "type": "inject",
+        "z": "22e80240.5cd7d6",
+        "name": "Get IPs",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 190,
+        "y": 220,
+        "wires": [
+            [
+                "f8bcef5e.61ca18"
+            ]
+        ]
+    },
+    {
+        "id": "3ad25688.609cfa",
+        "type": "exec",
+        "z": "22e80240.5cd7d6",
+        "command": "sudo batctl dc",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 220,
+        "y": 340,
+        "wires": [
+            [
+                "1172f28.32b408e"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "1172f28.32b408e",
+        "type": "function",
+        "z": "22e80240.5cd7d6",
+        "name": "Extract IPs from output",
+        "func": "var ip_lines = msg.payload.split('\\n');\nip_lines.splice(0,3);\nip_lines.pop();\n\nvar ips= [];\nfor (i = 0; i < ip_lines.length; i++) {\n    var ip = ip_lines[i];\n    ip = ip.split('.');\n    if (ip.length != 4 ){ // sanity check\n        node.error(\"Input from batctl could not be parsed: \" + ip.join('.'));\n        continue\n    }\n    ip[0] = ip[0].replace(/\\D/g,''); // remove non digits from first element in array\n    ip[3] = ip[3].split(' ')[0]; // remove mac adress\n    ip = ip.join('.');\n    ips.push(ip);\n}\nmsg.ips = ips;\nmsg.topic = \"ip_addresses\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 240,
+        "y": 400,
+        "wires": [
+            [
+                "2f319bab.740e7c"
+            ]
+        ]
+    },
+    {
+        "id": "88b4b781.55f52",
+        "type": "debug",
+        "z": "22e80240.5cd7d6",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 210,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "f8bcef5e.61ca18",
+        "type": "exec",
+        "z": "22e80240.5cd7d6",
+        "command": "ping -c3 -b 169.254.255.255 && sleep 5",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Refresh batman table",
+        "x": 240,
+        "y": 280,
+        "wires": [
+            [
+                "3ad25688.609cfa"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "2f319bab.740e7c",
+        "type": "exec",
+        "z": "22e80240.5cd7d6",
+        "command": "ifconfig bat0 | grep -o \"inet [0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*\" | grep -o \"[0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*\"",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "get my own IP",
+        "x": 220,
+        "y": 460,
+        "wires": [
+            [
+                "e7271670.2cddd"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "e7271670.2cddd",
+        "type": "function",
+        "z": "22e80240.5cd7d6",
+        "name": "strip my ip from batctl output",
+        "func": "var my_ip = msg.payload\nvar ip_arr = msg.ips;\n\n//Filter out newline from shell command result\nmy_ip = my_ip.replace(/(\\r\\n|\\n|\\r)/gm, \"\"); \n\nip_arr = ip_arr.filter(e => e !== my_ip);\n\nmsg.payload = ip_arr\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 260,
+        "y": 520,
+        "wires": [
+            [
+                "88b4b781.55f52",
+                "561790b9.f4955"
+            ]
+        ]
+    },
+    {
+        "id": "561790b9.f4955",
+        "type": "link out",
+        "z": "22e80240.5cd7d6",
+        "name": "All IPs",
+        "links": [
+            "78b2b765.cc869"
+        ],
+        "x": 525,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "a462676b.3c06f",
+        "type": "inject",
+        "z": "22e80240.5cd7d6",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "ip_addresses",
+        "payload": "{\"0\": \"192.168.0.246\"}",
+        "payloadType": "json",
+        "x": 320,
+        "y": 680,
+        "wires": [
+            [
+                "453e5dc0.040044",
+                "561790b9.f4955"
+            ]
+        ]
+    },
+    {
+        "id": "453e5dc0.040044",
+        "type": "debug",
+        "z": "22e80240.5cd7d6",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "aed1fd4a.f1253",
+        "type": "join",
+        "z": "335a17ee.f1f5f8",
+        "name": "Join with IPs",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 630,
+        "y": 720,
+        "wires": [
+            [
+                "98af02f0.e215f8",
+                "33a294b1.2892ac"
+            ]
+        ]
+    },
+    {
+        "id": "98af02f0.e215f8",
+        "type": "function",
+        "z": "335a17ee.f1f5f8",
+        "name": "Send to all IPs",
+        "func": "let pos = msg.payload[\"position\"];\nlet addresses = msg.payload[\"ip_addresses\"];\n\nlet ip;\nfor (ip in addresses){\n    msg = {host: addresses[ip], payload: pos };\n    node.send(msg);\n}\n\n//return msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 840,
+        "y": 720,
+        "wires": [
+            [
+                "12bf4cef.5afab3"
+            ]
+        ]
+    },
+    {
+        "id": "78b2b765.cc869",
+        "type": "link in",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "links": [
+            "561790b9.f4955"
+        ],
+        "x": 475,
+        "y": 720,
+        "wires": [
+            [
+                "aed1fd4a.f1253"
+            ]
+        ]
+    },
+    {
+        "id": "12bf4cef.5afab3",
+        "type": "tcp request",
+        "z": "335a17ee.f1f5f8",
+        "server": "",
+        "port": "55559",
+        "out": "time",
+        "splitc": "0",
+        "name": "",
+        "x": 940,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "33a294b1.2892ac",
+        "type": "debug",
+        "z": "335a17ee.f1f5f8",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 680,
+        "wires": []
     }
 ]

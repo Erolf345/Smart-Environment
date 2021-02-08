@@ -16,10 +16,10 @@ import os
 show_video = False
 try:
     if(sys.argv[3] == "1"):
-		os.environ['DISPLAY'] = ":1"
-		show_video = True
+        os.environ['DISPLAY'] = ":1"
+        show_video = True
 except:
-	pass
+    pass
 
 
 # construct the argument parser and parse the arguments
