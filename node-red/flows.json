@@ -2339,17 +2339,19 @@
         "id": "f2079758.54e2a",
         "type": "exec",
         "z": "29c1db97.901354",
-        "command": "sudo /home/pi/start_at_bt_clock",
+        "command": "sudo /home/pi/.node-red/projects/Smart-Environment/music_sync/bt_sync/start_at_bt_clock",
         "addpay": true,
         "append": "",
-        "useSpawn": "false",
+        "useSpawn": "true",
         "timer": "",
         "oldrc": false,
-        "name": "",
-        "x": 670,
+        "name": "BT Leader",
+        "x": 610,
         "y": 320,
         "wires": [
-            [],
+            [
+                "7a32260b.857ba"
+            ],
             [],
             [
                 "c5802ec0.80e558"
@@ -2434,7 +2436,8 @@
         "y": 440,
         "wires": [
             [
-                "928d0699.7c9058"
+                "928d0699.7c9058",
+                "7a32260b.857ba"
             ],
             [
                 "928d0699.7c9058"
@@ -4396,7 +4399,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "ip_addresses",
-        "payload": "{\"0\": \"192.168.0.246\"}",
+        "payload": "{\"0\": \"192.168.0.120\"}",
         "payloadType": "json",
         "x": 320,
         "y": 680,
@@ -4696,11 +4699,10 @@
         "topic": "",
         "payloadType": "str",
         "x": 570,
-        "y": 220,
+        "y": 180,
         "wires": [
             [
-                "f2079758.54e2a",
-                "575591c3.9b5fd"
+                "bb5cea9b.65a38"
             ]
         ]
     },
@@ -4826,6 +4828,59 @@
             [
                 "aca31413.40e1c"
             ]
+        ]
+    },
+    {
+        "id": "7a32260b.857ba",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "store pid as global",
+        "func": "if (msg.payload.includes(\"PID:4\"))\n    flow.set(\"PID\", msg.payload.substr(4));",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 890,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bb5cea9b.65a38",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "",
+        "func": "msg.payload = flow.get(\"PID\")\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 750,
+        "y": 180,
+        "wires": [
+            [
+                "ea2d0244.635ba8"
+            ]
+        ]
+    },
+    {
+        "id": "ea2d0244.635ba8",
+        "type": "exec",
+        "z": "29c1db97.901354",
+        "command": "sudo kill ",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 930,
+        "y": 180,
+        "wires": [
+            [],
+            [],
+            []
         ]
     }
 ]
