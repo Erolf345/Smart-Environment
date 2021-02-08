@@ -3786,7 +3786,8 @@
                 "9093b781.6c11b8",
                 "1d98ea33.7afa26",
                 "15d917c6.d190e",
-                "165fef48.4648f1"
+                "165fef48.4648f1",
+                "a39dab43.1852e"
             ]
         ]
     },
@@ -4001,7 +4002,8 @@
         "y": 400,
         "wires": [
             [
-                "694a32fe.6dd99c"
+                "694a32fe.6dd99c",
+                "c370d602.cb229"
             ]
         ]
     },
@@ -4104,9 +4106,7 @@
         "x": 310,
         "y": 360,
         "wires": [
-            [
-                "aca31413.40e1c"
-            ]
+            []
         ]
     },
     {
@@ -4665,7 +4665,7 @@
         "id": "e4ef7ae2.328ae",
         "type": "link in",
         "z": "29c1db97.901354",
-        "name": "config init",
+        "name": "config <-> music sync",
         "links": [
             "616408f.3891ef8"
         ],
@@ -4751,5 +4751,81 @@
         "x": 645,
         "y": 80,
         "wires": []
+    },
+    {
+        "id": "c370d602.cb229",
+        "type": "link out",
+        "z": "3f43a09.7e6556",
+        "name": "Volume out",
+        "links": [
+            "462ec09b.859cc8"
+        ],
+        "x": 555,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "a39dab43.1852e",
+        "type": "link out",
+        "z": "3f43a09.7e6556",
+        "name": "distance out",
+        "links": [
+            "56d659f0.ee4d28"
+        ],
+        "x": 615,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "56d659f0.ee4d28",
+        "type": "link in",
+        "z": "ea714443.5c3f38",
+        "name": "distance stats",
+        "links": [
+            "a39dab43.1852e"
+        ],
+        "x": 265,
+        "y": 260,
+        "wires": [
+            [
+                "269e0798.5d5c4"
+            ]
+        ]
+    },
+    {
+        "id": "462ec09b.859cc8",
+        "type": "link in",
+        "z": "ea714443.5c3f38",
+        "name": "distance stats",
+        "links": [
+            "c370d602.cb229"
+        ],
+        "x": 195,
+        "y": 400,
+        "wires": [
+            [
+                "52b737ce.756e08"
+            ]
+        ]
+    },
+    {
+        "id": "52b737ce.756e08",
+        "type": "range",
+        "z": "ea714443.5c3f38",
+        "minin": "70",
+        "maxin": "100",
+        "minout": "0",
+        "maxout": "100",
+        "action": "scale",
+        "round": true,
+        "property": "payload",
+        "name": "",
+        "x": 300,
+        "y": 400,
+        "wires": [
+            [
+                "aca31413.40e1c"
+            ]
+        ]
     }
 ]
