@@ -3474,11 +3474,19 @@
                 "type": "text",
                 "required": true,
                 "rows": null
+            },
+            {
+                "label": "Bluetooth Leader",
+                "value": "bluetooth_leader",
+                "type": "checkbox",
+                "required": true,
+                "rows": null
             }
         ],
         "formValue": {
             "camera_l": "",
-            "camera_r": ""
+            "camera_r": "",
+            "bluetooth_leader": false
         },
         "payload": "",
         "submit": "submit",
@@ -3489,7 +3497,8 @@
         "wires": [
             [
                 "d358d81c.ba7318",
-                "8013867a.cfb4e8"
+                "8013867a.cfb4e8",
+                "616408f.3891ef8"
             ]
         ]
     },
@@ -3737,8 +3746,7 @@
         "z": "169d6861.ad61d",
         "name": "Start Camera script",
         "links": [
-            "da0a3f8f.1954d",
-            "e4ef7ae2.328ae"
+            "da0a3f8f.1954d"
         ],
         "x": 655,
         "y": 140,
@@ -4657,15 +4665,15 @@
         "id": "e4ef7ae2.328ae",
         "type": "link in",
         "z": "29c1db97.901354",
-        "name": "config init",
+        "name": "config <-> music sync",
         "links": [
-            "fc4514e2.adfb6"
+            "616408f.3891ef8"
         ],
-        "x": 45,
-        "y": 200,
+        "x": 35,
+        "y": 120,
         "wires": [
             [
-                "762fefef.03986"
+                "3eeb1ea0.143e12"
             ]
         ]
     },
@@ -4713,5 +4721,35 @@
                 "762fefef.03986"
             ]
         ]
+    },
+    {
+        "id": "3eeb1ea0.143e12",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "",
+        "func": "node.warn(msg.payload.bluetooth_leader);\nif(msg.payload.bluetooth_leader)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 80,
+        "y": 220,
+        "wires": [
+            [
+                "762fefef.03986"
+            ]
+        ]
+    },
+    {
+        "id": "616408f.3891ef8",
+        "type": "link out",
+        "z": "169d6861.ad61d",
+        "name": "",
+        "links": [
+            "e4ef7ae2.328ae"
+        ],
+        "x": 645,
+        "y": 80,
+        "wires": []
     }
 ]
