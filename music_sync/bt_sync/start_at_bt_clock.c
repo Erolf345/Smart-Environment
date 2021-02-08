@@ -64,6 +64,7 @@ void error(const char *msg)
 
 int main(int argc, char *argv[])
 {
+	printf("PID:%i\n",getpid());
 	mpg123_handle *mh;
     char *buffer;
     size_t buffer_size;

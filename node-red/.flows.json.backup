@@ -4396,7 +4396,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "ip_addresses",
-        "payload": "{\"0\": \"192.168.0.246\"}",
+        "payload": "{\"0\": \"192.168.0.120\"}",
         "payloadType": "json",
         "x": 320,
         "y": 680,
@@ -4665,7 +4665,7 @@
         "id": "e4ef7ae2.328ae",
         "type": "link in",
         "z": "29c1db97.901354",
-        "name": "config init",
+        "name": "config <-> music sync",
         "links": [
             "616408f.3891ef8"
         ],
