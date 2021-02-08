@@ -9,6 +9,18 @@ import json
 import time
 import cv2
 import sys
+import os
+
+
+
+show_video = False
+try:
+    if(sys.argv[3] == "1"):
+		os.environ['DISPLAY'] = ":1"
+		show_video = True
+except:
+	pass
+
 
 # construct the argument parser and parse the arguments
 #ap = argparse.ArgumentParser()
@@ -18,7 +30,6 @@ import sys
 
 warnings.filterwarnings("ignore")
 #conf = json.load(open(args["conf"]))
-show_video = True
 
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
