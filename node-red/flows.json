@@ -2351,7 +2351,9 @@
         "wires": [
             [],
             [],
-            []
+            [
+                "c5802ec0.80e558"
+            ]
         ]
     },
     {
@@ -3735,7 +3737,8 @@
         "z": "169d6861.ad61d",
         "name": "Start Camera script",
         "links": [
-            "da0a3f8f.1954d"
+            "da0a3f8f.1954d",
+            "e4ef7ae2.328ae"
         ],
         "x": 655,
         "y": 140,
@@ -4647,6 +4650,67 @@
             [
                 "c6cefae8.52bb1",
                 "165fef48.4648f1"
+            ]
+        ]
+    },
+    {
+        "id": "e4ef7ae2.328ae",
+        "type": "link in",
+        "z": "29c1db97.901354",
+        "name": "config init",
+        "links": [
+            "fc4514e2.adfb6"
+        ],
+        "x": 45,
+        "y": 200,
+        "wires": [
+            [
+                "762fefef.03986"
+            ]
+        ]
+    },
+    {
+        "id": "8cb9aa9b.1b4e6",
+        "type": "inject",
+        "z": "29c1db97.901354",
+        "name": "kill",
+        "props": [
+            {
+                "p": "kill",
+                "v": "SIGKILL",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "str",
+        "x": 570,
+        "y": 220,
+        "wires": [
+            [
+                "f2079758.54e2a",
+                "575591c3.9b5fd"
+            ]
+        ]
+    },
+    {
+        "id": "c5802ec0.80e558",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "",
+        "func": "if(msg.payload == 0)return msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 250,
+        "y": 60,
+        "wires": [
+            [
+                "762fefef.03986"
             ]
         ]
     }

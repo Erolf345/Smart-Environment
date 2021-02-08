@@ -2352,7 +2352,7 @@
             [],
             [],
             [
-                "762fefef.03986"
+                "c5802ec0.80e558"
             ]
         ]
     },
@@ -3589,7 +3589,7 @@
         "type": "function",
         "z": "169d6861.ad61d",
         "name": "set globals",
-        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n    \n    //first kill to be sure\n    msg2 = {};\n    msg2.kill = \"SIGKILL\";\n    node.send(msg2);\n    \n    msg.payload = confs.camera_l+\" \" +confs.camera_r + \" \" + 1;\n    node.send(msg);\n\n}\n",
+        "func": "let confs = msg.payload;\n\nif (confs.camera_l.includes(\",\") && confs.camera_r.includes(\",\")){\n    global.set(\"cam_l\",confs.camera_l);\n    global.set(\"cam_r\",confs.camera_r);\n    \n    //first kill to be sure\n    msg2 = {};\n    msg2.kill = \"SIGKILL\";\n    node.send(msg2);\n    \n    msg.payload = confs.camera_l+\" \" +confs.camera_r + \" 1\";\n    node.send(msg);\n}\n\n\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -3737,7 +3737,8 @@
         "z": "169d6861.ad61d",
         "name": "Start Camera script",
         "links": [
-            "da0a3f8f.1954d"
+            "da0a3f8f.1954d",
+            "e4ef7ae2.328ae"
         ],
         "x": 655,
         "y": 140,
@@ -4387,7 +4388,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "ip_addresses",
-        "payload": "{\"0\": \"192.168.0.246\"}",
+        "payload": "{\"0\": \"192.168.0.120\"}",
         "payloadType": "json",
         "x": 320,
         "y": 680,
@@ -4538,7 +4539,7 @@
         "type": "function",
         "z": "3f43a09.7e6556",
         "name": "Check if system should hibernate",
-        "func": "var exit_time = global.get(\"exit_time\");\nif(exit_time == \"i\") return msg;\nif(exit_time == \"\") return;\n\nvar time_passed = msg.payload - exit_time;\n\nif(time_passed / 1000 > 5){\n    global.set(\"exit_time\",\"\");\n    return msg;\n}\nreturn;",
+        "func": "var exit_time = global.get(\"exit_time\");\n\nif(exit_time == \"\") return;\n\nvar time_passed = msg.payload - exit_time;\n\nif(time_passed / 1000 > 5){\n    global.set(\"exit_time\",\"\");\n    return msg;\n}\nreturn;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -4643,13 +4644,72 @@
         "topic": "",
         "payload": "off",
         "payloadType": "str",
-        "x": 460,
-        "y": 480,
-        "wires": [
+<<<<<<< HEAD
+        "y": 620,
+>>>>>>> 037753abdc3c78ac658883754d37a43a64175de7
             [
                 "c6cefae8.52bb1",
                 "165fef48.4648f1"
             ]
+        ]
+    },
+    {
+        "id": "e4ef7ae2.328ae",
+        "type": "link in",
+        "z": "29c1db97.901354",
+        "name": "config init",
+        "links": [
+            "fc4514e2.adfb6"
+        ],
+        "x": 45,
+        "y": 200,
+        "wires": [
+            [
+                "762fefef.03986"
+            ]
+        ]
+    },
+    {
+        "id": "8cb9aa9b.1b4e6",
+        "type": "inject",
+        "z": "29c1db97.901354",
+        "name": "kill",
+        "props": [
+            {
+                "p": "kill",
+                "v": "SIGKILL",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "str",
+        "x": 570,
+        "y": 220,
+        "wires": [
+            [
+                "f2079758.54e2a",
+                "575591c3.9b5fd"
+            ]
+        ]
+    },
+    {
+        "id": "c5802ec0.80e558",
+        "type": "function",
+        "z": "29c1db97.901354",
+        "name": "",
+        "func": "if(msg.payload == 0)return msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 250,
+        "y": 60,
+        "wires": [
+            []
         ]
     }
 ]
