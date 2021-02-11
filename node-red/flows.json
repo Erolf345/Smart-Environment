@@ -4631,7 +4631,7 @@
         "type": "function",
         "z": "29c1db97.901354",
         "name": "",
-        "func": "if(msg.payload == 0)return msg;",
+        "func": "if(msg.payload.code == 0)return msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
