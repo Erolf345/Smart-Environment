@@ -10,6 +10,7 @@ SCRIPT=$(readlink -f $0)
 # Absolute path this script is in. /home/user/bin
 SCRIPTPATH=`dirname $SCRIPT`
 
+# Copy preconfigured interface definitions to correct location
 sudo cp ./interfaces/bat0 /etc/network/interfaces.d/
 sudo cp ./interfaces/wlan0 /etc/network/interfaces.d/
 
