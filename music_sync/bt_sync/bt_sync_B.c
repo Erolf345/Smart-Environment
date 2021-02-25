@@ -228,12 +228,14 @@ int main(int argc, char *argv[])
 	bt_clock_B_now = cmd_clock(dd_local);
 	bt_offset = bt_clock_A_now - bt_clock_B_now;
 	printf("Calculated bluetooth clock offset: %zu \n", bt_offset);
+	printf("Clock A now: %zu \n", bt_clock_A_now);
 	printf("Now waiting for trigger event...\n");
+	bt_clock_A_now = cmd_clock(dd_local) + bt_offset;
 
 	// Wait until trigger time
-	while (bt_clock_B_now < bt_clock_trigger)
+	while (bt_clock_A_now < bt_clock_trigger)
 	{
-		bt_clock_B_now = cmd_clock(dd_local) + bt_offset;
+		bt_clock_A_now = cmd_clock(dd_local) + bt_offset;
 	}
 
 	digitalWrite(0, HIGH);
