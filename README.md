@@ -24,5 +24,5 @@ Each folder has its own README and detailed instructions.
     ├── music_sync                    # Clock synchronization
     └── node-red                      # Node-RED flows
     
-  
-
+```bubble-chart.js``` plots an objects position to the Node-RED dashboard
+```package.json``` contains node-red entry that lists the .js files that contain nodes for the runtime to load
