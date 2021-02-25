@@ -7,7 +7,7 @@ In this part we created a script for accurately measuring the bluetooth clock dr
 see bt_sync
 
 ## Wiring
-IMPORTANT: For this setup we did not have any success when trying to design wiring using pull up/down resistors. A single wrong trigger would break the entire script. We discovered a workaround hack accidentally that the pins do not float randomly when Pi A powers Pi B through its USB ports. In this scenario we can directly connect GPIO 17 of Pi A and B for the fastest possible communication
+IMPORTANT: For this setup we did not have any success when trying to design wiring using pull up/down resistors. A single wrong trigger would break the entire script. We discovered a workaround hack accidentally that the pins do not float randomly when Ground of Pi A and Pi B are connected. In this scenario we can directly connect GPIO 17 of Pi A and B for the fastest possible communication
 
 ## Compilation and execution
 

@@ -2,7 +2,7 @@
 read -p "What is the name of your mesh interface: " mesh_if
 
 asdf=$(sudo iw dev | grep -B 1 "$mesh_if" | grep "phy")
-phys_if=$(awk '{gsub(/\#/,"")}1' <<< "$asdf")
+phys_if=$(awk '{gsub(/\#/,"")}1' <<< "$asdf") # ATTENTION: THIS PART IS VERY EXPERIMTENTAL. If the script doesn't work make sure that the number defined here is actually the physical interface of the device you want to connect
 
 systemctl stop NetworkManager.service
 

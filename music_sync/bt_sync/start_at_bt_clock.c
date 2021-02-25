@@ -40,6 +40,9 @@
 //gcc -o start_at_bt_clock start_at_bt_clock.c -lbluetooth -lwiringPi -lmpg123 -lao -O2
 
 
+/*
+* read bluetooth clock of given hci socket
+*/
 static uint32_t cmd_clock(int dd)
 {
 	uint32_t clock;

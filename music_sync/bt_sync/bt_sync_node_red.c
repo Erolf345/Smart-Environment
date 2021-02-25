@@ -59,6 +59,9 @@
 
 // gcc -o bt_sync_node_red bt_sync_node_red.c -lbluetooth -lwiringPi -lmpg123 -lao -O2
 
+/*
+* read bluetooth clock of given hci socket
+*/
 static uint32_t cmd_clock(int dd)
 {
 	uint32_t clock;
@@ -75,6 +78,9 @@ static uint32_t cmd_clock(int dd)
 	return clock;
 }
 
+/*
+* connect to bt_address. This address will have to be paired already or be found in a previous scan
+*/
 static void connect_bt(char **argv, int *dd, int *dev_id, uint16_t *handle)
 {
 	bdaddr_t bdaddr;
@@ -156,6 +162,7 @@ int main(int argc, char *argv[])
 	uint16_t handle;
 	uint16_t accuracy;
 
+	// clock time at which event will be triggered
 	bt_clock_trigger = (uint32_t) atoi(argv[1]);
 
 	// Initialize dd and dev_id for calls to external bluetooth device
@@ -220,9 +227,7 @@ int main(int argc, char *argv[])
 	{
 		bt_clock_B_now = cmd_clock(dd_local) + bt_offset;
 	}
-	//digitalWrite(0, HIGH);
-	//sleep(1);
-	//digitalWrite(0, LOW);
+
    /* decode and play */
    	off_t pos;
 	off_t correct_pos;

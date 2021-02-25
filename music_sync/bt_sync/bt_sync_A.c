@@ -36,6 +36,9 @@
 
 //gcc -o bt_sync_A bt_sync_A.c -lbluetooth -lwiringPi
 
+/*
+* read bluetooth clock of given hci socket
+*/
 static uint32_t cmd_clock(int dd)
 {
 	uint32_t clock;
@@ -119,9 +122,10 @@ int main(int argc, char *argv[])
 	printf("Now waiting for trigger event...\n");
 	// Wait for time to pass
 	bt_clock_now = cmd_clock(dd_local);
-	while (bt_clock_now < bt_clock_trigger)
+	while (bt_clock_now < bt_clock_trigger) // since we are highly time sensitive we use while instead of sleep.
 		bt_clock_now = cmd_clock(dd_local);
 
+	//BLINK
 	digitalWrite(0, HIGH);
 	sleep(1);
 	digitalWrite(0, LOW);

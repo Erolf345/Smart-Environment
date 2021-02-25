@@ -57,6 +57,9 @@
 
 // gcc -o bt_sync_B bt_sync_B.c -lbluetooth -lwiringPi
 
+/*
+* read bluetooth clock of given hci socket
+*/
 static uint32_t cmd_clock(int dd)
 {
 	uint32_t clock;
@@ -72,7 +75,9 @@ static uint32_t cmd_clock(int dd)
 	// hci_close_dev(dd);
 	return clock;
 }
-
+/*
+* Connect to a given bluetooth device. This address will have to be paired already or been found in a recent scan
+*/
 static void connect_bt(char **argv, int *dd, int *dev_id, uint16_t *handle)
 {
 	bdaddr_t bdaddr;
@@ -150,31 +155,16 @@ int main(int argc, char *argv[])
 	// convert short integer value for port must be converted into network byte order
 	serv_addr.sin_port = htons(portno);
 
-	// bind(int fd, struct sockaddr *local_addr, socklen_t addr_length)
-	// bind() passes file descriptor, the address structure,
-	// and the length of the address structure
-	// This bind() call will bind  the socket to the current IP address on port, portno
 	if (bind(sockfd, (struct sockaddr *)&serv_addr,
 			 sizeof(serv_addr)) < 0)
 		error("ERROR on binding");
 
-	// This listen() call tells the socket to listen to the incoming connections.
-	// The listen() function places all incoming connection into a backlog queue
-	// until accept() call accepts the connection.
-	// Here, we set the maximum size for the backlog queue to 5.
 	listen(sockfd, 5);
 
-	// The accept() call actually accepts an incoming connection
 	clilen = sizeof(cli_addr);
 
-	// This accept() function will write the connecting client's address info
-	// into the the address structure and the size of that structure is clilen.
-	// The accept() returns a new socket file descriptor for the accepted connection.
-	// So, the original socket file descriptor can continue to be used
-	// for accepting new connections while the new socker file descriptor is used for
-	// communicating with the connected client.
-	newsockfd = accept(sockfd,
-					   (struct sockaddr *)&cli_addr, &clilen);
+	newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
+
 	if (newsockfd < 0)
 		error("ERROR on accept");
 
@@ -226,6 +216,8 @@ int main(int argc, char *argv[])
 
 	// get bluetooth clock of local device
 	bt_clock_B_now = cmd_clock(dd_local);
+
+	// Calculate offset between the two clocks
 	bt_offset = bt_clock_A_now - bt_clock_B_now;
 	printf("Calculated bluetooth clock offset: %zu \n", bt_offset);
 	printf("Clock A now: %zu \n", bt_clock_A_now);
@@ -233,11 +225,12 @@ int main(int argc, char *argv[])
 	bt_clock_A_now = cmd_clock(dd_local) + bt_offset;
 
 	// Wait until trigger time
-	while (bt_clock_A_now < bt_clock_trigger)
+	while (bt_clock_A_now < bt_clock_trigger)// since we are highly time sensitive we use while instead of sleep
 	{
 		bt_clock_A_now = cmd_clock(dd_local) + bt_offset;
 	}
 
+	// BLINK
 	digitalWrite(0, HIGH);
 	sleep(1);
 	digitalWrite(0, LOW);

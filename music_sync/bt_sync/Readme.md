@@ -3,6 +3,8 @@
 # About
 The code in this folder uses bluetooth clocks to synchronize the system clocks and run tasks like music playback and led flashing perfectly synchronous. There are 2 partners for this protocol, A and B. The process of execution is described in the diagram below.
 
+For bluetooth synchronization tests in this folder only ```bt_sync_A``` and ```bt_sync_B``` are suitable for the two partners. ```bt_sync_node_red``` and ```start_at_bt_clock``` are slimmed down versions of these files intended for use with node-red.
+
 
 # Perequisites 
 For bluetooth
@@ -17,9 +19,6 @@ For bluetooth
 # Overview
 
 ![Drag Racing](bt_sync.png)
-
-## Wiring
-The Code connects the LED to WiringPi pin 0 which is GPIO17 on the Raspberry Pi 3/4.
 
 ## First step pair and trust the devices
 1. ```sudo bluetoothctl``` in both devices 
