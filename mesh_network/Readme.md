@@ -5,9 +5,9 @@
 TODO
 
 
-## Steps
+## Requirements
 
-In order to set up the mesh on a raspberry pi you need to install batctl. 
+In order to set up the mesh on a raspberry pi you need to install batctl. Ifconfig and iwconfig are also required but they should be preinstalled.
 ``` 
 sudo apt install batctl 
 ```
@@ -31,12 +31,14 @@ Now you can use batctl to get information about the network although you may nee
 
 4. reboot
 
-## Connecting a laptop to mesh 
+## Connecting a laptop to mesh (experimental)
 
 Only tested on ubuntu 18.04-20.04. Will only work if Wifi card supports IBSS or Ad-hoc (run ```iw list``` to check)
 
-Copy and paste each line of ubuntu_connect into a root terminal (some commands need delay)
-Once finished batctl commands should work as expected.
+Just run ubuntu_connect with root privileges.
+
+Once finished batctl commands should work as expected. If they don't, make sure that the script detects the correct phys interface (output of iw dev isn't stable)
+
 
 ## Sources
 
