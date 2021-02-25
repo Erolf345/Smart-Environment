@@ -25,4 +25,5 @@ Each folder has its own README and detailed instructions.
     └── node-red                      # Node-RED flows
     
 ```bubble-chart.js``` plots an objects position to the Node-RED dashboard
-```package.json``` contains node-red entry that lists the .js files that contain nodes for the runtime to load
+
+```package.json``` contains node-RED entry that lists the .js files that contain nodes for the runtime to load
