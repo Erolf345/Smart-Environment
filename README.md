@@ -13,12 +13,12 @@ To connect actuators such as LEDs to our RPis we had to be familiar with the GPI
 
 
 ### Directory Layout
+
+Each folder has its own README and detailed instructions.
     
     ├── PIR_sensor                    # Testable python-script and instructions to connect PIR sensor to RPi
     ├── RGB LED                       # Testable python-script and instructions to connect RGB LED to RPi
-    ├── camera                        # Localization logic that holds testable script to test camera module
-    │   └── motion-detection          # Setup of the camera module, opencv and first motion detection
-    │       └── raspi-camera-stream   # Motion detection and tracking using a continuous video stream from RPi
+    ├── camera                        # Localization logic and instructions for setting up camera module
     ├── mesh-network                  # Set up of mesh network
     ├── microphone                    # Testable python-scripts and instructions to connect mics/sound sensors
     ├── music_sync                    # Clock synchronization
