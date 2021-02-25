@@ -1,10 +1,5 @@
 # Mesh networks with batman-adv
 
-
-## Introduction
-TODO
-
-
 ## Requirements
 
 In order to set up the mesh on a raspberry pi you need to install batctl. Ifconfig and iwconfig are also required but they should be preinstalled.
